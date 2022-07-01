@@ -49,15 +49,16 @@ fn build_ui(application: &Application) {
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_increase.connect_clicked(clone!(@weak number, @weak button_decrease =>
+    button_increase.connect_clicked(clone!(@weak number, @weak button_increase =>
         move |_| {
-                number.set(number.get() + 1); //issue
-                button_decrease.set_label(&number.get().to_string());
+                number.set(number.get() + 1);
+                button_increase.set_label(&number.get().to_string());
+
         }));
-    button_decrease.connect_clicked(clone!(@weak button_increase =>
+    button_decrease.connect_clicked(clone!(@weak button_decrease =>
         move |_| {
                 number.set(number.get() - 1);
-                button_increase.set_label(&number.get().to_string());
+                button_decrease.set_label(&number.get().to_string());
         }));
 
     // Add buttons to `gtk_box`
