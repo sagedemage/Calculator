@@ -1,5 +1,5 @@
 [package]
-name = "gtk-rust-app-experiment"
+name = "gtk4-memory-management"
 version = "0.1.0"
 edition = "2021"
 
