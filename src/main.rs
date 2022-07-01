@@ -1,5 +1,7 @@
 /*
- * gtk4 library rust keybindings
+ * gtk4
+ *
+ * Memory Management
  *
  * Got my Working Example from here:
  * https://gtk-rs.org/gtk4-rs/stable/latest/book/g_object_memory_management.html
@@ -9,7 +11,7 @@ use std::rc::Rc;
 use std::cell::Cell;
 use gtk4 as gtk;
 use gtk::prelude::*;
-use gtk::{Application, Button, ApplicationWindow, Grid, Entry, SignalAction, Orientation};
+use gtk::{Application, Button, ApplicationWindow, Orientation};
 use glib;
 use glib_macros::clone;
 
@@ -45,17 +47,14 @@ fn build_ui(application: &Application) {
     //let mut number = 0;
     let number = Rc::new(Cell::new(0));
 
-    // Connect callbacks, when a button is clicked `number` will be changed
-    let number_copy = number.clone();
-
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_increase.connect_clicked(clone!(@weak number, @strong button_decrease =>
+    button_increase.connect_clicked(clone!(@weak number, @weak button_decrease =>
         move |_| {
                 number.set(number.get() + 1); //issue
                 button_decrease.set_label(&number.get().to_string());
         }));
-    button_decrease.connect_clicked(clone!(@strong button_increase =>
+    button_decrease.connect_clicked(clone!(@weak button_increase =>
         move |_| {
                 number.set(number.get() - 1);
                 button_increase.set_label(&number.get().to_string());
