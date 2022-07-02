@@ -29,27 +29,29 @@ fn main() {
 }
 
 fn build_ui(application: &Application) {
+    let margin: i32 = 12;
+
     // Create two buttons
     let button_increase = Button::builder()
         .label("Increase")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
         .build();
     let button_decrease = Button::builder()
         .label("Decrease")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
         .build();
     let button_show = Button::builder()
         .label("None")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
         .build();
 
     // A mutable integer
