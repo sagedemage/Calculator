@@ -15,9 +15,11 @@ use gtk::{Application, Button, ApplicationWindow, Orientation};
 use glib;
 use glib_macros::clone;
 
+const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
+
 fn main() {
     // Create a new application
-    let app = Application::builder().application_id("str").build();
+    let app = Application::builder().application_id(APP_ID).build();
 
     // Connect to "activate" signal of `app`
     app.connect_activate(build_ui);
@@ -27,20 +29,29 @@ fn main() {
 }
 
 fn build_ui(application: &Application) {
+    let margin: i32 = 12;
+
     // Create two buttons
     let button_increase = Button::builder()
         .label("Increase")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
         .build();
     let button_decrease = Button::builder()
         .label("Decrease")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
+        .build();
+    let button_show = Button::builder()
+        .label("None")
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
         .build();
 
     // A mutable integer
@@ -49,22 +60,25 @@ fn build_ui(application: &Application) {
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_increase.connect_clicked(clone!(@weak number, @weak button_increase =>
+    button_increase.connect_clicked(clone!(@weak number, @weak button_increase, @weak button_show =>
         move |_| {
                 number.set(number.get() + 1);
-                button_increase.set_label(&number.get().to_string());
+                button_show.set_label(&number.get().to_string());
 
         }));
-    button_decrease.connect_clicked(clone!(@weak button_decrease =>
+
+    button_decrease.connect_clicked(clone!(@weak button_decrease, @weak button_show =>
         move |_| {
                 number.set(number.get() - 1);
-                button_decrease.set_label(&number.get().to_string());
+                button_show.set_label(&number.get().to_string());
         }));
 
     // Add buttons to `gtk_box`
     let gtk_box = gtk::Box::builder()
         .orientation(Orientation::Vertical)
         .build();
+
+    gtk_box.append(&button_show);
     gtk_box.append(&button_increase);
     gtk_box.append(&button_decrease);
 
