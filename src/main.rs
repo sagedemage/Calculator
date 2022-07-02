@@ -15,6 +15,8 @@ use gtk::{Application, Button, ApplicationWindow, Orientation};
 use glib;
 use glib_macros::clone;
 
+const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
+
 struct Con {
     num: i16,
     name: char,
@@ -31,7 +33,7 @@ impl Con {
 
 fn main() {
     // Create a new application
-    let app = Application::builder().application_id("str").build();
+    let app = Application::builder().application_id(APP_ID).build();
 
     // Connect to "activate" signal of `app`
     app.connect_activate(build_ui);
