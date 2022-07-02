@@ -15,17 +15,14 @@ use gtk::{Application, Button, ApplicationWindow, Orientation, Entry};
 use glib;
 use glib_macros::clone;
 
+/* Operation constants for it to be used */
+const ADD: char = 'a';
+const SUBTRACT: char = 's';
+const MULTIPLY: char = 'm';
+const DIVIDE: char = 'd';
+const EMPTY: char = 'e';
+
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
-
-struct Nums {
-    num1: i32,
-}
-
-impl Nums {
-    fn get(&self) -> i32 {
-        return self.num1;
-    }
-}
 
 fn main() {
     // Create a new application
@@ -94,84 +91,147 @@ fn build_ui(application: &Application) {
 
     //let entry = Entry::new()
 
-   
-
     // A mutable integer
-    let num1: Rc<Cell<i64>> = Rc::new(Cell::new(0));
-    let num2: Rc<Cell<i64>> = Rc::new(Cell::new(0));
-    let ops = Rc::new(Cell::new('n'));
+    let val1: Rc<Cell<i64>> = Rc::new(Cell::new(0));
+    let val2: Rc<Cell<i64>> = Rc::new(Cell::new(0));
     let num_counter = Rc::new(Cell::new(0));
-
-    //let rnums = Box::new(&mut nums);
-
+    let cur_ops = Rc::new(Cell::new(EMPTY));
+    let pre_ops = Rc::new(Cell::new(EMPTY));
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_num1.connect_clicked(clone!(@weak num1, @weak num2, @weak num_counter, @weak button_show =>
+    button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
             if num_counter.get() == 0 {
-                num1.set(num1.get() * 10 + 1);
+                val1.set(val1.get() * 10 + 1);
+                println!("val1: {}", val1.get());
+                println!("num1 -> counter: {}", num_counter.get());
+                button_show.set_label(&val1.get().to_string());
             }
-            if num_counter.get() == 0 {
-                num2.set(num2.get() * 10 + 1);
+            if num_counter.get() == 1 {
+                val2.set(val2.get() * 10 + 1);
+                println!("val2: {}", val2.get());
+                println!("num2 -> counter: {}", num_counter.get());
+                button_show.set_label(&val1.get().to_string());
             }
-            button_show.set_label(&num1.get().to_string());
 
         }));
 
-    button_num2.connect_clicked(clone!(@weak num1, @weak num2, @weak num_counter, @weak button_show =>
+    button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
             if num_counter.get() == 0 {
-                num1.set(num1.get() * 10 + 2);
+                val1.set(val1.get() * 10 + 2);
+                println!("val1: {}", val1.get());
+                button_show.set_label(&val1.get().to_string());
             }
-            if num_counter.get() == 0 {
-                num2.set(num2.get() * 10 + 2);
+            if num_counter.get() == 1 {
+                val2.set(val2.get() * 10 + 2);
+                println!("val2: {}", val2.get());
+                button_show.set_label(&val2.get().to_string());
             }
-            button_show.set_label(&num2.get().to_string());
 
         }));
 
-    button_plus.connect_clicked(clone!(@weak num1, @weak num2, @weak ops, @weak button_show, @weak num_counter=>
+    button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
         move |_| {
-            if num_counter.get() == 0 {
-                ops.set('+');
+            num_counter.set(num_counter.get() + 1);
+            println!("plus -> counter: {}", num_counter.get());
+
+            if num_counter.get() == 2 {
+                pre_ops.set(cur_ops.get());
+                cur_ops.set(ADD);
+
+                match pre_ops.get() {
+                    ADD => val1.set(val1.get() + val2.get()),
+                    SUBTRACT => val1.set(val1.get() - val2.get()),
+                    MULTIPLY => val1.set(val1.get() * val2.get()),
+                    DIVIDE => val1.set(val1.get() / val2.get()),
+                    _=> ()
+                }
+
+                //decrease the num counter and reset num2
+                num_counter.set(num_counter.get() - 1);
+                val2.set(0);
+
+                println!("ops: +");
+                button_show.set_label("+");
             }
-            if num_counter.get() == 0 {
-                ops.set('+');
+
+            else {
+                cur_ops.set(ADD);
+
+                println!("ops: +");
+                button_show.set_label("+");
             }
-            button_show.set_label(&ops.get().to_string());
 
         }));
-    button_minus.connect_clicked(clone!(@weak num1, @weak num2, @weak ops, @weak button_show, @weak num_counter =>
+    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong button_show =>
         move |_| {
-            if num_counter.get() == 0 {
-                ops.set('-');
+            num_counter.set(num_counter.get() + 1);
+            println!("plus -> counter: {}", num_counter.get());
+
+            if num_counter.get() == 2 {
+                pre_ops.set(cur_ops.get());
+                cur_ops.set(SUBTRACT);
+
+                match pre_ops.get() {
+                    ADD => val1.set(val1.get() + val2.get()),
+                    SUBTRACT => val1.set(val1.get() - val2.get()),
+                    MULTIPLY => val1.set(val1.get() * val2.get()),
+                    DIVIDE => val1.set(val1.get() / val2.get()),
+                    _=> ()
+                }
+
+                //decrease the num counter and reset num2
+                num_counter.set(num_counter.get() - 1);
+                val2.set(0);
+
+                println!("ops: -");
+                button_show.set_label("-");
             }
-            if num_counter.get() == 0 {
-                ops.set('-');
+
+            else {
+                cur_ops.set(SUBTRACT);
+
+                println!("ops: -");
+                button_show.set_label("-");
             }
-            button_show.set_label(&ops.get().to_string());
     
         }));
     
-    button_equals.connect_clicked(clone!(@weak ops, @weak button_show =>
+    button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong button_show =>
         move |_| {
-            if num_counter.get() == 0 {
-                ops.set('=');
+            num_counter.set(num_counter.get() + 1);
+            println!("equals -> counter: {}", num_counter.get());
+
+            if num_counter.get() == 2 {
+                //ops.set('=');
+                let mut result = 0;
+                match cur_ops.get() {
+                    ADD => {val1.set(val1.get() + val2.get()); result = val1.get();},
+                    SUBTRACT => {val1.set(val1.get() - val2.get()); result = val1.get();},
+                    MULTIPLY => {val1.set(val1.get() * val2.get()); result = val1.get();},
+                    _=> ()
+                }
+                
+                println!("result: {}", result);
+                button_show.set_label(&result.to_string());
+
+                num_counter.set(0);
+                val1.set(0);
+                val2.set(0);
+                cur_ops.set(EMPTY);
             }
-            if num_counter.get() == 0 {
-                ops.set('=');
-            }
-            button_show.set_label(&ops.get().to_string());
         
         }));
 
-    button_clear.connect_clicked(clone!(@weak button_show =>
+    button_clear.connect_clicked(clone!(@strong button_show =>
         move |_| {
-            num1.set(0);
-            num2.set(0);
-            ops.set(' ');
-            button_show.set_label("");
+            num_counter.set(0);
+            val1.set(0);
+            val2.set(0);
+            cur_ops.set(EMPTY);
+            //button_show.set_label("");
         }));
 
     // Add buttons to `gtk_box`
