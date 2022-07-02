@@ -15,6 +15,20 @@ use gtk::{Application, Button, ApplicationWindow, Orientation};
 use glib;
 use glib_macros::clone;
 
+struct Con {
+    num: i16,
+    name: char,
+}
+
+impl Con {
+    fn set(&mut self, value: i16) {
+        self.num = value;
+    }
+    fn get(&self) -> i16 {
+        return self.num;
+    }
+}
+
 fn main() {
     // Create a new application
     let app = Application::builder().application_id("str").build();
@@ -42,29 +56,40 @@ fn build_ui(application: &Application) {
         .margin_start(12)
         .margin_end(12)
         .build();
+    let button_show = Button::builder()
+        .label("None")
+        .margin_top(12)
+        .margin_bottom(12)
+        .margin_start(12)
+        .margin_end(12)
+        .build();
 
     // A mutable integer
     //let mut number = 0;
+    let mut con = Con {num: 1, name: 'c'};
     let number = Rc::new(Cell::new(0));
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_increase.connect_clicked(clone!(@weak number, @weak button_increase =>
+    button_increase.connect_clicked(clone!(@weak number, @weak button_increase, @weak button_show =>
         move |_| {
                 number.set(number.get() + 1);
-                button_increase.set_label(&number.get().to_string());
+                button_show.set_label(&number.get().to_string());
 
         }));
-    button_decrease.connect_clicked(clone!(@weak button_decrease =>
+
+    button_decrease.connect_clicked(clone!(@weak button_decrease, @weak button_show =>
         move |_| {
                 number.set(number.get() - 1);
-                button_decrease.set_label(&number.get().to_string());
+                button_show.set_label(&number.get().to_string());
         }));
 
     // Add buttons to `gtk_box`
     let gtk_box = gtk::Box::builder()
         .orientation(Orientation::Vertical)
         .build();
+
+    gtk_box.append(&button_show);
     gtk_box.append(&button_increase);
     gtk_box.append(&button_decrease);
 
