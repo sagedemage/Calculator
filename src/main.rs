@@ -17,20 +17,6 @@ use glib_macros::clone;
 
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
 
-struct Con {
-    num: i16,
-    name: char,
-}
-
-impl Con {
-    fn set(&mut self, value: i16) {
-        self.num = value;
-    }
-    fn get(&self) -> i16 {
-        return self.num;
-    }
-}
-
 fn main() {
     // Create a new application
     let app = Application::builder().application_id(APP_ID).build();
@@ -68,7 +54,6 @@ fn build_ui(application: &Application) {
 
     // A mutable integer
     //let mut number = 0;
-    let mut con = Con {num: 1, name: 'c'};
     let number = Rc::new(Cell::new(0));
 
     // Connect callbacks
