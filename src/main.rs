@@ -267,7 +267,7 @@ fn build_ui(application: &Application) {
                     val1.set(val1.get() / val2.get());
                 }
         
-                //decrease the num counter and reset num2
+                // reset variables
                 num_counter.set(num_counter.get() - 1);
                 val2.set(0);
             }
@@ -284,9 +284,9 @@ fn build_ui(application: &Application) {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
+            let mut result = 0;
+
             if num_counter.get() == 2 {
-                //ops.set('=');
-                let mut result = 0;
                 match cur_ops.get() {
                     ADD => {val1.set(val1.get() + val2.get()); result = val1.get();},
                     SUBTRACT => {val1.set(val1.get() - val2.get()); result = val1.get();},
@@ -300,10 +300,10 @@ fn build_ui(application: &Application) {
                     val1.set(val1.get() / val2.get());
                     result = val1.get();
                 }
-                
-                println!("result: {}", result);
+
                 button_show.set_label(&result.to_string());
 
+                // reset variables
                 num_counter.set(0);
                 val1.set(0);
                 val2.set(0);
@@ -318,7 +318,7 @@ fn build_ui(application: &Application) {
             val1.set(0);
             val2.set(0);
             cur_ops.set(EMPTY);
-            //button_show.set_label("");
+            button_show.set_label("");
         }));
 
     // Add buttons to `gtk_box`
