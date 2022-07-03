@@ -4,7 +4,7 @@ use std::rc::Rc;
 use std::cell::Cell;
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Grid, Orientation};
+use gtk::{Application, ApplicationWindow, Grid};
 use glib_macros::clone;
 
 pub use crate::defs::*;
@@ -237,11 +237,6 @@ pub fn build_ui(application: &Application) {
             entry.set_text("");
         }));
 
-    // Add buttons to `gtk_box`
-    let gtk_box = gtk::Box::builder()
-        .orientation(Orientation::Vertical)
-        .build();
-
     let grid = Grid::new(); // gtk4::Grid
 
     /* Row 0 */
@@ -272,24 +267,6 @@ pub fn build_ui(application: &Application) {
     /* Row 5 */
     GridExt::attach(&grid, &button_num0, 0, 5, 3, 1);
     GridExt::attach(&grid, &button_equals, 3, 5, 1, 1);
-
-    gtk_box.append(&entry);
-    gtk_box.append(&button_num0);
-    gtk_box.append(&button_num1);
-    gtk_box.append(&button_num2);
-    gtk_box.append(&button_num3);
-    gtk_box.append(&button_num4);
-    gtk_box.append(&button_num5);
-    gtk_box.append(&button_num6);
-    gtk_box.append(&button_num7);
-    gtk_box.append(&button_num8);
-    gtk_box.append(&button_num9);
-    gtk_box.append(&button_plus);
-    gtk_box.append(&button_minus);
-    gtk_box.append(&button_multiply);
-    gtk_box.append(&button_divide);
-    gtk_box.append(&button_equals);
-    gtk_box.append(&button_clear);
 
     // Create a window
     let window = ApplicationWindow::builder()

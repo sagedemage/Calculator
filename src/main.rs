@@ -31,8 +31,8 @@ fn main() {
     let app = Application::builder().application_id(APP_ID).build();
 
     // Connect to signals
-    app.connect_activate(build_ui);
     app.connect_startup(|_| load_css());
+    app.connect_activate(build_ui);
 
     // Run the application
     app.run();
