@@ -13,16 +13,6 @@ pub fn set_value(num_counter: i32, val1: &Rc<Cell<i64>>, val2: &Rc<Cell<i64>>, n
     }
 }
 
-pub fn display_value(num_counter: i32, val1: i64, val2: i64) -> i64 {
-    if num_counter == 0 {
-        return val1;
-    }
-    if num_counter == 1 {
-        return val2;
-    }
-    return 0;
-}
-
 pub fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
     match pre_ops {
         ADD => val1.set(val1.get() + val2),
@@ -31,7 +21,7 @@ pub fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
         _=> ()
     }
     if pre_ops == DIVIDE && val2 == 0 {
-        println!("Divide by zero error");
+        println!("Division by zero error");
     }
     else if pre_ops == DIVIDE && val2 != 0 {
         val1.set(val1.get() / val2);
@@ -50,7 +40,7 @@ pub fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64) -> std::s
         val1.set(val1.get() / val2);
     }
     if cur_ops == DIVIDE && val2 == 0 {
-        result =  String::from("Divide by zero error");
+        result =  String::from("Division by zero error");
     }
     else {
         result.push_str(&val1.get().to_string());

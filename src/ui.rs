@@ -5,7 +5,7 @@ use std::cell::Cell;
 
 use gtk4 as gtk;
 use gtk::prelude::*;
-use gtk::{Application, Button, ApplicationWindow, Orientation, Entry};
+use gtk::{Application, ApplicationWindow, Orientation};
 use glib_macros::clone;
 
 pub use crate::defs::*;
@@ -23,41 +23,44 @@ pub fn build_ui(application: &Application) {
     let button_divide = create_button("/");
     let button_equals = create_button("=");
     let button_clear = create_button("clear");
-    let button_show = create_button("none");
-
-    //let entry = Entry::new()
+    let entry = create_entry();
 
     // A mutable integer
     let val1: Rc<Cell<i64>> = Rc::new(Cell::new(0));
     let val2: Rc<Cell<i64>> = Rc::new(Cell::new(0));
     let num_counter = Rc::new(Cell::new(0));
-    let cur_ops = Rc::new(Cell::new(EMPTY));
-    let pre_ops = Rc::new(Cell::new(EMPTY));
+    let cur_ops = Rc::new(Cell::new(NONE));
+    let pre_ops = Rc::new(Cell::new(NONE));
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
+    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong entry =>
         move |_| {
             set_value(num_counter.get(), &val1, &val2, 0);
-            let val = display_value(num_counter.get(), val1.get(), val2.get());
-            button_show.set_label(&val.to_string());
+            entry.insert_text("0", &mut -1);
         }));
 
-    button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
+    button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
         move |_| {
+            if pre_ops.get() == EQUALS {
+                entry.set_text("");
+                pre_ops.set(NONE);
+            }
             set_value(num_counter.get(), &val1, &val2, 1);
-            let val = display_value(num_counter.get(), val1.get(), val2.get());
-            button_show.set_label(&val.to_string());
+            entry.insert_text("1", &mut -1);
         }));
 
-    button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
+    button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
         move |_| {
+            if pre_ops.get() == EQUALS {
+                entry.set_text("");
+                pre_ops.set(NONE);
+            }
             set_value(num_counter.get(), &val1, &val2, 2);
-            let val = display_value(num_counter.get(), val1.get(), val2.get());
-            button_show.set_label(&val.to_string());
+            entry.insert_text("2", &mut -1);
         }));
 
-    button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
+    button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -78,11 +81,11 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(ADD);
             }
 
-            button_show.set_label("+");
+            entry.insert_text("+", &mut -1);
 
         }));
 
-    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
+    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -103,11 +106,11 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(SUBTRACT);
             }
 
-            button_show.set_label("-");
+            entry.insert_text("-", &mut -1);
     
         }));
 
-    button_multiply.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
+    button_multiply.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -128,11 +131,11 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(MULTIPLY);
             }
 
-            button_show.set_label("*");
+            entry.insert_text("*", &mut -1);
         
         }));
 
-    button_divide.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
+    button_divide.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -153,11 +156,11 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(DIVIDE);
             }
 
-            button_show.set_label("/");
+            entry.insert_text("/", &mut -1);
             
         }));
     
-    button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong button_show =>
+    button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -167,24 +170,26 @@ pub fn build_ui(application: &Application) {
             if num_counter.get() == 2 {
                 result = equation_result(cur_ops.get(), &val1, val2.get());
 
-                button_show.set_label(&result.to_string());
+                entry.set_text(&result.to_string());
+
+                pre_ops.set(EQUALS);
 
                 // reset variables
                 num_counter.set(0);
                 val1.set(0);
                 val2.set(0);
-                cur_ops.set(EMPTY);
+                cur_ops.set(NONE);
             }
         
         }));
 
-    button_clear.connect_clicked(clone!(@strong button_show =>
+    button_clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             num_counter.set(0);
             val1.set(0);
             val2.set(0);
-            cur_ops.set(EMPTY);
-            button_show.set_label("");
+            cur_ops.set(NONE);
+            entry.set_text("");
         }));
 
     // Add buttons to `gtk_box`
@@ -192,7 +197,7 @@ pub fn build_ui(application: &Application) {
         .orientation(Orientation::Vertical)
         .build();
 
-    gtk_box.append(&button_show);
+    gtk_box.append(&entry);
     gtk_box.append(&button_num0);
     gtk_box.append(&button_num1);
     gtk_box.append(&button_num2);

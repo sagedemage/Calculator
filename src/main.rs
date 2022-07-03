@@ -9,13 +9,9 @@
 
  /* Main program */
 
-use std::rc::Rc;
-use std::cell::Cell;
-
 use gtk4 as gtk;
 use gtk::prelude::*;
-use gtk::{Application, Button, ApplicationWindow, Orientation, Entry};
-use glib_macros::clone;
+use gtk::{Application};
 
 mod defs;
 mod button;
