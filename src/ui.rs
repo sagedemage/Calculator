@@ -34,8 +34,9 @@ pub fn build_ui(application: &Application) {
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong entry =>
+    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
         move |_| {
+            clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 0);
             entry.insert_text("0", &mut -1);
         }));
