@@ -115,33 +115,31 @@ fn build_ui(application: &Application) {
     // When a button is clicked, `number` should be changed
     button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
+            let mut val = 0;
             if num_counter.get() == 0 {
                 val1.set(val1.get() * 10 + 1);
-                println!("val1: {}", val1.get());
-                println!("num1 -> counter: {}", num_counter.get());
-                button_show.set_label(&val1.get().to_string());
+                val = val1.get();
             }
             if num_counter.get() == 1 {
                 val2.set(val2.get() * 10 + 1);
-                println!("val2: {}", val2.get());
-                println!("num2 -> counter: {}", num_counter.get());
-                button_show.set_label(&val2.get().to_string());
+                val = val2.get();
             }
+            button_show.set_label(&val.to_string());
 
         }));
 
     button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
+            let mut val = 0;
             if num_counter.get() == 0 {
                 val1.set(val1.get() * 10 + 2);
-                println!("val1: {}", val1.get());
-                button_show.set_label(&val1.get().to_string());
+                val = val1.get();
             }
             if num_counter.get() == 1 {
                 val2.set(val2.get() * 10 + 2);
-                println!("val2: {}", val2.get());
-                button_show.set_label(&val2.get().to_string());
+                val = val2.get();
             }
+            button_show.set_label(&val.to_string());
 
         }));
 
