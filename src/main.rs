@@ -152,7 +152,7 @@ fn build_ui(application: &Application) {
                 cur_ops.set(ADD);
 
                 // Do operation
-                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
+                operation(pre_ops.get(), &val1, val2.get());
 
                 // Decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
@@ -177,7 +177,7 @@ fn build_ui(application: &Application) {
                 cur_ops.set(SUBTRACT);
 
                 // Do operation
-                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
+                operation(pre_ops.get(), &val1, val2.get());
 
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
@@ -202,7 +202,7 @@ fn build_ui(application: &Application) {
                 cur_ops.set(MULTIPLY);
                 
                 // Do operation
-                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
+                operation(pre_ops.get(), &val1, val2.get());
     
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
@@ -227,7 +227,7 @@ fn build_ui(application: &Application) {
                 cur_ops.set(DIVIDE);
         
                 // Do operation
-                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
+                operation(pre_ops.get(), &val1, val2.get());
         
                 // reset variables
                 num_counter.set(num_counter.get() - 1);
@@ -249,6 +249,7 @@ fn build_ui(application: &Application) {
             let mut result = String::from("");
 
             if num_counter.get() == 2 {
+                // start here
                 match cur_ops.get() {
                     ADD => {val1.set(val1.get() + val2.get());},
                     SUBTRACT => {val1.set(val1.get() - val2.get());},
@@ -264,6 +265,7 @@ fn build_ui(application: &Application) {
                 else {
                     result = val1.get().to_string();
                 }
+                // end here
 
                 button_show.set_label(&result.to_string());
 
@@ -331,7 +333,7 @@ fn display_value(num_counter: i32, val1: i64, val2: i64) -> i64 {
     return 0;
 }
 
-fn operation(num_counter: i32, pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
+fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
     match pre_ops {
         ADD => val1.set(val1.get() + val2),
         SUBTRACT => val1.set(val1.get() - val2),
@@ -345,5 +347,23 @@ fn operation(num_counter: i32, pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
         val1.set(val1.get() / val2);
     }
 }
+
+/*fn result() {
+    match cur_ops.get() {
+        ADD => {val1.set(val1.get() + val2.get());},
+        SUBTRACT => {val1.set(val1.get() - val2.get());},
+        MULTIPLY => {val1.set(val1.get() * val2.get());},
+        _=> ()
+    }
+    if cur_ops.get() == DIVIDE && val2.get() != 0 {
+        val1.set(val1.get() / val2.get());
+    }
+    if cur_ops.get() == DIVIDE && val2.get() == 0 {
+        result =  String::from("Divide by zero error");
+    }
+    else {
+        result = val1.get().to_string();
+    }
+}*/
 
 
