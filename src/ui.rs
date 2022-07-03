@@ -210,10 +210,8 @@ pub fn build_ui(application: &Application) {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
-            let mut result = String::from("");
-
             if num_counter.get() == 2 {
-                result = equation_result(cur_ops.get(), &val1, val2.get());
+                let result = equation_result(cur_ops.get(), &val1, val2.get());
 
                 entry.set_text(&result.to_string());
 

@@ -9,8 +9,11 @@
 
  /* Main program */
 
-use gtk4 as gtk;
-use gtk::{Application};
+pub use gtk4 as gtk;
+pub use gtk::{Application};
+
+pub use gdk4::Display;
+pub use gtk::{CssProvider, StyleContext};
 
 mod defs;
 mod button;
