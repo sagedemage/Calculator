@@ -32,8 +32,8 @@ pub fn build_ui(application: &Application) {
     let button_clear = create_button("clear");
     let entry = create_entry();
 
-    button_clear.set_widget_name("clear_button");
-    button_equals.set_widget_name("equals_button");
+    button_clear.add_css_class("destructive-action");
+    button_equals.add_css_class("suggested-action");
 
     // A mutable integer
     let val1: Rc<Cell<i64>> = Rc::new(Cell::new(0));
