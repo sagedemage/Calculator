@@ -26,8 +26,8 @@ pub fn build_ui(application: &Application) {
 
     let button_plus = create_button("+");
     let button_minus = create_button("-");
-    let button_multiply = create_button("×");
-    let button_divide = create_button("÷");
+    let button_multiply = create_button("\u{00D7}");
+    let button_divide = create_button("\u{00F7}");
     let button_equals = create_button("=");
     let button_clear = create_button("clear");
     let entry = create_entry();
@@ -176,7 +176,7 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(MULTIPLY);
             }
 
-            entry.insert_text("×", &mut -1);
+            entry.insert_text("\u{00D7}", &mut -1);
         
         }));
 
@@ -201,7 +201,7 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(DIVIDE);
             }
 
-            entry.insert_text("÷", &mut -1);
+            entry.insert_text("\u{00F7}", &mut -1);
             
         }));
     
