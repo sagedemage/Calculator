@@ -1,5 +1,5 @@
+/* Operation constants */
 
-/* Operation constants for it to be used */
 pub const ADD: char = 'a';
 pub const SUBTRACT: char = 's';
 pub const MULTIPLY: char = 'm';
