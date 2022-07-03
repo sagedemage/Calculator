@@ -4,10 +4,8 @@ use std::rc::Rc;
 use std::cell::Cell;
 
 use gtk4 as gtk;
-use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Grid, Orientation, Widget};
+use gtk::{Application, ApplicationWindow, Grid, Orientation};
 use glib_macros::clone;
-//use pango::{AttrSize, AttrColor};
 
 pub use crate::defs::*;
 pub use crate::button::*;
