@@ -14,12 +14,13 @@ use gtk::prelude::*;
 use gtk::{Application, Button, ApplicationWindow, Orientation, Entry};
 use glib_macros::clone;
 
-/* Operation constants for it to be used */
-const ADD: char = 'a';
-const SUBTRACT: char = 's';
-const MULTIPLY: char = 'm';
-const DIVIDE: char = 'd';
-const EMPTY: char = 'e';
+mod defs;
+mod button;
+mod calculator;
+
+pub use crate::defs::*;
+pub use crate::button::*;
+pub use crate::calculator::*;
 
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
 
@@ -237,72 +238,4 @@ fn build_ui(application: &Application) {
     // Present the window
     window.present();
 }
-
-pub fn create_button(label: &'static str) -> Button {
-    let margin = 6;
-    let button = Button::builder()
-        .label(label)
-        .margin_start(margin)
-        .margin_top(margin)
-        .margin_end(margin)
-        .margin_bottom(margin)
-        .build();
-
-    return button;
-}
-
-fn set_value(num_counter: i32, val1: &Rc<Cell<i64>>, val2: &Rc<Cell<i64>>, num: i64) {
-    if num_counter == 0 {
-        val1.set(val1.get() * 10 + num);
-    }
-    if num_counter == 1 {
-        val2.set(val2.get() * 10 + num);
-    }
-}
-
-fn display_value(num_counter: i32, val1: i64, val2: i64) -> i64 {
-    if num_counter == 0 {
-        return val1;
-    }
-    if num_counter == 1 {
-        return val2;
-    }
-    return 0;
-}
-
-fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
-    match pre_ops {
-        ADD => val1.set(val1.get() + val2),
-        SUBTRACT => val1.set(val1.get() - val2),
-        MULTIPLY => val1.set(val1.get() * val2),
-        _=> ()
-    }
-    if pre_ops == DIVIDE && val2 == 0 {
-        println!("Divide by zero error");
-    }
-    else if pre_ops == DIVIDE && val2 != 0 {
-        val1.set(val1.get() / val2);
-    }
-}
-
-fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64) -> std::string::String {
-    let mut result = String::from("= ").to_owned();
-    match cur_ops {
-        ADD => {val1.set(val1.get() + val2);},
-        SUBTRACT => {val1.set(val1.get() - val2);},
-        MULTIPLY => {val1.set(val1.get() * val2);},
-        _=> ()
-    }
-    if cur_ops == DIVIDE && val2 != 0 {
-        val1.set(val1.get() / val2);
-    }
-    if cur_ops == DIVIDE && val2 == 0 {
-        result =  String::from("Divide by zero error");
-    }
-    else {
-        result.push_str(&val1.get().to_string());
-    }
-    return result;
-}
-
 
