@@ -12,7 +12,6 @@ use std::cell::Cell;
 use gtk4 as gtk;
 use gtk::prelude::*;
 use gtk::{Application, Button, ApplicationWindow, Orientation, Entry};
-use glib;
 use glib_macros::clone;
 
 /* Operation constants for it to be used */
@@ -67,6 +66,20 @@ fn build_ui(application: &Application) {
         .margin_start(margin)
         .margin_end(margin)
         .build();
+    let button_multiply = Button::builder()
+        .label("*")
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
+        .build();
+    let button_divide = Button::builder()
+        .label("/")
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
+        .build();
     let button_equals = Button::builder()
         .label("=")
         .margin_top(margin)
@@ -112,7 +125,7 @@ fn build_ui(application: &Application) {
                 val2.set(val2.get() * 10 + 1);
                 println!("val2: {}", val2.get());
                 println!("num2 -> counter: {}", num_counter.get());
-                button_show.set_label(&val1.get().to_string());
+                button_show.set_label(&val2.get().to_string());
             }
 
         }));
@@ -145,8 +158,13 @@ fn build_ui(application: &Application) {
                     ADD => val1.set(val1.get() + val2.get()),
                     SUBTRACT => val1.set(val1.get() - val2.get()),
                     MULTIPLY => val1.set(val1.get() * val2.get()),
-                    DIVIDE => val1.set(val1.get() / val2.get()),
                     _=> ()
+                }
+                if pre_ops.get() == DIVIDE && val2.get() == 0 {
+                    println!("Divide by zero error");
+                }
+                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
+                    val1.set(val1.get() / val2.get());
                 }
 
                 //decrease the num counter and reset num2
@@ -165,7 +183,8 @@ fn build_ui(application: &Application) {
             }
 
         }));
-    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong button_show =>
+
+    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
         move |_| {
             num_counter.set(num_counter.get() + 1);
             println!("plus -> counter: {}", num_counter.get());
@@ -178,8 +197,13 @@ fn build_ui(application: &Application) {
                     ADD => val1.set(val1.get() + val2.get()),
                     SUBTRACT => val1.set(val1.get() - val2.get()),
                     MULTIPLY => val1.set(val1.get() * val2.get()),
-                    DIVIDE => val1.set(val1.get() / val2.get()),
                     _=> ()
+                }
+                if pre_ops.get() == DIVIDE && val2.get() == 0 {
+                    println!("Divide by zero error");
+                }
+                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
+                    val1.set(val1.get() / val2.get());
                 }
 
                 //decrease the num counter and reset num2
@@ -198,6 +222,84 @@ fn build_ui(application: &Application) {
             }
     
         }));
+
+    button_multiply.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
+        move |_| {
+            num_counter.set(num_counter.get() + 1);
+            println!("plus -> counter: {}", num_counter.get());
+    
+            if num_counter.get() == 2 {
+                pre_ops.set(cur_ops.get());
+                cur_ops.set(MULTIPLY);
+    
+                match pre_ops.get() {
+                    ADD => val1.set(val1.get() + val2.get()),
+                    SUBTRACT => val1.set(val1.get() - val2.get()),
+                    MULTIPLY => val1.set(val1.get() * val2.get()),
+                    _=> ()
+                }
+                if pre_ops.get() == DIVIDE && val2.get() == 0 {
+                    println!("Divide by zero error");
+                }
+                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
+                    val1.set(val1.get() / val2.get());
+                }
+    
+                //decrease the num counter and reset num2
+                num_counter.set(num_counter.get() - 1);
+                val2.set(0);
+    
+                println!("ops: *");
+                button_show.set_label("*");
+            }
+    
+            else {
+                cur_ops.set(MULTIPLY);
+    
+                println!("ops: *");
+                button_show.set_label("*");
+            }
+        
+        }));
+
+    button_divide.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
+        move |_| {
+            num_counter.set(num_counter.get() + 1);
+            println!("plus -> counter: {}", num_counter.get());
+        
+            if num_counter.get() == 2 {
+                pre_ops.set(cur_ops.get());
+                cur_ops.set(DIVIDE);
+        
+                match pre_ops.get() {
+                    ADD => val1.set(val1.get() + val2.get()),
+                    SUBTRACT => val1.set(val1.get() - val2.get()),
+                    MULTIPLY => val1.set(val1.get() * val2.get()),
+                    _=> ()
+                }
+                if pre_ops.get() == DIVIDE && val2.get() == 0 {
+                    println!("Divide by zero error");
+                }
+                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
+                    val1.set(val1.get() / val2.get());
+                }
+        
+                //decrease the num counter and reset num2
+                num_counter.set(num_counter.get() - 1);
+                val2.set(0);
+        
+                println!("ops: /");
+                button_show.set_label("/");
+            }
+        
+            else {
+                cur_ops.set(DIVIDE);
+        
+                println!("ops: /");
+                button_show.set_label("/");
+            }
+            
+        }));
     
     button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong button_show =>
         move |_| {
@@ -212,6 +314,13 @@ fn build_ui(application: &Application) {
                     SUBTRACT => {val1.set(val1.get() - val2.get()); result = val1.get();},
                     MULTIPLY => {val1.set(val1.get() * val2.get()); result = val1.get();},
                     _=> ()
+                }
+                if cur_ops.get() == DIVIDE && val2.get() == 0 {
+                    println!("Divide by zero error");
+                }
+                else if cur_ops.get() == DIVIDE && val2.get() != 0 {
+                    val1.set(val1.get() / val2.get());
+                    result = val1.get();
                 }
                 
                 println!("result: {}", result);
@@ -244,6 +353,8 @@ fn build_ui(application: &Application) {
     gtk_box.append(&button_num2);
     gtk_box.append(&button_plus);
     gtk_box.append(&button_minus);
+    gtk_box.append(&button_multiply);
+    gtk_box.append(&button_divide);
     gtk_box.append(&button_equals);
     gtk_box.append(&button_clear);
 
