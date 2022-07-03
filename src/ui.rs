@@ -26,8 +26,8 @@ pub fn build_ui(application: &Application) {
 
     let button_plus = create_button("+");
     let button_minus = create_button("-");
-    let button_multiply = create_button("*");
-    let button_divide = create_button("/");
+    let button_multiply = create_button("×");
+    let button_divide = create_button("÷");
     let button_equals = create_button("=");
     let button_clear = create_button("clear");
     let entry = create_entry();
@@ -176,7 +176,7 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(MULTIPLY);
             }
 
-            entry.insert_text("*", &mut -1);
+            entry.insert_text("×", &mut -1);
         
         }));
 
@@ -201,7 +201,7 @@ pub fn build_ui(application: &Application) {
                 cur_ops.set(DIVIDE);
             }
 
-            entry.insert_text("/", &mut -1);
+            entry.insert_text("÷", &mut -1);
             
         }));
     
@@ -270,9 +270,8 @@ pub fn build_ui(application: &Application) {
     let window = ApplicationWindow::builder()
         .application(application)
         .title("Calculator")
-        //.default_width(250)
-        //.default_height(70)
-        //.child(&gtk_box)
+        .default_width(250)
+        .default_height(70)
         .build();
 
     // gtk4::prelude::GtkWindowExt
