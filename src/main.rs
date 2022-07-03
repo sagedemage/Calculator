@@ -145,8 +145,8 @@ fn build_ui(application: &Application) {
 
     button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
         move |_| {
+            // Increase the counter
             num_counter.set(num_counter.get() + 1);
-            println!("plus -> counter: {}", num_counter.get());
 
             if num_counter.get() == 2 {
                 pre_ops.set(cur_ops.get());
@@ -165,20 +165,16 @@ fn build_ui(application: &Application) {
                     val1.set(val1.get() / val2.get());
                 }
 
-                //decrease the num counter and reset num2
+                // Decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
                 val2.set(0);
-
-                println!("ops: +");
-                button_show.set_label("+");
             }
 
             else {
                 cur_ops.set(ADD);
-
-                println!("ops: +");
-                button_show.set_label("+");
             }
+
+            button_show.set_label("+");
 
         }));
 
