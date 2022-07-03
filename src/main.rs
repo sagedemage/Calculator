@@ -37,77 +37,17 @@ fn main() {
 fn build_ui(application: &Application) {
     let margin: i32 = 12;
 
-    // Create two buttons
-    let button_num0 = Button::builder()
-        .label("0")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_num1 = Button::builder()
-        .label("1")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_num2 = Button::builder()
-        .label("2")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_plus = Button::builder()
-        .label("+")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_minus = Button::builder()
-        .label("-")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_multiply = Button::builder()
-        .label("*")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_divide = Button::builder()
-        .label("/")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_equals = Button::builder()
-        .label("=")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_clear = Button::builder()
-        .label("clear")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
-    let button_show = Button::builder()
-        .label("None")
-        .margin_top(margin)
-        .margin_bottom(margin)
-        .margin_start(margin)
-        .margin_end(margin)
-        .build();
+    // Create buttons
+    let button_num0 = create_button("0");
+    let button_num1 = create_button("1");
+    let button_num2 = create_button("2");
+    let button_plus = create_button("+");
+    let button_minus = create_button("-");
+    let button_multiply = create_button("*");
+    let button_divide = create_button("/");
+    let button_equals = create_button("=");
+    let button_clear = create_button("clear");
+    let button_show = create_button("none");
 
     //let entry = Entry::new()
 
@@ -250,7 +190,7 @@ fn build_ui(application: &Application) {
 
             if num_counter.get() == 2 {
                 result = equation_result(cur_ops.get(), &val1, val2.get());
-                
+
                 button_show.set_label(&result.to_string());
 
                 // reset variables
@@ -296,6 +236,19 @@ fn build_ui(application: &Application) {
 
     // Present the window
     window.present();
+}
+
+pub fn create_button(label: &'static str) -> Button {
+    let margin = 6;
+    let button = Button::builder()
+        .label(label)
+        .margin_start(margin)
+        .margin_top(margin)
+        .margin_end(margin)
+        .margin_bottom(margin)
+        .build();
+
+    return button;
 }
 
 fn set_value(num_counter: i32, val1: &Rc<Cell<i64>>, val2: &Rc<Cell<i64>>, num: i64) {
