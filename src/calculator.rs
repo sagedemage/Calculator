@@ -2,7 +2,9 @@
 
 use std::rc::Rc;
 use std::cell::Cell;
+pub use crate::gtk::prelude::*;
 pub use crate::defs::*;
+pub use crate::gtk::{Entry};
 
 pub fn set_value(num_counter: i32, val1: &Rc<Cell<i64>>, val2: &Rc<Cell<i64>>, num: i64) {
     if num_counter == 0 {
@@ -46,4 +48,11 @@ pub fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64) -> std::s
         result.push_str(&val1.get().to_string());
     }
     return result;
+}
+
+pub fn clear_entry(pre_ops: &Rc<Cell<char>>, entry: &Entry) {
+    if pre_ops.get() == EQUALS {
+        entry.set_text("");
+        pre_ops.set(NONE);
+    }
 }

@@ -42,20 +42,14 @@ pub fn build_ui(application: &Application) {
 
     button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
         move |_| {
-            if pre_ops.get() == EQUALS {
-                entry.set_text("");
-                pre_ops.set(NONE);
-            }
+            clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 1);
             entry.insert_text("1", &mut -1);
         }));
 
     button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
         move |_| {
-            if pre_ops.get() == EQUALS {
-                entry.set_text("");
-                pre_ops.set(NONE);
-            }
+            clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 2);
             entry.insert_text("2", &mut -1);
         }));
