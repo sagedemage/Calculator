@@ -1,4 +1,4 @@
-/* IMplementation for CSS */
+/* Implementation for CSS */
 
 use gdk4::Display;
 use gtk4 as gtk;
