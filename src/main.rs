@@ -10,7 +10,6 @@
  /* Main program */
 
 use gtk4 as gtk;
-use gtk::prelude::*;
 use gtk::{Application};
 
 mod defs;
