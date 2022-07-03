@@ -249,24 +249,8 @@ fn build_ui(application: &Application) {
             let mut result = String::from("");
 
             if num_counter.get() == 2 {
-                // start here
-                match cur_ops.get() {
-                    ADD => {val1.set(val1.get() + val2.get());},
-                    SUBTRACT => {val1.set(val1.get() - val2.get());},
-                    MULTIPLY => {val1.set(val1.get() * val2.get());},
-                    _=> ()
-                }
-                if cur_ops.get() == DIVIDE && val2.get() != 0 {
-                    val1.set(val1.get() / val2.get());
-                }
-                if cur_ops.get() == DIVIDE && val2.get() == 0 {
-                    result =  String::from("Divide by zero error");
-                }
-                else {
-                    result = val1.get().to_string();
-                }
-                // end here
-
+                result = equation_result(cur_ops.get(), &val1, val2.get());
+                
                 button_show.set_label(&result.to_string());
 
                 // reset variables
@@ -348,22 +332,24 @@ fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
     }
 }
 
-/*fn result() {
-    match cur_ops.get() {
-        ADD => {val1.set(val1.get() + val2.get());},
-        SUBTRACT => {val1.set(val1.get() - val2.get());},
-        MULTIPLY => {val1.set(val1.get() * val2.get());},
+fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64) -> std::string::String {
+    let mut result = String::from("= ").to_owned();
+    match cur_ops {
+        ADD => {val1.set(val1.get() + val2);},
+        SUBTRACT => {val1.set(val1.get() - val2);},
+        MULTIPLY => {val1.set(val1.get() * val2);},
         _=> ()
     }
-    if cur_ops.get() == DIVIDE && val2.get() != 0 {
-        val1.set(val1.get() / val2.get());
+    if cur_ops == DIVIDE && val2 != 0 {
+        val1.set(val1.get() / val2);
     }
-    if cur_ops.get() == DIVIDE && val2.get() == 0 {
+    if cur_ops == DIVIDE && val2 == 0 {
         result =  String::from("Divide by zero error");
     }
     else {
-        result = val1.get().to_string();
+        result.push_str(&val1.get().to_string());
     }
-}*/
+    return result;
+}
 
 
