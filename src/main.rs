@@ -115,32 +115,16 @@ fn build_ui(application: &Application) {
     // When a button is clicked, `number` should be changed
     button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
-            let mut val = 0;
-            if num_counter.get() == 0 {
-                val1.set(val1.get() * 10 + 1);
-                val = val1.get();
-            }
-            if num_counter.get() == 1 {
-                val2.set(val2.get() * 10 + 1);
-                val = val2.get();
-            }
+            set_value(num_counter.get(), &val1, &val2, 1);
+            let val = display_value(num_counter.get(), val1.get(), val2.get());
             button_show.set_label(&val.to_string());
-
         }));
 
     button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
-            let mut val = 0;
-            if num_counter.get() == 0 {
-                val1.set(val1.get() * 10 + 2);
-                val = val1.get();
-            }
-            if num_counter.get() == 1 {
-                val2.set(val2.get() * 10 + 2);
-                val = val2.get();
-            }
+            set_value(num_counter.get(), &val1, &val2, 2);
+            let val = display_value(num_counter.get(), val1.get(), val2.get());
             button_show.set_label(&val.to_string());
-
         }));
 
     button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong button_show =>
@@ -345,4 +329,23 @@ fn build_ui(application: &Application) {
 
     // Present the window
     window.present();
+}
+
+fn set_value(num_counter: i32, val1: &Rc<Cell<i64>>, val2: &Rc<Cell<i64>>, num: i64) {
+    if num_counter == 0 {
+        val1.set(val1.get() * 10 + num);
+    }
+    if num_counter == 1 {
+        val2.set(val2.get() * 10 + num);
+    }
+}
+
+fn display_value(num_counter: i32, val1: i64, val2: i64) -> i64 {
+    if num_counter == 0 {
+        return val1;
+    }
+    if num_counter == 1 {
+        return val2;
+    }
+    return 0;
 }
