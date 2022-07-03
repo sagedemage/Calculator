@@ -9,8 +9,9 @@
 
  /* Main program */
 
+use gdk4::Display;
 use gtk4 as gtk;
-use gtk::{Application};
+use gtk::{Application, CssProvider, StyleContext};
 
 mod defs;
 mod button;
@@ -28,10 +29,30 @@ fn main() {
     // Create a new application
     let app = Application::builder().application_id(APP_ID).build();
 
-    // Connect to "activate" signal of `app`
+    // Connect to signals
+    app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
 
     // Run the application
     app.run();
+}
+
+fn load_css() {
+    // Load the CSS file and add it to the provider
+    let provider = CssProvider::new();
+    provider.load_from_data(include_bytes!("style.css"));
+
+    //IsA
+
+    // Add the provider to the default screen
+    //IsA<gtk4::gdk4::Display>` is not satisfied
+    //the following other types implement trait `IsA<T>`:
+    //<gdk::Display as IsA<gdk::Display>>
+    //<gdk::Display as IsA<gdk::glib::Object>>rustcE0277
+    StyleContext::add_provider_for_display(
+        &Display::default().expect("Could not connect to a display."),
+        &provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
 }
 

@@ -6,6 +6,7 @@ use std::cell::Cell;
 use gtk4 as gtk;
 use gtk::{Application, ApplicationWindow, Grid, Orientation};
 use glib_macros::clone;
+//use pango::{AttrSize, AttrColor};
 
 pub use crate::defs::*;
 pub use crate::button::*;
@@ -292,8 +293,8 @@ pub fn build_ui(application: &Application) {
     let window = ApplicationWindow::builder()
         .application(application)
         .title("Calculator")
-        .default_width(250)
-        .default_height(70)
+        //.default_width(250)
+        //.default_height(70)
         //.child(&gtk_box)
         .build();
 
