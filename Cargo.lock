@@ -338,6 +338,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "gtk4-calculator"
+version = "0.1.0"
+dependencies = [
+ "gdk4",
+ "glib",
+ "glib-macros",
+ "gtk4",
+ "pango",
+]
+
+[[package]]
 name = "gtk4-macros"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -350,17 +361,6 @@ dependencies = [
  "quick-xml",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "gtk4-memory-management"
-version = "0.1.0"
-dependencies = [
- "gdk4",
- "glib",
- "glib-macros",
- "gtk4",
- "pango",
 ]
 
 [[package]]

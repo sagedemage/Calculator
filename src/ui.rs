@@ -4,7 +4,8 @@ use std::rc::Rc;
 use std::cell::Cell;
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Grid, Orientation};
+use gtk::prelude::*;
+use gtk::{Application, ApplicationWindow, Grid, Orientation, Widget};
 use glib_macros::clone;
 //use pango::{AttrSize, AttrColor};
 
@@ -32,6 +33,9 @@ pub fn build_ui(application: &Application) {
     let button_equals = create_button("=");
     let button_clear = create_button("clear");
     let entry = create_entry();
+
+    button_clear.set_widget_name("clear_button");
+    button_equals.set_widget_name("equals_button");
 
     // A mutable integer
     let val1: Rc<Cell<i64>> = Rc::new(Cell::new(0));

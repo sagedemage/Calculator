@@ -9,9 +9,8 @@
 
  /* Main program */
 
-use gdk4::Display;
 use gtk4 as gtk;
-use gtk::{Application, CssProvider, StyleContext};
+use gtk::{Application};
 
 mod defs;
 mod button;
@@ -32,8 +31,8 @@ fn main() {
     let app = Application::builder().application_id(APP_ID).build();
 
     // Connect to signals
-    app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
+    app.connect_startup(|_| load_css());
 
     // Run the application
     app.run();

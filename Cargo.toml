@@ -1,5 +1,5 @@
 [package]
-name = "gtk4-memory-management"
+name = "gtk4-calculator"
 version = "0.1.0"
 edition = "2021"
 
