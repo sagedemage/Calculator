@@ -38,6 +38,13 @@ fn build_ui(application: &Application) {
     let margin: i32 = 12;
 
     // Create two buttons
+    let button_num0 = Button::builder()
+        .label("0")
+        .margin_top(margin)
+        .margin_bottom(margin)
+        .margin_start(margin)
+        .margin_end(margin)
+        .build();
     let button_num1 = Button::builder()
         .label("1")
         .margin_top(margin)
@@ -113,6 +120,13 @@ fn build_ui(application: &Application) {
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
+    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
+        move |_| {
+            set_value(num_counter.get(), &val1, &val2, 0);
+            let val = display_value(num_counter.get(), val1.get(), val2.get());
+            button_show.set_label(&val.to_string());
+        }));
+
     button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong button_show =>
         move |_| {
             set_value(num_counter.get(), &val1, &val2, 1);
@@ -232,21 +246,23 @@ fn build_ui(application: &Application) {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
-            let mut result = 0;
+            let mut result = String::from("");
 
             if num_counter.get() == 2 {
                 match cur_ops.get() {
-                    ADD => {val1.set(val1.get() + val2.get()); result = val1.get();},
-                    SUBTRACT => {val1.set(val1.get() - val2.get()); result = val1.get();},
-                    MULTIPLY => {val1.set(val1.get() * val2.get()); result = val1.get();},
+                    ADD => {val1.set(val1.get() + val2.get());},
+                    SUBTRACT => {val1.set(val1.get() - val2.get());},
+                    MULTIPLY => {val1.set(val1.get() * val2.get());},
                     _=> ()
                 }
-                if cur_ops.get() == DIVIDE && val2.get() == 0 {
-                    println!("Divide by zero error");
-                }
-                else if cur_ops.get() == DIVIDE && val2.get() != 0 {
+                if cur_ops.get() == DIVIDE && val2.get() != 0 {
                     val1.set(val1.get() / val2.get());
-                    result = val1.get();
+                }
+                if cur_ops.get() == DIVIDE && val2.get() == 0 {
+                    result =  String::from("Divide by zero error");
+                }
+                else {
+                    result = val1.get().to_string();
                 }
 
                 button_show.set_label(&result.to_string());
@@ -275,6 +291,7 @@ fn build_ui(application: &Application) {
         .build();
 
     gtk_box.append(&button_show);
+    gtk_box.append(&button_num0);
     gtk_box.append(&button_num1);
     gtk_box.append(&button_num2);
     gtk_box.append(&button_plus);
