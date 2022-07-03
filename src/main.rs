@@ -133,21 +133,12 @@ fn build_ui(application: &Application) {
             num_counter.set(num_counter.get() + 1);
 
             if num_counter.get() == 2 {
+                // Set previous and current operation
                 pre_ops.set(cur_ops.get());
                 cur_ops.set(ADD);
 
-                match pre_ops.get() {
-                    ADD => val1.set(val1.get() + val2.get()),
-                    SUBTRACT => val1.set(val1.get() - val2.get()),
-                    MULTIPLY => val1.set(val1.get() * val2.get()),
-                    _=> ()
-                }
-                if pre_ops.get() == DIVIDE && val2.get() == 0 {
-                    println!("Divide by zero error");
-                }
-                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
-                    val1.set(val1.get() / val2.get());
-                }
+                // Do operation
+                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
 
                 // Decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
@@ -167,21 +158,12 @@ fn build_ui(application: &Application) {
             num_counter.set(num_counter.get() + 1);
 
             if num_counter.get() == 2 {
+                // Set previous and current operation
                 pre_ops.set(cur_ops.get());
                 cur_ops.set(SUBTRACT);
 
-                match pre_ops.get() {
-                    ADD => val1.set(val1.get() + val2.get()),
-                    SUBTRACT => val1.set(val1.get() - val2.get()),
-                    MULTIPLY => val1.set(val1.get() * val2.get()),
-                    _=> ()
-                }
-                if pre_ops.get() == DIVIDE && val2.get() == 0 {
-                    println!("Divide by zero error");
-                }
-                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
-                    val1.set(val1.get() / val2.get());
-                }
+                // Do operation
+                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
 
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
@@ -201,21 +183,12 @@ fn build_ui(application: &Application) {
             num_counter.set(num_counter.get() + 1);
     
             if num_counter.get() == 2 {
+                // Set previous and current operation
                 pre_ops.set(cur_ops.get());
                 cur_ops.set(MULTIPLY);
-    
-                match pre_ops.get() {
-                    ADD => val1.set(val1.get() + val2.get()),
-                    SUBTRACT => val1.set(val1.get() - val2.get()),
-                    MULTIPLY => val1.set(val1.get() * val2.get()),
-                    _=> ()
-                }
-                if pre_ops.get() == DIVIDE && val2.get() == 0 {
-                    println!("Divide by zero error");
-                }
-                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
-                    val1.set(val1.get() / val2.get());
-                }
+                
+                // Do operation
+                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
     
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
@@ -235,21 +208,12 @@ fn build_ui(application: &Application) {
             num_counter.set(num_counter.get() + 1);
         
             if num_counter.get() == 2 {
+                // Set previous and current operation
                 pre_ops.set(cur_ops.get());
                 cur_ops.set(DIVIDE);
         
-                match pre_ops.get() {
-                    ADD => val1.set(val1.get() + val2.get()),
-                    SUBTRACT => val1.set(val1.get() - val2.get()),
-                    MULTIPLY => val1.set(val1.get() * val2.get()),
-                    _=> ()
-                }
-                if pre_ops.get() == DIVIDE && val2.get() == 0 {
-                    println!("Divide by zero error");
-                }
-                else if pre_ops.get() == DIVIDE && val2.get() != 0 {
-                    val1.set(val1.get() / val2.get());
-                }
+                // Do operation
+                operation(num_counter.get(), pre_ops.get(), &val1, val2.get());
         
                 // reset variables
                 num_counter.set(num_counter.get() - 1);
@@ -349,3 +313,20 @@ fn display_value(num_counter: i32, val1: i64, val2: i64) -> i64 {
     }
     return 0;
 }
+
+fn operation(num_counter: i32, pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
+    match pre_ops {
+        ADD => val1.set(val1.get() + val2),
+        SUBTRACT => val1.set(val1.get() - val2),
+        MULTIPLY => val1.set(val1.get() * val2),
+        _=> ()
+    }
+    if pre_ops == DIVIDE && val2 == 0 {
+        println!("Divide by zero error");
+    }
+    else if pre_ops == DIVIDE && val2 != 0 {
+        val1.set(val1.get() / val2);
+    }
+}
+
+
