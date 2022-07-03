@@ -1,7 +1,20 @@
-# gtk4-memory-management
+# gtk4-calculator
 
-This repository explains how to properly do memory management in gtk4.
+Basic calculator application written in rust using gtk4 rust key bindings.
 
-## Resources:
-Got this code from GUI development with Rust and GTK 4 Book:
-* [Memory Management in gtk4](https://gtk-rs.org/gtk4-rs/stable/latest/book/g_object_memory_management.html#memory-management)
+## Dependencies
+* libgtk-4-dev
+* build-essential
+
+Command:
+```
+sudo apt install libgtk-4-dev build-essential
+```
+
+Check this page to install dependencies in other linux distros:
+[Linux Installation](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_linux.html)
+
+## Crates:
+* [gtk4 crate](https://crates.io/crates/gtk4)
+* [glib crate](https://crates.io/crates/glib)
+* [glib-macros](https://crates.io/crates/glib-macros)
