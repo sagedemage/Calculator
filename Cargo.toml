@@ -8,6 +8,4 @@ edition = "2021"
 [dependencies]
 gtk4 = "0.4.8"
 gdk4 = "0.4.8"
-glib = "0.15.12"
 glib-macros = "0.15.11"
-pango = "0.15.10"

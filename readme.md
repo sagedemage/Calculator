@@ -15,6 +15,6 @@ Check this page to install dependencies in other linux distros:
 [Linux Installation](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_linux.html)
 
 ## Crates:
-* [gtk4 crate](https://crates.io/crates/gtk4)
-* [glib crate](https://crates.io/crates/glib)
+* [gtk4](https://crates.io/crates/gtk4)
+* [gdk4](https://crates.io/crates/gdk4)
 * [glib-macros](https://crates.io/crates/glib-macros)

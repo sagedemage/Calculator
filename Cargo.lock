@@ -342,10 +342,8 @@ name = "gtk4-calculator"
 version = "0.1.0"
 dependencies = [
  "gdk4",
- "glib",
  "glib-macros",
  "gtk4",
- "pango",
 ]
 
 [[package]]
