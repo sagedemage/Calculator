@@ -41,71 +41,83 @@ pub fn build_ui(application: &Application) {
     let num_counter = Rc::new(Cell::new(0));
     let cur_ops = Rc::new(Cell::new(NONE));
     let pre_ops = Rc::new(Cell::new(NONE));
+    let divide_zero = Rc::new(Cell::new(false));
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 0);
             entry.insert_text("0", &mut -1);
         }));
-    button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 1);
             entry.insert_text("1", &mut -1);
         }));
-    button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 2);
             entry.insert_text("2", &mut -1);
         }));
-    button_num3.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num3.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 3);
             entry.insert_text("3", &mut -1);
         }));
-    button_num4.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num4.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 4);
             entry.insert_text("4", &mut -1);
         }));
-    button_num5.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num5.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 5);
             entry.insert_text("5", &mut -1);
         }));
-    button_num6.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num6.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 6);
             entry.insert_text("6", &mut -1);
         }));
-    button_num7.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num7.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 7);
             entry.insert_text("7", &mut -1);
         }));
-    button_num8.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num8.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 8);
             entry.insert_text("8", &mut -1);
         }));
-    button_num9.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, @strong entry =>
+    button_num9.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+        @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
             set_value(num_counter.get(), &val1, &val2, 9);
             entry.insert_text("9", &mut -1);
         }));
     
-    button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
+    button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
+        @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -130,7 +142,8 @@ pub fn build_ui(application: &Application) {
 
         }));
 
-    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
+    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
+        @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -155,7 +168,8 @@ pub fn build_ui(application: &Application) {
     
         }));
 
-    button_multiply.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
+    button_multiply.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
+        @strong pre_ops, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -180,7 +194,8 @@ pub fn build_ui(application: &Application) {
         
         }));
 
-    button_divide.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong pre_ops, @strong entry =>
+    button_divide.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
+        @strong pre_ops, @strong divide_zero, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
@@ -192,6 +207,9 @@ pub fn build_ui(application: &Application) {
         
                 // Do operation
                 operation(pre_ops.get(), &val1, val2.get());
+
+                // Check divison by zero
+                check_divison_by_zero(pre_ops.get(), val2.get(), &divide_zero);
         
                 // reset variables
                 num_counter.set(num_counter.get() - 1);
@@ -205,15 +223,16 @@ pub fn build_ui(application: &Application) {
             
         }));
     
-    button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, @strong entry =>
+    button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
+        @strong divide_zero, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
             if num_counter.get() == 2 {
-                let result = equation_result(cur_ops.get(), &val1, val2.get());
+                let result = equation_result(cur_ops.get(), &val1, val2.get(), &divide_zero);
 
-                entry.set_text(&result.to_string());
+                entry.set_text(&result);
 
                 pre_ops.set(EQUALS);
 
