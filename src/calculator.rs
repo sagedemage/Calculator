@@ -23,7 +23,7 @@ pub fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
         _=> ()
     }
     if pre_ops == DIVIDE && val2 == 0 {
-        println!("Division by zero error");
+        println!("Divide by 0 error");
     }
     else if pre_ops == DIVIDE && val2 != 0 {
         val1.set(val1.get() / val2);
@@ -31,7 +31,7 @@ pub fn operation(pre_ops: char, val1: &Rc<Cell<i64>>, val2: i64) {
 }
 
 pub fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64) -> std::string::String {
-    let mut result = String::from("= ").to_owned();
+    let mut result = String::from("= ");
     match cur_ops {
         ADD => {val1.set(val1.get() + val2);},
         SUBTRACT => {val1.set(val1.get() - val2);},
@@ -42,12 +42,12 @@ pub fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64) -> std::s
         val1.set(val1.get() / val2);
     }
     if cur_ops == DIVIDE && val2 == 0 {
-        result =  String::from("Division by zero error");
+        result =  String::from("Divide by 0 error");
     }
     else {
         result.push_str(&val1.get().to_string());
     }
-    return result;
+    result
 }
 
 pub fn clear_entry(pre_ops: &Rc<Cell<char>>, entry: &Entry) {

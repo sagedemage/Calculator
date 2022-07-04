@@ -213,7 +213,7 @@ pub fn build_ui(application: &Application) {
             if num_counter.get() == 2 {
                 let result = equation_result(cur_ops.get(), &val1, val2.get());
 
-                entry.set_text(&result.to_string());
+                entry.set_text(&result);
 
                 pre_ops.set(EQUALS);
 
