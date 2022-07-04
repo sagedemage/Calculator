@@ -49,7 +49,7 @@ pub fn equation_result(cur_ops: char, val1: &Rc<Cell<i64>>, val2: i64, divide_ze
     if cur_ops == DIVIDE && val2 == 0 {
         result =  String::from("Divide by 0 error");
     }
-    if divide_zero.get() == true {
+    if divide_zero.get() {
         result =  String::from("Divide by 0 error");
     }
     else {
