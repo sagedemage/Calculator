@@ -18,3 +18,15 @@ Check this page to install dependencies in other linux distros:
 * [gtk4](https://crates.io/crates/gtk4)
 * [gdk4](https://crates.io/crates/gdk4)
 * [glib-macros](https://crates.io/crates/glib-macros)
+
+## Building Calculator app
+
+Go to the root directory of my project
+```
+cd Calculator
+```
+
+Build and run the application
+```
+cargo run
+```
