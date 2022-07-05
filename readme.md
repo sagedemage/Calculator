@@ -1,4 +1,4 @@
-# gtk4-calculator
+# Calculator
 
 Basic calculator application written in rust using gtk4 rust key bindings.
 
