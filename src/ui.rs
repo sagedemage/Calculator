@@ -36,8 +36,8 @@ pub fn build_ui(application: &Application) {
     button_equals.add_css_class("suggested-action");
 
     // A mutable integer
-    let val1: Rc<Cell<i64>> = Rc::new(Cell::new(0));
-    let val2: Rc<Cell<i64>> = Rc::new(Cell::new(0));
+    let val1: Rc<Cell<f64>> = Rc::new(Cell::new(0.0));
+    let val2: Rc<Cell<f64>> = Rc::new(Cell::new(0.0));
     let num_counter = Rc::new(Cell::new(0));
     let cur_ops = Rc::new(Cell::new(NONE));
     let pre_ops = Rc::new(Cell::new(NONE));
@@ -49,70 +49,70 @@ pub fn build_ui(application: &Application) {
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 0);
+            set_value(num_counter.get(), &val1, &val2, 0.0);
             entry.insert_text("0", &mut -1);
         }));
     button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 1);
+            set_value(num_counter.get(), &val1, &val2, 1.0);
             entry.insert_text("1", &mut -1);
         }));
     button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 2);
+            set_value(num_counter.get(), &val1, &val2, 2.0);
             entry.insert_text("2", &mut -1);
         }));
     button_num3.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 3);
+            set_value(num_counter.get(), &val1, &val2, 3.0);
             entry.insert_text("3", &mut -1);
         }));
     button_num4.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 4);
+            set_value(num_counter.get(), &val1, &val2, 4.0);
             entry.insert_text("4", &mut -1);
         }));
     button_num5.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 5);
+            set_value(num_counter.get(), &val1, &val2, 5.0);
             entry.insert_text("5", &mut -1);
         }));
     button_num6.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 6);
+            set_value(num_counter.get(), &val1, &val2, 6.0);
             entry.insert_text("6", &mut -1);
         }));
     button_num7.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 7);
+            set_value(num_counter.get(), &val1, &val2, 7.0);
             entry.insert_text("7", &mut -1);
         }));
     button_num8.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 8);
+            set_value(num_counter.get(), &val1, &val2, 8.0);
             entry.insert_text("8", &mut -1);
         }));
     button_num9.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
         @strong entry =>
         move |_| {
             clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 9);
+            set_value(num_counter.get(), &val1, &val2, 9.0);
             entry.insert_text("9", &mut -1);
         }));
     
@@ -132,7 +132,7 @@ pub fn build_ui(application: &Application) {
 
                 // Decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0);
+                val2.set(0.0);
             }
             else {
                 cur_ops.set(ADD);
@@ -158,7 +158,7 @@ pub fn build_ui(application: &Application) {
 
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0);
+                val2.set(0.0);
             }
             else {
                 cur_ops.set(SUBTRACT);
@@ -184,7 +184,7 @@ pub fn build_ui(application: &Application) {
     
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0);
+                val2.set(0.0);
             }
             else {
                 cur_ops.set(MULTIPLY);
@@ -213,7 +213,7 @@ pub fn build_ui(application: &Application) {
         
                 // reset variables
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0);
+                val2.set(0.0);
             }
             else {
                 cur_ops.set(DIVIDE);
@@ -238,8 +238,8 @@ pub fn build_ui(application: &Application) {
 
                 // reset variables
                 num_counter.set(0);
-                val1.set(0);
-                val2.set(0);
+                val1.set(0.0);
+                val2.set(0.0);
                 cur_ops.set(NONE);
             }
         
@@ -248,8 +248,8 @@ pub fn build_ui(application: &Application) {
     button_clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             num_counter.set(0);
-            val1.set(0);
-            val2.set(0);
+            val1.set(0.0);
+            val2.set(0.0);
             cur_ops.set(NONE);
             entry.set_text("");
         }));
