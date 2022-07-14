@@ -4,7 +4,7 @@ use std::rc::Rc;
 use std::cell::Cell;
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Grid};
+use gtk::{Application, ApplicationWindow, Grid, HeaderBar, ToggleButton};
 use glib_macros::clone;
 
 pub use crate::defs::*;
@@ -12,6 +12,16 @@ pub use crate::button::*;
 pub use crate::calculator::*;
 
 pub fn build_ui(application: &Application) {
+    // Header bar
+    let header_bar = HeaderBar::new();
+
+    // Search Button
+    let search_button = ToggleButton::new();
+
+    search_button.set_icon_name("system-search-symbolic");
+
+    header_bar.pack_end(&search_button);
+
     // Create buttons
     let button_num0 = create_button("0");
     let button_num1 = create_button("1");
@@ -292,6 +302,9 @@ pub fn build_ui(application: &Application) {
         .default_width(250)
         .default_height(70)
         .build();
+
+    
+    window.set_titlebar(Some(&header_bar));
 
     // gtk4::prelude::GtkWindowExt
     window.set_child(Some(&grid));
