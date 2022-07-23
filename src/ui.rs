@@ -38,7 +38,7 @@ pub fn build_ui(application: &Application) {
         num9: create_button("9"),
     };
 
-    // create operation and miscs widgets
+    // create operation and misc widgets
     let button_plus = create_button("+");
     let button_minus = create_button("-");
     let button_multiply = create_button("\u{00D7}");
