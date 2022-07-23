@@ -23,19 +23,20 @@ pub fn build_ui(application: &Application) {
 
     // Add search button to the header bar
     //header_bar.pack_end(&search_button);
-
-    // Create buttons
-    // number buttons
-    let button_num0 = create_button("0");
-    let button_num1 = create_button("1");
-    let button_num2 = create_button("2");
-    let button_num3 = create_button("3");
-    let button_num4 = create_button("4");
-    let button_num5 = create_button("5");
-    let button_num6 = create_button("6");
-    let button_num7 = create_button("7");
-    let button_num8 = create_button("8");
-    let button_num9 = create_button("9");
+    
+    // Create number buttons
+    let number_buttons = NumberButtons{
+        num0: create_button("0"),
+        num1: create_button("1"),
+        num2: create_button("2"),
+        num3: create_button("3"),
+        num4: create_button("4"),
+        num5: create_button("5"),
+        num6: create_button("6"),
+        num7: create_button("7"),
+        num8: create_button("8"),
+        num9: create_button("9"),
+    };
 
     // operation and miscs buttons
     let button_plus = create_button("+");
@@ -69,70 +70,70 @@ pub fn build_ui(application: &Application) {
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 0.0);
             entry.insert_text("0", &mut -1);
         }));
-    button_num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 1.0);
             entry.insert_text("1", &mut -1);
         }));
-    button_num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 2.0);
             entry.insert_text("2", &mut -1);
         }));
-    button_num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 3.0);
             entry.insert_text("3", &mut -1);
         }));
-    button_num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 4.0);
             entry.insert_text("4", &mut -1);
         }));
-    button_num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 5.0);
             entry.insert_text("5", &mut -1);
         }));
-    button_num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 6.0);
             entry.insert_text("6", &mut -1);
         }));
-    button_num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 7.0);
             entry.insert_text("7", &mut -1);
         }));
-    button_num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
             set_value(num_counter.get(), &vals, 8.0);
             entry.insert_text("8", &mut -1);
         }));
-    button_num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    number_buttons.num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             clear_entry_before_calculation(&ops.borrow().previous, &entry);
@@ -292,25 +293,25 @@ pub fn build_ui(application: &Application) {
     GridExt::attach(&grid, &button_divide, 3, 1, 1, 1);
 
     /* Row 2 */
-    GridExt::attach(&grid, &button_num7, 0, 2, 1, 1);
-    GridExt::attach(&grid, &button_num8, 1, 2, 1, 1);
-    GridExt::attach(&grid, &button_num9, 2, 2, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num7, 0, 2, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num8, 1, 2, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num9, 2, 2, 1, 1);
     GridExt::attach(&grid, &button_multiply, 3, 2, 1, 1);
 
     /* Row 3 */
-    GridExt::attach(&grid, &button_num4, 0, 3, 1, 1);
-    GridExt::attach(&grid, &button_num5, 1, 3, 1, 1);
-    GridExt::attach(&grid, &button_num6, 2, 3, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num4, 0, 3, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num5, 1, 3, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num6, 2, 3, 1, 1);
     GridExt::attach(&grid, &button_minus, 3, 3, 1, 1);
 
     /* Row 4 */
-    GridExt::attach(&grid, &button_num1, 0, 4, 1, 1);
-    GridExt::attach(&grid, &button_num2, 1, 4, 1, 1);
-    GridExt::attach(&grid, &button_num3, 2, 4, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num1, 0, 4, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num2, 1, 4, 1, 1);
+    GridExt::attach(&grid, &number_buttons.num3, 2, 4, 1, 1);
     GridExt::attach(&grid, &button_plus, 3, 4, 1, 1);
 
     /* Row 5 */
-    GridExt::attach(&grid, &button_num0, 0, 5, 3, 1);
+    GridExt::attach(&grid, &number_buttons.num0, 0, 5, 3, 1);
     GridExt::attach(&grid, &button_equals, 3, 5, 1, 1);
 
     // Create a window
