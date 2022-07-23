@@ -1,7 +1,7 @@
 /* User Interface */
 
 use std::rc::Rc;
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
 use gtk::{Application, ApplicationWindow, Grid, HeaderBar, ToggleButton};
@@ -23,6 +23,7 @@ pub fn build_ui(application: &Application) {
     header_bar.pack_end(&search_button);
 
     // Create buttons
+    // number buttons
     let button_num0 = create_button("0");
     let button_num1 = create_button("1");
     let button_num2 = create_button("2");
@@ -34,6 +35,7 @@ pub fn build_ui(application: &Application) {
     let button_num8 = create_button("8");
     let button_num9 = create_button("9");
 
+    // operation and miscs buttons
     let button_plus = create_button("+");
     let button_minus = create_button("-");
     let button_multiply = create_button("\u{00D7}");
@@ -45,212 +47,227 @@ pub fn build_ui(application: &Application) {
     button_clear.add_css_class("destructive-action");
     button_equals.add_css_class("suggested-action");
 
-    // A mutable integer
-    let val1: Rc<Cell<f64>> = Rc::new(Cell::new(0.0));
-    let val2: Rc<Cell<f64>> = Rc::new(Cell::new(0.0));
-    let num_counter = Rc::new(Cell::new(0));
-    let cur_ops = Rc::new(Cell::new(NONE));
-    let pre_ops = Rc::new(Cell::new(NONE));
-    let divide_zero = Rc::new(Cell::new(false));
+    // A mutable values
+    let vals = Rc::new(RefCell::new(
+            Values {
+                num1: Rc::new(Cell::new(0.0)),
+                num2: Rc::new(Cell::new(0.0)),
+            }
+        ));
+
+    let ops = Rc::new(RefCell::new(
+            Operators {
+                current: Rc::new(Cell::new(NONE)),
+                previous: Rc::new(Cell::new(NONE)),
+            }
+        ));
+
+    let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
+    let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_num0.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 0.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 0.0);
             entry.insert_text("0", &mut -1);
         }));
-    button_num1.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 1.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 1.0);
             entry.insert_text("1", &mut -1);
         }));
-    button_num2.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 2.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 2.0);
             entry.insert_text("2", &mut -1);
         }));
-    button_num3.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 3.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 3.0);
             entry.insert_text("3", &mut -1);
         }));
-    button_num4.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 4.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 4.0);
             entry.insert_text("4", &mut -1);
         }));
-    button_num5.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 5.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 5.0);
             entry.insert_text("5", &mut -1);
         }));
-    button_num6.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 6.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 6.0);
             entry.insert_text("6", &mut -1);
         }));
-    button_num7.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 7.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 7.0);
             entry.insert_text("7", &mut -1);
         }));
-    button_num8.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 8.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 8.0);
             entry.insert_text("8", &mut -1);
         }));
-    button_num9.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong pre_ops, 
+    button_num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&pre_ops, &entry);
-            set_value(num_counter.get(), &val1, &val2, 9.0);
+            clear_entry(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 9.0);
             entry.insert_text("9", &mut -1);
         }));
     
-    button_plus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
-        @strong pre_ops, @strong entry =>
+    button_plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+        @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
             if num_counter.get() == 2 {
                 // Set previous and current operation
-                pre_ops.set(cur_ops.get());
-                cur_ops.set(ADD);
+                ops.borrow().previous.set(ops.borrow().current.get());
+                ops.borrow().current.set(ADD);
 
                 // Do operation
-                operation(pre_ops.get(), &val1, val2.get());
+                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
 
                 // Decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0.0);
+                vals.borrow().num2.set(0.0);
             }
             else {
-                cur_ops.set(ADD);
+                ops.borrow().current.set(ADD);
             }
 
             entry.insert_text("+", &mut -1);
 
         }));
 
-    button_minus.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
-        @strong pre_ops, @strong entry =>
+    button_minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+        @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
             if num_counter.get() == 2 {
                 // Set previous and current operation
-                pre_ops.set(cur_ops.get());
-                cur_ops.set(SUBTRACT);
+                ops.borrow().previous.set(ops.borrow().current.get());
+                ops.borrow().current.set(SUBTRACT);
 
                 // Do operation
-                operation(pre_ops.get(), &val1, val2.get());
+                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
 
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0.0);
+                vals.borrow().num2.set(0.0);
             }
             else {
-                cur_ops.set(SUBTRACT);
+                ops.borrow().current.set(SUBTRACT);
             }
 
             entry.insert_text("-", &mut -1);
     
         }));
 
-    button_multiply.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
-        @strong pre_ops, @strong entry =>
+    button_multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+        @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
     
             if num_counter.get() == 2 {
                 // Set previous and current operation
-                pre_ops.set(cur_ops.get());
-                cur_ops.set(MULTIPLY);
+                ops.borrow().previous.set(ops.borrow().current.get());
+                ops.borrow().current.set(MULTIPLY);
                 
                 // Do operation
-                operation(pre_ops.get(), &val1, val2.get());
+                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
     
                 //decrease the num counter and reset num2
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0.0);
+                vals.borrow().num2.set(0.0);
             }
             else {
-                cur_ops.set(MULTIPLY);
+                ops.borrow().current.set(MULTIPLY);
             }
 
             entry.insert_text("\u{00D7}", &mut -1);
         
         }));
 
-    button_divide.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
-        @strong pre_ops, @strong divide_zero, @strong entry =>
+    button_divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+        @strong divide_zero, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
         
             if num_counter.get() == 2 {
                 // Set previous and current operation
-                pre_ops.set(cur_ops.get());
-                cur_ops.set(DIVIDE);
+                ops.borrow().previous.set(ops.borrow().current.get());
+                ops.borrow().current.set(DIVIDE);
         
                 // Do operation
-                operation(pre_ops.get(), &val1, val2.get());
+                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
 
                 // Check divison by zero
-                check_divison_by_zero(pre_ops.get(), val2.get(), &divide_zero);
+                check_divison_by_zero(ops.borrow().previous.get(), vals.borrow().num2.get(), &divide_zero);
         
                 // reset variables
                 num_counter.set(num_counter.get() - 1);
-                val2.set(0.0);
+                vals.borrow().num2.set(0.0);
             }
             else {
-                cur_ops.set(DIVIDE);
+                ops.borrow().current.set(DIVIDE);
             }
 
             entry.insert_text("\u{00F7}", &mut -1);
             
         }));
     
-    button_equals.connect_clicked(clone!(@strong val1, @strong val2, @strong num_counter, @strong cur_ops, 
+    button_equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
 
             if num_counter.get() == 2 {
-                let result = equation_result(cur_ops.get(), &val1, val2.get(), &divide_zero);
+                let result = equation_result(
+                    ops.borrow().current.get(),
+                    &vals.borrow().num1,
+                    vals.borrow().num2.get(),
+                    &divide_zero
+                    );
 
                 entry.set_text(&result);
 
-                pre_ops.set(EQUALS);
+                ops.borrow().previous.set(EQUALS);
 
                 // reset variables
                 num_counter.set(0);
-                val1.set(0.0);
-                val2.set(0.0);
-                cur_ops.set(NONE);
+                vals.borrow().num1.set(0.0);
+                vals.borrow().num2.set(0.0);
+                ops.borrow().current.set(NONE);
             }
         
         }));
@@ -258,9 +275,9 @@ pub fn build_ui(application: &Application) {
     button_clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             num_counter.set(0);
-            val1.set(0.0);
-            val2.set(0.0);
-            cur_ops.set(NONE);
+            vals.borrow().num1.set(0.0);
+            vals.borrow().num2.set(0.0);
+            ops.borrow().current.set(NONE);
             entry.set_text("");
         }));
 

@@ -6,6 +6,16 @@ pub use crate::gtk::prelude::*;
 pub use crate::defs::*;
 pub use crate::gtk::Entry;
 
+pub struct Values {
+    pub num1: Rc<Cell<f64>>,
+    pub num2: Rc<Cell<f64>>,
+}
+
+pub struct Operators {
+    pub current: Rc<Cell<char>>,
+    pub previous: Rc<Cell<char>>,
+}
+
 pub fn set_value(num_counter: i32, val1: &Rc<Cell<f64>>, val2: &Rc<Cell<f64>>, num: f64) {
     if num_counter == 0 {
         val1.set(val1.get() * 10.0 + num);
