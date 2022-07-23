@@ -69,7 +69,6 @@ pub fn build_ui(application: &Application) {
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
     // Connect callbacks
-    // When a button is clicked, `number` should be changed
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
