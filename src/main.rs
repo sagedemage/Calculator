@@ -10,22 +10,19 @@
  /* Main program */
 
 pub use gtk4 as gtk;
-pub use gtk::{Application};
+pub use gtk::Application;
 
 pub use gdk4::Display;
 pub use gtk::{CssProvider, StyleContext};
 
 mod defs;
-mod button;
+mod widget;
 mod calculator;
 mod ui;
 mod css;
 
-pub use crate::defs::*;
-pub use crate::button::*;
-pub use crate::calculator::*;
 pub use crate::ui::*;
-pub use crate::css::{load_css};
+pub use crate::css::load_css;
 
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
 

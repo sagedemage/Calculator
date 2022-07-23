@@ -1,4 +1,4 @@
-/* Create Button implementation */
+/* Widgets */
 
 use gtk4 as gtk;
 use gtk::{Button, Entry};

@@ -9,7 +9,7 @@ use gtk::{Application, ApplicationWindow, Grid, HeaderBar};
 use glib_macros::clone;
 
 pub use crate::defs::*;
-pub use crate::button::*;
+pub use crate::widget::*;
 pub use crate::calculator::*;
 
 pub fn build_ui(application: &Application) {
