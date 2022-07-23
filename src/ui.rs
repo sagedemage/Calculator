@@ -4,7 +4,8 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Grid, HeaderBar, ToggleButton};
+use gtk::{Application, ApplicationWindow, Grid, HeaderBar};
+//use gtk::ToggleButton;
 use glib_macros::clone;
 
 pub use crate::defs::*;
@@ -15,12 +16,13 @@ pub fn build_ui(application: &Application) {
     // Header bar
     let header_bar = HeaderBar::new();
 
-    // Search Button
-    let search_button = ToggleButton::new();
+    // Search Button (work in progress)
+    //let search_button = ToggleButton::new();
 
-    search_button.set_icon_name("system-search-symbolic");
+    //search_button.set_icon_name("system-search-symbolic");
 
-    header_bar.pack_end(&search_button);
+    // Add search button to the header bar
+    //header_bar.pack_end(&search_button);
 
     // Create buttons
     // number buttons
@@ -70,71 +72,71 @@ pub fn build_ui(application: &Application) {
     button_num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 0.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 0.0);
             entry.insert_text("0", &mut -1);
         }));
     button_num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 1.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 1.0);
             entry.insert_text("1", &mut -1);
         }));
     button_num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 2.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 2.0);
             entry.insert_text("2", &mut -1);
         }));
     button_num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 3.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 3.0);
             entry.insert_text("3", &mut -1);
         }));
     button_num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 4.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 4.0);
             entry.insert_text("4", &mut -1);
         }));
     button_num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 5.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 5.0);
             entry.insert_text("5", &mut -1);
         }));
     button_num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 6.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 6.0);
             entry.insert_text("6", &mut -1);
         }));
     button_num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 7.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 7.0);
             entry.insert_text("7", &mut -1);
         }));
     button_num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 8.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 8.0);
             entry.insert_text("8", &mut -1);
         }));
     button_num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            clear_entry(&ops.borrow().previous, &entry);
-            set_value(num_counter.get(), &vals.borrow().num1, &vals.borrow().num2, 9.0);
+            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            set_value(num_counter.get(), &vals, 9.0);
             entry.insert_text("9", &mut -1);
         }));
     
@@ -254,9 +256,8 @@ pub fn build_ui(application: &Application) {
             if num_counter.get() == 2 {
                 let result = equation_result(
                     ops.borrow().current.get(),
-                    &vals.borrow().num1,
-                    vals.borrow().num2.get(),
-                    &divide_zero
+                    &vals,
+                    &divide_zero,
                     );
 
                 entry.set_text(&result);
