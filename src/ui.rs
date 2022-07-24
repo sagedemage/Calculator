@@ -48,6 +48,7 @@ pub fn build_ui(application: &Application) {
     let button_clear = create_button("clear");
     let entry = create_entry();
 
+    // add css class for the button
     button_clear.add_css_class("clear");
     button_equals.add_css_class("equals");
 
