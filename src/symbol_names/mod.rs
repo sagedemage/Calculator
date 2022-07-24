@@ -1,4 +1,4 @@
-/* Operation constants */
+/* Calculator symbol names */
 
 pub const ADD: char = 'a';
 pub const SUBTRACT: char = 's';

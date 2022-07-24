@@ -8,7 +8,7 @@ use gtk::{Application, ApplicationWindow, Grid, HeaderBar, AboutDialog};
 
 use glib_macros::clone;
 
-pub use crate::defs::*;
+pub use crate::symbol_names::*;
 pub use crate::widget::*;
 pub use crate::calculator::*;
 

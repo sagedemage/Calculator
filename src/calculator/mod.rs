@@ -3,7 +3,7 @@
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 pub use crate::gtk::prelude::*;
-pub use crate::defs::*;
+pub use crate::symbol_names::*;
 pub use crate::gtk::Entry;
 
 pub struct Values {

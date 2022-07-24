@@ -4,7 +4,7 @@ pub use gdk4::Display;
 pub use gtk4 as gtk;
 pub use gtk::{CssProvider, StyleContext};
 
-pub fn load_css() {
+pub fn load_css_file() {
     // Load the CSS file and add it to the provider
     let provider = CssProvider::new();
     provider.load_from_data(include_bytes!("style.css"));

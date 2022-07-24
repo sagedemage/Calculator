@@ -15,14 +15,14 @@ pub use gtk::Application;
 pub use gdk4::Display;
 pub use gtk::{CssProvider, StyleContext};
 
-mod defs;
+mod symbol_names;
 mod widget;
 mod calculator;
 mod ui;
 mod css;
 
 pub use crate::ui::*;
-pub use crate::css::load_css;
+pub use crate::css::load_css_file;
 
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
 
@@ -31,7 +31,7 @@ fn main() {
     let app = Application::builder().application_id(APP_ID).build();
 
     // Connect to signals
-    app.connect_startup(|_| load_css());
+    app.connect_startup(|_| load_css_file());
     app.connect_activate(build_ui);
 
     // Run the application
