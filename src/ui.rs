@@ -20,6 +20,8 @@ pub fn build_ui(application: &Application) {
 
     toggle_button.set_icon_name("view-list");
 
+    //toggle_button.insert_action_group(name, group);
+
     // Add search button to the header bar
     header_bar.pack_end(&toggle_button);
     
@@ -46,8 +48,8 @@ pub fn build_ui(application: &Application) {
     let button_clear = create_button("clear");
     let entry = create_entry();
 
-    button_clear.add_css_class("destructive-action");
-    button_equals.add_css_class("suggested-action");
+    button_clear.add_css_class("clear");
+    button_equals.add_css_class("equals");
 
     // A mutable values
     let vals = Rc::new(RefCell::new(
