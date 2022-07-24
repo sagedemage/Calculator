@@ -4,8 +4,8 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Grid, HeaderBar, MenuButton, PopoverMenu, PopoverMenuBar, ToggleButton};
-use gio::{Menu, MenuModel};
+use gtk::{Application, ApplicationWindow, Grid, HeaderBar, AboutDialog};
+
 use glib_macros::clone;
 
 pub use crate::defs::*;
@@ -16,14 +16,21 @@ pub fn build_ui(application: &Application) {
     // Header bar
     let header_bar = HeaderBar::new();
 
-    let toggle_button = ToggleButton::new();
-
-    toggle_button.set_icon_name("view-list");
-
-    //toggle_button.insert_action_group(name, group);
+    let about_button = create_button("About");
+    //about_button.set_icon_name("view-list");
+    
+    let authors = vec![String::from("Salmaan Saeed")];
+    
+    let about_dialog = AboutDialog::builder()
+        .version("0.1.0")
+        .comments("GTK4 Calculator App written in Rust")
+        .copyright("© 2022 Salmaan Saeed")
+        .authors(authors)
+        .license("The 3-Clause BSD License")
+        .build();
 
     // Add search button to the header bar
-    header_bar.pack_end(&toggle_button);
+    header_bar.pack_end(&about_button);
     
     // Create number buttons
     let number_buttons = NumberButtons{
@@ -71,6 +78,12 @@ pub fn build_ui(application: &Application) {
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
     // Connect callbacks
+    about_button.connect_clicked(clone!(@strong about_dialog =>
+        move |_| {
+            about_dialog.show();
+        }
+    ));
+
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
