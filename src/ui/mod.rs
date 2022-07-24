@@ -4,6 +4,7 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
+use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, Grid, HeaderBar, AboutDialog};
 
 use glib_macros::clone;
@@ -15,6 +16,9 @@ pub use crate::calculator::*;
 pub fn build_ui(application: &Application) {
     // Header bar
     let header_bar = HeaderBar::new();
+
+    // Create Grid
+    let grid = Grid::new();
 
     let about_button = create_button("About");
     //about_button.set_icon_name("view-list");
@@ -28,10 +32,7 @@ pub fn build_ui(application: &Application) {
         .authors(authors)
         .license("The 3-Clause BSD License")
         .build();
-
-    // Add search button to the header bar
-    header_bar.pack_end(&about_button);
-    
+   
     // Create number buttons
     let number_buttons = NumberButtons{
         num0: create_button("0"),
@@ -47,17 +48,17 @@ pub fn build_ui(application: &Application) {
     };
 
     // create operation and misc widgets
-    let button_plus = create_button("+");
-    let button_minus = create_button("-");
-    let button_multiply = create_button("\u{00D7}");
-    let button_divide = create_button("\u{00F7}");
-    let button_equals = create_button("=");
-    let button_clear = create_button("clear");
+    let plus_button = create_button("+");
+    let minus_button = create_button("-");
+    let multiply_button = create_button("\u{00D7}");
+    let divide_button = create_button("\u{00F7}");
+    let equals_button = create_button("=");
+    let clear_button = create_button("clear");
     let entry = create_entry();
 
     // add css class for the button
-    button_clear.add_css_class("clear");
-    button_equals.add_css_class("equals");
+    clear_button.add_css_class("clear");
+    equals_button.add_css_class("equals");
 
     // A mutable values
     let vals = Rc::new(RefCell::new(
@@ -155,7 +156,7 @@ pub fn build_ui(application: &Application) {
             entry.insert_text("9", &mut -1);
         }));
     
-    button_plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    plus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             // Increase the counter
@@ -181,7 +182,7 @@ pub fn build_ui(application: &Application) {
 
         }));
 
-    button_minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    minus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             // Increase the counter
@@ -207,7 +208,7 @@ pub fn build_ui(application: &Application) {
     
         }));
 
-    button_multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    multiply_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
             // Increase the counter
@@ -233,7 +234,7 @@ pub fn build_ui(application: &Application) {
         
         }));
 
-    button_divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    divide_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             // Increase the counter
@@ -262,7 +263,7 @@ pub fn build_ui(application: &Application) {
             
         }));
     
-    button_equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    equals_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             // Increase the counter
@@ -288,7 +289,7 @@ pub fn build_ui(application: &Application) {
         
         }));
 
-    button_clear.connect_clicked(clone!(@strong entry =>
+    clear_button.connect_clicked(clone!(@strong entry =>
         move |_| {
             num_counter.set(0);
             vals.borrow().num1.set(0.0);
@@ -297,36 +298,37 @@ pub fn build_ui(application: &Application) {
             entry.set_text("");
         }));
 
-    let grid = Grid::new(); // gtk4::Grid
+    // Add search button to the header bar
+    header_bar.pack_end(&about_button);
 
     /* Row 0 */
     GridExt::attach(&grid, &entry, 0, 0, 4, 1);
 
     /* Row 1 */
-    GridExt::attach(&grid, &button_clear, 0, 1, 3, 1);
-    GridExt::attach(&grid, &button_divide, 3, 1, 1, 1);
+    GridExt::attach(&grid, &clear_button, 0, 1, 3, 1);
+    GridExt::attach(&grid, &divide_button, 3, 1, 1, 1);
 
     /* Row 2 */
     GridExt::attach(&grid, &number_buttons.num7, 0, 2, 1, 1);
     GridExt::attach(&grid, &number_buttons.num8, 1, 2, 1, 1);
     GridExt::attach(&grid, &number_buttons.num9, 2, 2, 1, 1);
-    GridExt::attach(&grid, &button_multiply, 3, 2, 1, 1);
+    GridExt::attach(&grid, &multiply_button, 3, 2, 1, 1);
 
     /* Row 3 */
     GridExt::attach(&grid, &number_buttons.num4, 0, 3, 1, 1);
     GridExt::attach(&grid, &number_buttons.num5, 1, 3, 1, 1);
     GridExt::attach(&grid, &number_buttons.num6, 2, 3, 1, 1);
-    GridExt::attach(&grid, &button_minus, 3, 3, 1, 1);
+    GridExt::attach(&grid, &minus_button, 3, 3, 1, 1);
 
     /* Row 4 */
     GridExt::attach(&grid, &number_buttons.num1, 0, 4, 1, 1);
     GridExt::attach(&grid, &number_buttons.num2, 1, 4, 1, 1);
     GridExt::attach(&grid, &number_buttons.num3, 2, 4, 1, 1);
-    GridExt::attach(&grid, &button_plus, 3, 4, 1, 1);
+    GridExt::attach(&grid, &plus_button, 3, 4, 1, 1);
 
     /* Row 5 */
     GridExt::attach(&grid, &number_buttons.num0, 0, 5, 3, 1);
-    GridExt::attach(&grid, &button_equals, 3, 5, 1, 1);
+    GridExt::attach(&grid, &equals_button, 3, 5, 1, 1);
 
     // Create a window
     let window = ApplicationWindow::builder()
