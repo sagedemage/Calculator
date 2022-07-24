@@ -4,8 +4,8 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Grid, HeaderBar};
-//use gtk::ToggleButton;
+use gtk::{Application, ApplicationWindow, Grid, HeaderBar, MenuButton, PopoverMenu, PopoverMenuBar, ToggleButton};
+use gio::{Menu, MenuModel};
 use glib_macros::clone;
 
 pub use crate::defs::*;
@@ -16,13 +16,12 @@ pub fn build_ui(application: &Application) {
     // Header bar
     let header_bar = HeaderBar::new();
 
-    // Search Button (work in progress)
-    //let search_button = ToggleButton::new();
+    let toggle_button = ToggleButton::new();
 
-    //search_button.set_icon_name("system-search-symbolic");
+    toggle_button.set_icon_name("view-list");
 
     // Add search button to the header bar
-    //header_bar.pack_end(&search_button);
+    header_bar.pack_end(&toggle_button);
     
     // Create number buttons
     let number_buttons = NumberButtons{
