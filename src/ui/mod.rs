@@ -24,28 +24,11 @@ pub fn build_ui(application: &Application) {
 
     let pop = gtk::Popover::new();
 
-    let about_button = gtk::Button::with_label("about");
-    let info_button = gtk::Button::with_label("info");
-
-    let menu = Menu::new();
-    let help_menu = Menu::new();
-
-    help_menu.append(Some("About"), Some("app.about"));
-    menu.append_submenu(Some("Help"), &help_menu);
-
-    vbox.append(&about_button);
-    vbox.append(&info_button);
-
-    pop.set_child(Some(&vbox));
-
-    menu_button.set_popover(Some(&pop));
+    let about_label = gtk::Label::new(Some("About"));
 
     // Create Grid
     let grid = Grid::new();
 
-    //let about_button = create_button("About");
-    //about_button.set_icon_name("view-list");
-    
     let authors = vec![String::from("Salmaan Saeed")];
     
     let about_dialog = AboutDialog::builder()
@@ -101,12 +84,20 @@ pub fn build_ui(application: &Application) {
     let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
+    
     // Connect callbacks
-    about_button.connect_clicked(clone!(@strong about_dialog =>
+    /*about_label.connect_clicked(clone!(@strong about_dialog =>
         move |_| {
             about_dialog.show();
         }
-    ));
+    ));*/
+
+    about_label.connect_activate_current_link(clone!(@strong vals, @strong num_counter, @strong ops, 
+        @strong entry =>
+        move |_| {
+            println!("Hello");
+        }));
+
 
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
@@ -321,8 +312,16 @@ pub fn build_ui(application: &Application) {
             entry.set_text("");
         }));
 
+    // Add label to box
+    vbox.append(&about_label);
+    
+    // Add box to popover
+    pop.set_child(Some(&vbox));
+
+    // Add popover to menu button
+    menu_button.set_popover(Some(&pop));
+
     // Add about button to the header bar
-    //header_bar.pack_end(&about_button);
     header_bar.pack_end(&menu_button);
 
     /* Row 0 */
