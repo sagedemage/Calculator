@@ -4,9 +4,8 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
-use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, Popover, Grid, HeaderBar, AboutDialog, MenuButton};
-use gio::{Menu, MenuItem, MenuModel};
+use gio::{Menu, MenuItem};
 
 use glib_macros::clone;
 

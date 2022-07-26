@@ -11,8 +11,7 @@
 
 use gtk4 as gtk;
 
-use gdk4::Display;
-use gtk::{Application, CssProvider, StyleContext};
+use gtk::Application;
 use gtk::prelude::*;
 
 mod symbol_names;
