@@ -4,8 +4,8 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
-use gtk::{Application, ApplicationWindow, Popover, Grid, HeaderBar, AboutDialog, MenuButton};
-use gio::{Menu, MenuItem};
+use gtk::{Application, ApplicationWindow, Box, Orientation, GestureClick,
+Popover, Grid, HeaderBar, AboutDialog, MenuButton, Label};
 
 use glib_macros::clone;
 
@@ -13,29 +13,39 @@ pub use crate::symbol_names::*;
 pub use crate::widget::*;
 pub use crate::calculator::*;
 
+// Need GestureClick for label (about label)
+
 pub fn build_ui(application: &Application) {
+    /* build ui of the application */
+
     // Header bar
     let header_bar = HeaderBar::new();
 
+    // Menu Button
     let menu_button = MenuButton::new();
-    menu_button.set_icon_name("view-list");
+    menu_button.set_icon_name("view-list"); // set menu button icon
 
-    let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
+    // Vertical Box
+    let vbox = Box::new(Orientation::Vertical, 0);
 
-    let pop = gtk::Popover::new();
+    // Popover for labels
+    let popover = Popover::new();
 
-    let about_label = gtk::Label::new(Some("About"));
+    // About label
+    let about_label = Label::new(Some("About"));
 
-    // Create Grid
-    let grid = Grid::new();
-
-    let authors = vec![String::from("Salmaan Saeed")];
+    // About gesture
+    let about_gesture = GestureClick::new();
     
+    // Grid
+    let grid = Grid::new();
+    
+    // About Dialog 
     let about_dialog = AboutDialog::builder()
         .version("0.1.0")
         .comments("GTK4 Calculator App written in Rust")
         .copyright("© 2022 Salmaan Saeed")
-        .authors(authors)
+        .authors(vec![String::from("Salmaan Saeed")])
         .license("The 3-Clause BSD License")
         .build();
    
@@ -84,20 +94,11 @@ pub fn build_ui(application: &Application) {
     let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
-    
-    // Connect callbacks
-    /*about_label.connect_clicked(clone!(@strong about_dialog =>
-        move |_| {
-            about_dialog.show();
-        }
-    ));*/
-
-    about_label.connect_activate_current_link(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
-        move |_| {
-            println!("Hello");
-        }));
-
+    /* Connect callbacks */
+    about_gesture.connect_pressed(move |about_gesture, _, _, _| {
+        about_gesture.set_state(gtk::EventSequenceState::Claimed);
+        about_dialog.show();
+    });
 
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
@@ -313,43 +314,47 @@ pub fn build_ui(application: &Application) {
         }));
 
     // Add label to box
+    about_label.add_controller(&about_gesture);
+
+    // Add about label to vertical box
     vbox.append(&about_label);
     
-    // Add box to popover
-    pop.set_child(Some(&vbox));
+    // Set vertical box as the child of popover
+    popover.set_child(Some(&vbox));
 
-    // Add popover to menu button
-    menu_button.set_popover(Some(&pop));
+    // Set popover for menu button
+    menu_button.set_popover(Some(&popover));
 
     // Add about button to the header bar
     header_bar.pack_end(&menu_button);
 
-    /* Row 0 */
+    /* Attach widgets to the Grid */
+    // Row 0
     GridExt::attach(&grid, &entry, 0, 0, 4, 1);
 
-    /* Row 1 */
+    // Row 1
     GridExt::attach(&grid, &clear_button, 0, 1, 3, 1);
     GridExt::attach(&grid, &divide_button, 3, 1, 1, 1);
 
-    /* Row 2 */
+    // Row 2
     GridExt::attach(&grid, &number_buttons.num7, 0, 2, 1, 1);
     GridExt::attach(&grid, &number_buttons.num8, 1, 2, 1, 1);
     GridExt::attach(&grid, &number_buttons.num9, 2, 2, 1, 1);
     GridExt::attach(&grid, &multiply_button, 3, 2, 1, 1);
 
-    /* Row 3 */
+    // Row 3
     GridExt::attach(&grid, &number_buttons.num4, 0, 3, 1, 1);
     GridExt::attach(&grid, &number_buttons.num5, 1, 3, 1, 1);
     GridExt::attach(&grid, &number_buttons.num6, 2, 3, 1, 1);
     GridExt::attach(&grid, &minus_button, 3, 3, 1, 1);
 
-    /* Row 4 */
+    // Row 4
     GridExt::attach(&grid, &number_buttons.num1, 0, 4, 1, 1);
     GridExt::attach(&grid, &number_buttons.num2, 1, 4, 1, 1);
     GridExt::attach(&grid, &number_buttons.num3, 2, 4, 1, 1);
     GridExt::attach(&grid, &plus_button, 3, 4, 1, 1);
 
-    /* Row 5 */
+    // Row 5
     GridExt::attach(&grid, &number_buttons.num0, 0, 5, 3, 1);
     GridExt::attach(&grid, &equals_button, 3, 5, 1, 1);
 
@@ -367,22 +372,7 @@ pub fn build_ui(application: &Application) {
     // set grid as a child of window
     window.set_child(Some(&grid));
 
-    build_system_menu(application);
-
     // Present the window
     window.present();
 }
-
-fn build_system_menu(application: &Application) {
-    let menu_bar = gio::Menu::new();
-    let help_menu = gio::Menu::new();
-
-    help_menu.append(Some("About"), Some("app.about"));
-    menu_bar.append_submenu(Some("Help"), &help_menu);
-
-    application.set_menubar(Some(&menu_bar));
-}
-
-
-
 
