@@ -5,7 +5,8 @@ use std::cell::{Cell, RefCell};
 
 use gtk4 as gtk;
 use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Grid, HeaderBar, AboutDialog};
+use gtk::{Application, ApplicationWindow, Popover, Grid, HeaderBar, AboutDialog, MenuButton};
+use gio::{Menu, MenuItem, MenuModel};
 
 use glib_macros::clone;
 
@@ -17,10 +18,33 @@ pub fn build_ui(application: &Application) {
     // Header bar
     let header_bar = HeaderBar::new();
 
+    let menu_button = MenuButton::new();
+    menu_button.set_icon_name("view-list");
+
+    let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
+
+    let pop = gtk::Popover::new();
+
+    let about_button = gtk::Button::with_label("about");
+    let info_button = gtk::Button::with_label("info");
+
+    let menu = Menu::new();
+    let help_menu = Menu::new();
+
+    help_menu.append(Some("About"), Some("app.about"));
+    menu.append_submenu(Some("Help"), &help_menu);
+
+    vbox.append(&about_button);
+    vbox.append(&info_button);
+
+    pop.set_child(Some(&vbox));
+
+    menu_button.set_popover(Some(&pop));
+
     // Create Grid
     let grid = Grid::new();
 
-    let about_button = create_button("About");
+    //let about_button = create_button("About");
     //about_button.set_icon_name("view-list");
     
     let authors = vec![String::from("Salmaan Saeed")];
@@ -298,8 +322,9 @@ pub fn build_ui(application: &Application) {
             entry.set_text("");
         }));
 
-    // Add search button to the header bar
-    header_bar.pack_end(&about_button);
+    // Add about button to the header bar
+    //header_bar.pack_end(&about_button);
+    header_bar.pack_end(&menu_button);
 
     /* Row 0 */
     GridExt::attach(&grid, &entry, 0, 0, 4, 1);
@@ -338,12 +363,28 @@ pub fn build_ui(application: &Application) {
         .default_height(70)
         .build();
 
-    
+    // Set the window title bar
     window.set_titlebar(Some(&header_bar));
 
-    // gtk4::prelude::GtkWindowExt
+    // set grid as a child of window
     window.set_child(Some(&grid));
+
+    build_system_menu(application);
 
     // Present the window
     window.present();
 }
+
+fn build_system_menu(application: &Application) {
+    let menu_bar = gio::Menu::new();
+    let help_menu = gio::Menu::new();
+
+    help_menu.append(Some("About"), Some("app.about"));
+    menu_bar.append_submenu(Some("Help"), &help_menu);
+
+    application.set_menubar(Some(&menu_bar));
+}
+
+
+
+
