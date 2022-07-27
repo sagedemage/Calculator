@@ -39,15 +39,6 @@ pub fn build_ui(application: &Application) {
     
     // Grid
     let grid = Grid::new();
-    
-    // About Dialog 
-    let about_dialog = AboutDialog::builder()
-        .version("0.1.0")
-        .comments("GTK4 Calculator App written in Rust")
-        .copyright("© 2022 Salmaan Saeed")
-        .authors(vec![String::from("Salmaan Saeed")])
-        .license("The 3-Clause BSD License")
-        .build();
    
     // Create number buttons
     let number_buttons = NumberButtons{
@@ -97,6 +88,17 @@ pub fn build_ui(application: &Application) {
     /* Connect callbacks */
     about_gesture.connect_pressed(move |about_gesture, _, _, _| {
         about_gesture.set_state(gtk::EventSequenceState::Claimed);
+
+        // create about dialog here
+        // About Dialog 
+        let about_dialog = AboutDialog::builder()
+            .version("0.1.0")
+            .comments("GTK4 Calculator App written in Rust")
+            .copyright("© 2022 Salmaan Saeed")
+            .authors(vec![String::from("Salmaan Saeed")])
+            .license("The 3-Clause BSD License")
+            .build();
+
         about_dialog.show();
     });
 
