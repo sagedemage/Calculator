@@ -13,7 +13,8 @@ pub use crate::symbol_names::*;
 pub use crate::widget::*;
 pub use crate::calculator::*;
 
-// Need GestureClick for label (about label)
+// Get package version from Cargo
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub fn build_ui(application: &Application) {
     /* build ui of the application */
@@ -92,7 +93,7 @@ pub fn build_ui(application: &Application) {
         // create about dialog here
         // About Dialog 
         let about_dialog = AboutDialog::builder()
-            .version("0.1.0")
+            .version(VERSION)
             .comments("GTK4 Calculator App written in Rust")
             .copyright("© 2022 Salmaan Saeed")
             .authors(vec![String::from("Salmaan Saeed")])
