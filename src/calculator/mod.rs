@@ -25,21 +25,21 @@ pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {
     }
 }
 
-pub fn calculation(pre_ops: char, val1: &Rc<Cell<f64>>, val2: f64) {
-    match pre_ops {
-        ADD => val1.set(val1.get() + val2),
-        SUBTRACT => val1.set(val1.get() - val2),
-        MULTIPLY => val1.set(val1.get() * val2),
+pub fn calculation(operation: char, vals: &Rc<RefCell<Values>>) {
+    match operation {
+        ADD => vals.borrow().num1.set(vals.borrow().num1.get() + vals.borrow().num2.get()),
+        SUBTRACT => vals.borrow().num1.set(vals.borrow().num1.get() - vals.borrow().num2.get()),
+        MULTIPLY => vals.borrow().num1.set(vals.borrow().num1.get() * vals.borrow().num2.get()),
         _=> ()
     }
-    if pre_ops == DIVIDE && val2 != 0.0 {
-        val1.set(val1.get() / val2);
+    if operation == DIVIDE && vals.borrow().num2.get() != 0.0 {
+        vals.borrow().num1.set(vals.borrow().num1.get() / vals.borrow().num2.get());
     }
 }
 
-pub fn check_divison_by_zero(pre_ops: char, val2: f64, divide_zero: &Rc<Cell<bool>>) {
+pub fn check_divison_by_zero(ops: char, val2: f64, divide_zero: &Rc<Cell<bool>>) {
     /* Set division by zero status */
-    if pre_ops == DIVIDE && val2 == 0.0 {
+    if ops == DIVIDE && val2 == 0.0 {
         divide_zero.set(true);
     }
 }
@@ -53,7 +53,7 @@ pub fn operation(symbol_operator: char, num_counter: &Rc<Cell<i32>>, ops: &Rc<Re
         ops.borrow().current.set(symbol_operator);
         
         // Do calculation
-        calculation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
+        calculation(ops.borrow().previous.get(), &vals);
 
         // Check divison by zero
         check_divison_by_zero(ops.borrow().previous.get(), vals.borrow().num2.get(), divide_zero);
@@ -67,32 +67,22 @@ pub fn operation(symbol_operator: char, num_counter: &Rc<Cell<i32>>, ops: &Rc<Re
     }
 }
 
-pub fn equation_result(cur_ops: char, vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>)
--> std::string::String {
+pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>) 
+    -> std::string::String {
     let mut result = String::from("= ");
-    match cur_ops {
-        ADD => {
-            vals.borrow().num1.set(vals.borrow().num1.get() + vals.borrow().num2.get());
-        },
-        SUBTRACT => {
-            vals.borrow().num1.set(vals.borrow().num1.get() - vals.borrow().num2.get());
-        },
-        MULTIPLY => {
-            vals.borrow().num1.set(vals.borrow().num1.get() * vals.borrow().num2.get());
-        },
-        _=> ()
-    }
-    if cur_ops == DIVIDE && vals.borrow().num2.get() != 0.0 {
-        vals.borrow().num1.set(vals.borrow().num1.get() / vals.borrow().num2.get());
-    }
-    if cur_ops == DIVIDE && vals.borrow().num2.get() == 0.0 {
-        result =  String::from("Divide by 0 error");
-    }
-    else if divide_zero.get() {
+
+    // Check divison by zero
+    check_divison_by_zero(ops.borrow().current.get(), vals.borrow().num2.get(), divide_zero);
+
+    // Do calculation
+    calculation(ops.borrow().current.get(), &vals);
+
+    if divide_zero.get() {
+        // The result stores Divsion by Zero Error Message
         result =  String::from("Divide by 0 error");
     }
     else {
-        // append val1 to the result
+        // append the first value to the result
         // in other words, it just appends the result after the equals sign
         result.push_str(&vals.borrow().num1.get().to_string());
     }

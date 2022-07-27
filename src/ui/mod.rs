@@ -247,7 +247,7 @@ pub fn build_ui(application: &Application) {
 
                         if num_counter.get() == 2 {
                             let result = equation_result(
-                                ops.borrow().current.get(),
+                                &ops,
                                 &vals,
                                 &divide_zero,
                                 );
