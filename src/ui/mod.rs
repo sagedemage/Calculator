@@ -177,84 +177,88 @@ pub fn build_ui(application: &Application) {
     plus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            // Increase the counter
-            num_counter.set(num_counter.get() + 1);
+            if entry.text().chars().last().unwrap() != '+' {
+                // Increase the counter
+                num_counter.set(num_counter.get() + 1);
 
-            if num_counter.get() == 2 {
-                // Set previous and current operation
-                ops.borrow().previous.set(ops.borrow().current.get());
-                ops.borrow().current.set(ADD);
+                if num_counter.get() == 2 {
+                    // Set previous and current operation
+                    ops.borrow().previous.set(ops.borrow().current.get());
+                    ops.borrow().current.set(ADD);
 
-                // Do operation
-                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
+                    // Do operation
+                    operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
 
-                // Decrease the num counter and reset num2
-                num_counter.set(num_counter.get() - 1);
-                vals.borrow().num2.set(0.0);
+                    // Decrease the num counter and reset num2
+                    num_counter.set(num_counter.get() - 1);
+                    vals.borrow().num2.set(0.0);
+                }
+                else {
+                    ops.borrow().current.set(ADD);
+                }
+
+                entry.insert_text("+", &mut -1);
             }
-            else {
-                ops.borrow().current.set(ADD);
-            }
-
-            entry.insert_text("+", &mut -1);
-
         }));
 
     minus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            // Increase the counter
-            num_counter.set(num_counter.get() + 1);
+            if entry.text().chars().last().unwrap() != '-' {
+                // Increase the counter
+                num_counter.set(num_counter.get() + 1);
 
-            if num_counter.get() == 2 {
-                // Set previous and current operation
-                ops.borrow().previous.set(ops.borrow().current.get());
-                ops.borrow().current.set(SUBTRACT);
+                if num_counter.get() == 2 {
+                    // Set previous and current operation
+                    ops.borrow().previous.set(ops.borrow().current.get());
+                    ops.borrow().current.set(SUBTRACT);
 
-                // Do operation
-                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
+                    // Do operation
+                    operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
 
-                //decrease the num counter and reset num2
-                num_counter.set(num_counter.get() - 1);
-                vals.borrow().num2.set(0.0);
+                    // decrease the num counter and reset num2
+                    num_counter.set(num_counter.get() - 1);
+                    vals.borrow().num2.set(0.0);
+                }
+                else {
+                    ops.borrow().current.set(SUBTRACT);
+                }
+
+                entry.insert_text("-", &mut -1);
             }
-            else {
-                ops.borrow().current.set(SUBTRACT);
-            }
-
-            entry.insert_text("-", &mut -1);
-    
         }));
 
     multiply_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong entry =>
         move |_| {
-            // Increase the counter
-            num_counter.set(num_counter.get() + 1);
+            if entry.text().chars().last().unwrap() != '\u{00D7}' {
+                // Increase the counter
+                num_counter.set(num_counter.get() + 1);
     
-            if num_counter.get() == 2 {
-                // Set previous and current operation
-                ops.borrow().previous.set(ops.borrow().current.get());
-                ops.borrow().current.set(MULTIPLY);
+                if num_counter.get() == 2 {
+                    // Set previous and current operation
+                    ops.borrow().previous.set(ops.borrow().current.get());
+                    ops.borrow().current.set(MULTIPLY);
                 
-                // Do operation
-                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
+                    // Do operation
+                    operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
     
-                //decrease the num counter and reset num2
-                num_counter.set(num_counter.get() - 1);
-                vals.borrow().num2.set(0.0);
-            }
-            else {
-                ops.borrow().current.set(MULTIPLY);
-            }
+                    //decrease the num counter and reset num2
+                    num_counter.set(num_counter.get() - 1);
+                    vals.borrow().num2.set(0.0);
+                }
+                else {
+                    ops.borrow().current.set(MULTIPLY);
+                }
 
-            entry.insert_text("\u{00D7}", &mut -1);
-        
+                entry.insert_text("\u{00D7}", &mut -1);
+            }
         }));
 
     divide_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
+            if entry.text().chars().last().unwrap() != '\u{00F7}' {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
         
@@ -278,33 +282,41 @@ pub fn build_ui(application: &Application) {
             }
 
             entry.insert_text("\u{00F7}", &mut -1);
-            
+            }
         }));
     
     equals_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
-            // Increase the counter
-            num_counter.set(num_counter.get() + 1);
+            let last_entry_char = entry.text().chars().last();
 
-            if num_counter.get() == 2 {
-                let result = equation_result(
-                    ops.borrow().current.get(),
-                    &vals,
-                    &divide_zero,
-                    );
+            match last_entry_char {
+                Some(_) => {
+                    if last_entry_char.unwrap().is_numeric() {
+                        // Increase the counter
+                        num_counter.set(num_counter.get() + 1);
 
-                entry.set_text(&result);
+                        if num_counter.get() == 2 {
+                            let result = equation_result(
+                                ops.borrow().current.get(),
+                                &vals,
+                                &divide_zero,
+                                );
 
-                ops.borrow().previous.set(EQUALS);
+                            entry.set_text(&result);
 
-                // reset variables
-                num_counter.set(0);
-                vals.borrow().num1.set(0.0);
-                vals.borrow().num2.set(0.0);
-                ops.borrow().current.set(NONE);
+                            ops.borrow().previous.set(EQUALS);
+
+                            // reset variables
+                            num_counter.set(0);
+                            vals.borrow().num1.set(0.0);
+                            vals.borrow().num2.set(0.0);
+                            ops.borrow().current.set(NONE);
+                        }        
+                    }
+                },
+                None => {}
             }
-        
         }));
 
     clear_button.connect_clicked(clone!(@strong entry =>
