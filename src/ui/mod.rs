@@ -175,82 +175,46 @@ pub fn build_ui(application: &Application) {
         }));
     
     plus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '+' {
                 // Increase the counter
                 num_counter.set(num_counter.get() + 1);
 
-                if num_counter.get() == 2 {
-                    // Set previous and current operation
-                    ops.borrow().previous.set(ops.borrow().current.get());
-                    ops.borrow().current.set(ADD);
+                // Do the operation
+                operation(ADD, &num_counter, &ops, &vals, &divide_zero);
 
-                    // Do operation
-                    operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
-
-                    // Decrease the num counter and reset num2
-                    num_counter.set(num_counter.get() - 1);
-                    vals.borrow().num2.set(0.0);
-                }
-                else {
-                    ops.borrow().current.set(ADD);
-                }
-
+                // Insert the addition symbol to the entry
                 entry.insert_text("+", &mut -1);
             }
         }));
 
     minus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '-' {
                 // Increase the counter
                 num_counter.set(num_counter.get() + 1);
 
-                if num_counter.get() == 2 {
-                    // Set previous and current operation
-                    ops.borrow().previous.set(ops.borrow().current.get());
-                    ops.borrow().current.set(SUBTRACT);
+                // Do the operation
+                operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
 
-                    // Do operation
-                    operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
-
-                    // decrease the num counter and reset num2
-                    num_counter.set(num_counter.get() - 1);
-                    vals.borrow().num2.set(0.0);
-                }
-                else {
-                    ops.borrow().current.set(SUBTRACT);
-                }
-
+                // Insert the subtraction symbol to the entry
                 entry.insert_text("-", &mut -1);
             }
         }));
 
     multiply_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '\u{00D7}' {
                 // Increase the counter
                 num_counter.set(num_counter.get() + 1);
-    
-                if num_counter.get() == 2 {
-                    // Set previous and current operation
-                    ops.borrow().previous.set(ops.borrow().current.get());
-                    ops.borrow().current.set(MULTIPLY);
-                
-                    // Do operation
-                    operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
-    
-                    //decrease the num counter and reset num2
-                    num_counter.set(num_counter.get() - 1);
-                    vals.borrow().num2.set(0.0);
-                }
-                else {
-                    ops.borrow().current.set(MULTIPLY);
-                }
 
+                // Do the operation
+                operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
+    
+                // Insert the multiplication symbol to the entry
                 entry.insert_text("\u{00D7}", &mut -1);
             }
         }));
@@ -261,26 +225,11 @@ pub fn build_ui(application: &Application) {
             if entry.text().chars().last().unwrap() != '\u{00F7}' {
             // Increase the counter
             num_counter.set(num_counter.get() + 1);
-        
-            if num_counter.get() == 2 {
-                // Set previous and current operation
-                ops.borrow().previous.set(ops.borrow().current.get());
-                ops.borrow().current.set(DIVIDE);
-        
-                // Do operation
-                operation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
 
-                // Check divison by zero
-                check_divison_by_zero(ops.borrow().previous.get(), vals.borrow().num2.get(), &divide_zero);
+            // Do the operation
+            operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
         
-                // reset variables
-                num_counter.set(num_counter.get() - 1);
-                vals.borrow().num2.set(0.0);
-            }
-            else {
-                ops.borrow().current.set(DIVIDE);
-            }
-
+            // Insert the division symbol to the entry
             entry.insert_text("\u{00F7}", &mut -1);
             }
         }));
@@ -312,6 +261,7 @@ pub fn build_ui(application: &Application) {
                             vals.borrow().num1.set(0.0);
                             vals.borrow().num2.set(0.0);
                             ops.borrow().current.set(NONE);
+                            divide_zero.set(false);
                         }        
                     }
                 },

@@ -25,7 +25,7 @@ pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {
     }
 }
 
-pub fn operation(pre_ops: char, val1: &Rc<Cell<f64>>, val2: f64) {
+pub fn calculation(pre_ops: char, val1: &Rc<Cell<f64>>, val2: f64) {
     match pre_ops {
         ADD => val1.set(val1.get() + val2),
         SUBTRACT => val1.set(val1.get() - val2),
@@ -41,6 +41,29 @@ pub fn check_divison_by_zero(pre_ops: char, val2: f64, divide_zero: &Rc<Cell<boo
     /* Set division by zero status */
     if pre_ops == DIVIDE && val2 == 0.0 {
         divide_zero.set(true);
+    }
+}
+
+pub fn operation(symbol_operator: char, num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
+                 vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>) {
+    /* Do the operation when two values are received for calucaltion */ 
+    if num_counter.get() == 2 {
+        // Set previous and current operation
+        ops.borrow().previous.set(ops.borrow().current.get());
+        ops.borrow().current.set(symbol_operator);
+        
+        // Do calculation
+        calculation(ops.borrow().previous.get(), &vals.borrow().num1, vals.borrow().num2.get());
+
+        // Check divison by zero
+        check_divison_by_zero(ops.borrow().previous.get(), vals.borrow().num2.get(), divide_zero);
+        
+        // reset variables
+        num_counter.set(num_counter.get() - 1);
+        vals.borrow().num2.set(0.0);
+    }
+    else {
+        ops.borrow().current.set(symbol_operator);
     }
 }
 
