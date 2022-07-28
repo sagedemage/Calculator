@@ -205,14 +205,14 @@ pub fn build_ui(application: &Application) {
         @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '\u{00F7}' {
-            // Increase the counter
-            num_counter.set(num_counter.get() + 1);
+                // Increase the counter
+                num_counter.set(num_counter.get() + 1);
 
-            // Do the operation
-            operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
+                // Do the operation
+                operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
         
-            // Insert the division symbol to the entry
-            entry.insert_text("\u{00F7}", &mut -1);
+                // Insert the division symbol to the entry
+                entry.insert_text("\u{00F7}", &mut -1);
             }
         }));
     
@@ -226,23 +226,9 @@ pub fn build_ui(application: &Application) {
                     if last_entry_char.unwrap().is_numeric() {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
-
-                        if num_counter.get() == 2 {
-                            let result = equation_result(
-                                &ops,
-                                &vals,
-                                &divide_zero,
-                                );
-
-                            // Show the result on the entry
-                            entry.set_text(&result);
-
-                            // Notify the progam the user initated the equals button
-                            initiate_equals.set(true);
-
-                            // reset variables
-                            reset_variables(&vals, &ops, &num_counter, &divide_zero);
-                        }        
+                        
+                        // Equality
+                        equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals);
                     }
                 },
                 None => {}

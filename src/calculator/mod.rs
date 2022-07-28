@@ -120,6 +120,27 @@ pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
     divide_zero.set(false);
 }
 
+pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
+                 vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>,
+                 entry: &Entry, initiate_equals: &Rc<Cell<bool>>) {
+    if num_counter.get() == 2 {
+        let result = equation_result(
+            &ops,
+            &vals,
+            &divide_zero,
+        );
+
+        // Show the result on the entry
+        entry.set_text(&result);
+
+        // Notify the progam the user initated the equals button
+        initiate_equals.set(true);
+
+        // reset variables
+        reset_variables(&vals, &ops, &num_counter, &divide_zero);
+    }
+}
+
 pub fn clear_entry_before_calculation(initiate_equals: &Rc<Cell<bool>>, entry: &Entry) {
     /* Clears the entry once the user clicks a number after getting the 
      * result of the calculation */
