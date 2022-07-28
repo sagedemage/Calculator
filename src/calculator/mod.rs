@@ -11,9 +11,27 @@ pub struct Values {
     pub num2: Rc<Cell<f64>>,
 }
 
+impl Values {
+    pub fn new() -> Values {
+        Values {
+            num1: Rc::new(Cell::new(0.0)),
+            num2: Rc::new(Cell::new(0.0)),
+        }
+    }
+}
+
 pub struct Operators {
     pub current: Rc<Cell<char>>,
     pub previous: Rc<Cell<char>>,
+}
+
+impl Operators {
+    pub fn new() -> Operators {
+        Operators {
+            current: Rc::new(Cell::new(NONE)),
+            previous: Rc::new(Cell::new(NONE)),
+        }
+    }
 }
 
 pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {

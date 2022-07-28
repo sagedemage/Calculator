@@ -46,51 +46,23 @@ pub fn build_ui(application: &Application) {
     let entry = create_entry();
 
     // number buttons
-    let number_buttons = NumberButtons{
-        num0: create_button("0"),
-        num1: create_button("1"),
-        num2: create_button("2"),
-        num3: create_button("3"),
-        num4: create_button("4"),
-        num5: create_button("5"),
-        num6: create_button("6"),
-        num7: create_button("7"),
-        num8: create_button("8"),
-        num9: create_button("9"),
-    };
+    let number_buttons = NumberButtons::new();
 
     // operator buttons
-    let operator_buttons = OperatorButtons{
-        plus: create_button("+"),
-        minus: create_button("-"),
-        multiply: create_button("\u{00D7}"),
-        divide: create_button("\u{00F7}"),
-    };
+    let operator_buttons = OperatorButtons::new();
 
     // special buttons
-    let special_buttons = SpecialButtons{
-        clear: create_button("clear"),
-        equals: create_button("="),
-    };
+    let special_buttons = SpecialButtons::new();
 
     // add css class for the special button
     special_buttons.clear.add_css_class("clear");
     special_buttons.equals.add_css_class("equals");
 
-    // A mutable values
-    let vals = Rc::new(RefCell::new(
-            Values {
-                num1: Rc::new(Cell::new(0.0)),
-                num2: Rc::new(Cell::new(0.0)),
-            }
-        ));
-
-    let ops = Rc::new(RefCell::new(
-            Operators {
-                current: Rc::new(Cell::new(NONE)),
-                previous: Rc::new(Cell::new(NONE)),
-            }
-        ));
+    /* Mutable values */
+    // values
+    let vals = Rc::new(RefCell::new(Values::new()));
+    // operators
+    let ops = Rc::new(RefCell::new(Operators::new()));
 
     let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
