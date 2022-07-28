@@ -12,6 +12,7 @@ use glib_macros::clone;
 pub use crate::operator_symbols::*;
 pub use crate::widgets::*;
 pub use crate::calculator::*;
+pub use crate::grid::set_grid;
 
 // Get package version from Cargo
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -41,6 +42,9 @@ pub fn build_ui(application: &Application) {
     // Grid
     let grid = Grid::new();
    
+    // entry
+    let entry = create_entry();
+
     // number buttons
     let number_buttons = NumberButtons{
         num0: create_button("0"),
@@ -63,16 +67,15 @@ pub fn build_ui(application: &Application) {
         divide: create_button("\u{00F7}"),
     };
 
-    // misc buttons
-    let equals_button = create_button("=");
-    let clear_button = create_button("clear");
+    // special buttons
+    let special_buttons = SpecialButtons{
+        clear: create_button("clear"),
+        equals: create_button("="),
+    };
 
-    // entry
-    let entry = create_entry();
-
-    // add css class for the button
-    clear_button.add_css_class("clear");
-    equals_button.add_css_class("equals");
+    // add css class for the special button
+    special_buttons.clear.add_css_class("clear");
+    special_buttons.equals.add_css_class("equals");
 
     // A mutable values
     let vals = Rc::new(RefCell::new(
@@ -241,7 +244,7 @@ pub fn build_ui(application: &Application) {
             }
         }));
     
-    equals_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    special_buttons.equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
@@ -259,9 +262,10 @@ pub fn build_ui(application: &Application) {
                                 &divide_zero,
                                 );
 
+                            // Show the result on the entry
                             entry.set_text(&result);
 
-                            //ops.borrow().previous.set(EQUALS);
+                            // Notify the progam the user initated the equals button
                             initiate_equals.set(true);
 
                             // reset variables
@@ -273,7 +277,7 @@ pub fn build_ui(application: &Application) {
             }
         }));
 
-    clear_button.connect_clicked(clone!(@strong entry =>
+    special_buttons.clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             // reset variables
             reset_variables(&vals, &ops, &num_counter, &divide_zero);
@@ -298,34 +302,7 @@ pub fn build_ui(application: &Application) {
     header_bar.pack_end(&menu_button);
 
     /* Attach widgets to the Grid */
-    // Row 0
-    GridExt::attach(&grid, &entry, 0, 0, 4, 1);
-
-    // Row 1
-    GridExt::attach(&grid, &clear_button, 0, 1, 3, 1);
-    GridExt::attach(&grid, &operator_buttons.divide, 3, 1, 1, 1);
-
-    // Row 2
-    GridExt::attach(&grid, &number_buttons.num7, 0, 2, 1, 1);
-    GridExt::attach(&grid, &number_buttons.num8, 1, 2, 1, 1);
-    GridExt::attach(&grid, &number_buttons.num9, 2, 2, 1, 1);
-    GridExt::attach(&grid, &operator_buttons.multiply, 3, 2, 1, 1);
-
-    // Row 3
-    GridExt::attach(&grid, &number_buttons.num4, 0, 3, 1, 1);
-    GridExt::attach(&grid, &number_buttons.num5, 1, 3, 1, 1);
-    GridExt::attach(&grid, &number_buttons.num6, 2, 3, 1, 1);
-    GridExt::attach(&grid, &operator_buttons.minus, 3, 3, 1, 1);
-
-    // Row 4
-    GridExt::attach(&grid, &number_buttons.num1, 0, 4, 1, 1);
-    GridExt::attach(&grid, &number_buttons.num2, 1, 4, 1, 1);
-    GridExt::attach(&grid, &number_buttons.num3, 2, 4, 1, 1);
-    GridExt::attach(&grid, &operator_buttons.plus, 3, 4, 1, 1);
-
-    // Row 5
-    GridExt::attach(&grid, &number_buttons.num0, 0, 5, 3, 1);
-    GridExt::attach(&grid, &equals_button, 3, 5, 1, 1);
+    set_grid(&grid, &entry, &special_buttons, &operator_buttons, &number_buttons);
 
     // Create a window
     let window = ApplicationWindow::builder()

@@ -23,6 +23,11 @@ pub struct OperatorButtons {
     pub divide: Button,
 }
 
+pub struct SpecialButtons {
+    pub clear: Button,
+    pub equals: Button,
+}
+
 pub fn create_button(label: &'static str) -> Button {
     let margin = 6;
     
