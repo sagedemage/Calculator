@@ -86,3 +86,4 @@ pub fn create_entry() -> Entry {
         .margin_bottom(margin)
         .build()
 }
+

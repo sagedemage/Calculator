@@ -26,3 +26,4 @@ fn main() {
     // Run the application
     app.run();
 }
+

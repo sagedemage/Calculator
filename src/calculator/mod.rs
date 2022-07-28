@@ -149,3 +149,4 @@ pub fn clear_entry_before_calculation(initiate_equals: &Rc<Cell<bool>>, entry: &
         initiate_equals.set(false);
     }
 }
+

@@ -14,3 +14,4 @@ pub fn load_css_file() {
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
 }
+
