@@ -1,6 +1,11 @@
 button {
 	/* Put this, for the background color to be visible */
     background-image: none;
+	font-size: 25px;
+}
+
+entry {
+	font-size: 25px;
 }
 
 button.clear {
@@ -12,5 +17,5 @@ button.equals {
 }
 
 * {
-    font-size: 25px;
+    /*font-size: 25px;*/
 }
