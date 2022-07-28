@@ -10,7 +10,7 @@ Popover, Grid, HeaderBar, AboutDialog, MenuButton, Label};
 use glib_macros::clone;
 
 pub use crate::operator_symbols::*;
-pub use crate::widget::*;
+pub use crate::widgets::*;
 pub use crate::calculator::*;
 
 // Get package version from Cargo
@@ -55,11 +55,13 @@ pub fn build_ui(application: &Application) {
         num9: create_button("9"),
     };
 
-    // operator buttons and misc widgets
-    let plus_button = create_button("+");
-    let minus_button = create_button("-");
-    let multiply_button = create_button("\u{00D7}");
-    let divide_button = create_button("\u{00F7}");
+    // operator buttons
+    let operator_buttons = OperatorButtons{
+        plus: create_button("+"),
+        minus: create_button("-"),
+        multiply: create_button("\u{00D7}"),
+        divide: create_button("\u{00F7}"),
+    };
 
     // misc buttons
     let equals_button = create_button("=");
@@ -179,7 +181,7 @@ pub fn build_ui(application: &Application) {
             entry.insert_text("9", &mut -1);
         }));
     
-    plus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '+' {
@@ -194,7 +196,7 @@ pub fn build_ui(application: &Application) {
             }
         }));
 
-    minus_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '-' {
@@ -209,7 +211,7 @@ pub fn build_ui(application: &Application) {
             }
         }));
 
-    multiply_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    operator_buttons.multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '\u{00D7}' {
@@ -224,7 +226,7 @@ pub fn build_ui(application: &Application) {
             }
         }));
 
-    divide_button.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+    operator_buttons.divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
             if entry.text().chars().last().unwrap() != '\u{00F7}' {
@@ -301,25 +303,25 @@ pub fn build_ui(application: &Application) {
 
     // Row 1
     GridExt::attach(&grid, &clear_button, 0, 1, 3, 1);
-    GridExt::attach(&grid, &divide_button, 3, 1, 1, 1);
+    GridExt::attach(&grid, &operator_buttons.divide, 3, 1, 1, 1);
 
     // Row 2
     GridExt::attach(&grid, &number_buttons.num7, 0, 2, 1, 1);
     GridExt::attach(&grid, &number_buttons.num8, 1, 2, 1, 1);
     GridExt::attach(&grid, &number_buttons.num9, 2, 2, 1, 1);
-    GridExt::attach(&grid, &multiply_button, 3, 2, 1, 1);
+    GridExt::attach(&grid, &operator_buttons.multiply, 3, 2, 1, 1);
 
     // Row 3
     GridExt::attach(&grid, &number_buttons.num4, 0, 3, 1, 1);
     GridExt::attach(&grid, &number_buttons.num5, 1, 3, 1, 1);
     GridExt::attach(&grid, &number_buttons.num6, 2, 3, 1, 1);
-    GridExt::attach(&grid, &minus_button, 3, 3, 1, 1);
+    GridExt::attach(&grid, &operator_buttons.minus, 3, 3, 1, 1);
 
     // Row 4
     GridExt::attach(&grid, &number_buttons.num1, 0, 4, 1, 1);
     GridExt::attach(&grid, &number_buttons.num2, 1, 4, 1, 1);
     GridExt::attach(&grid, &number_buttons.num3, 2, 4, 1, 1);
-    GridExt::attach(&grid, &plus_button, 3, 4, 1, 1);
+    GridExt::attach(&grid, &operator_buttons.plus, 3, 4, 1, 1);
 
     // Row 5
     GridExt::attach(&grid, &number_buttons.num0, 0, 5, 3, 1);

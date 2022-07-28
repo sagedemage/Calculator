@@ -16,6 +16,13 @@ pub struct NumberButtons {
     pub num9: Button,
 }
 
+pub struct OperatorButtons {
+    pub plus: Button,
+    pub minus: Button,
+    pub multiply: Button,
+    pub divide: Button,
+}
+
 pub fn create_button(label: &'static str) -> Button {
     let margin = 6;
     

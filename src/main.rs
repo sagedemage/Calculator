@@ -15,7 +15,7 @@ use gtk::Application;
 use gtk::prelude::*;
 
 mod operator_symbols;
-mod widget;
+mod widgets;
 mod calculator;
 mod ui;
 mod css;
