@@ -1,4 +1,4 @@
-/* Implementation for CSS */
+/* Setup the CSS to improve the app appearance */
 
 use gdk::Display;
 use gtk::{CssProvider, StyleContext};

@@ -1,4 +1,4 @@
-/* Set up the grid */
+/* Set up the Grid contianer */
 
 use gtk::{Grid, Entry};
 use gtk::prelude::*;
