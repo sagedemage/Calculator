@@ -1,13 +1,4 @@
-/*
- * gtk4
- *
- * Memory Management
- *
- * Got my Working Example from here:
- * https://gtk-rs.org/gtk4-rs/stable/latest/book/g_object_memory_management.html
- */
-
- /* Main program */
+/* Calculator Desktop App */
 
 use gtk::Application;
 use gtk::prelude::*;
