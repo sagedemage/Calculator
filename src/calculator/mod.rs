@@ -3,7 +3,7 @@
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 pub use crate::gtk::prelude::*;
-pub use crate::symbol_names::*;
+pub use crate::operator_symbols::*;
 pub use crate::gtk::Entry;
 
 pub struct Values {
@@ -17,6 +17,7 @@ pub struct Operators {
 }
 
 pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {
+    /* Set the first or second value */
     if num_counter == 0 {
         vals.borrow().num1.set(vals.borrow().num1.get() * 10.0 + num); 
     }
@@ -26,6 +27,7 @@ pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {
 }
 
 pub fn calculation(operation: char, vals: &Rc<RefCell<Values>>) {
+    /* Calculate the 2 values */
     match operation {
         ADD => vals.borrow().num1.set(vals.borrow().num1.get() + vals.borrow().num2.get()),
         SUBTRACT => vals.borrow().num1.set(vals.borrow().num1.get() - vals.borrow().num2.get()),
@@ -89,11 +91,22 @@ pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>,
     result
 }
 
-pub fn clear_entry_before_calculation(pre_ops: &Rc<Cell<char>>, entry: &Entry) {
-    /* Clear entry once the user clicks a number after getting the 
+pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
+                       num_counter: &Rc<Cell<i32>>, divide_zero: &Rc<Cell<bool>>) {
+    /* reset variables */
+    vals.borrow().num1.set(0.0);
+    vals.borrow().num2.set(0.0);
+    ops.borrow().previous.set(NONE);
+    ops.borrow().current.set(NONE);
+    num_counter.set(0);
+    divide_zero.set(false);
+}
+
+pub fn clear_entry_before_calculation(initiate_equals: &Rc<Cell<bool>>, entry: &Entry) {
+    /* Clears the entry once the user clicks a number after getting the 
      * result of the calculation */
-    if pre_ops.get() == EQUALS {
+    if initiate_equals.get() {
         entry.set_text("");
-        pre_ops.set(NONE);
+        initiate_equals.set(false);
     }
 }

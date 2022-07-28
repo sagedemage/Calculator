@@ -14,7 +14,7 @@ use gtk4 as gtk;
 use gtk::Application;
 use gtk::prelude::*;
 
-mod symbol_names;
+mod operator_symbols;
 mod widget;
 mod calculator;
 mod ui;

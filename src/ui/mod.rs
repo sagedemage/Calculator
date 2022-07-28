@@ -9,7 +9,7 @@ Popover, Grid, HeaderBar, AboutDialog, MenuButton, Label};
 
 use glib_macros::clone;
 
-pub use crate::symbol_names::*;
+pub use crate::operator_symbols::*;
 pub use crate::widget::*;
 pub use crate::calculator::*;
 
@@ -41,7 +41,7 @@ pub fn build_ui(application: &Application) {
     // Grid
     let grid = Grid::new();
    
-    // Create number buttons
+    // number buttons
     let number_buttons = NumberButtons{
         num0: create_button("0"),
         num1: create_button("1"),
@@ -55,13 +55,17 @@ pub fn build_ui(application: &Application) {
         num9: create_button("9"),
     };
 
-    // create operation and misc widgets
+    // operator buttons and misc widgets
     let plus_button = create_button("+");
     let minus_button = create_button("-");
     let multiply_button = create_button("\u{00D7}");
     let divide_button = create_button("\u{00F7}");
+
+    // misc buttons
     let equals_button = create_button("=");
     let clear_button = create_button("clear");
+
+    // entry
     let entry = create_entry();
 
     // add css class for the button
@@ -85,6 +89,7 @@ pub fn build_ui(application: &Application) {
 
     let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
+    let initiate_equals: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
     /* Connect callbacks */
     about_gesture.connect_pressed(move |about_gesture, _, _, _| {
@@ -104,72 +109,72 @@ pub fn build_ui(application: &Application) {
     });
 
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 0.0);
             entry.insert_text("0", &mut -1);
         }));
     number_buttons.num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 1.0);
             entry.insert_text("1", &mut -1);
         }));
     number_buttons.num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 2.0);
             entry.insert_text("2", &mut -1);
         }));
     number_buttons.num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 3.0);
             entry.insert_text("3", &mut -1);
         }));
     number_buttons.num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 4.0);
             entry.insert_text("4", &mut -1);
         }));
     number_buttons.num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 5.0);
             entry.insert_text("5", &mut -1);
         }));
     number_buttons.num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 6.0);
             entry.insert_text("6", &mut -1);
         }));
     number_buttons.num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 7.0);
             entry.insert_text("7", &mut -1);
         }));
     number_buttons.num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 8.0);
             entry.insert_text("8", &mut -1);
         }));
     number_buttons.num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong entry =>
+        @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&ops.borrow().previous, &entry);
+            clear_entry_before_calculation(&initiate_equals, &entry);
             set_value(num_counter.get(), &vals, 9.0);
             entry.insert_text("9", &mut -1);
         }));
@@ -254,14 +259,11 @@ pub fn build_ui(application: &Application) {
 
                             entry.set_text(&result);
 
-                            ops.borrow().previous.set(EQUALS);
+                            //ops.borrow().previous.set(EQUALS);
+                            initiate_equals.set(true);
 
                             // reset variables
-                            num_counter.set(0);
-                            vals.borrow().num1.set(0.0);
-                            vals.borrow().num2.set(0.0);
-                            ops.borrow().current.set(NONE);
-                            divide_zero.set(false);
+                            reset_variables(&vals, &ops, &num_counter, &divide_zero);
                         }        
                     }
                 },
@@ -271,10 +273,10 @@ pub fn build_ui(application: &Application) {
 
     clear_button.connect_clicked(clone!(@strong entry =>
         move |_| {
-            num_counter.set(0);
-            vals.borrow().num1.set(0.0);
-            vals.borrow().num2.set(0.0);
-            ops.borrow().current.set(NONE);
+            // reset variables
+            reset_variables(&vals, &ops, &num_counter, &divide_zero);
+
+            // Clear entry text
             entry.set_text("");
         }));
 
