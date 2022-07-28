@@ -3,9 +3,9 @@
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
-use gtk4 as gtk;
 use gtk::{Application, ApplicationWindow, Box, Orientation, GestureClick,
 Popover, Grid, HeaderBar, AboutDialog, MenuButton, Label};
+use gtk::prelude::*;
 
 use glib_macros::clone;
 

@@ -1,6 +1,5 @@
 /* Set up the grid */
 
-use gtk4 as gtk;
 use gtk::{Grid, Entry};
 use gtk::prelude::*;
 pub use crate::widgets::*;

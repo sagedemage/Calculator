@@ -9,8 +9,6 @@
 
  /* Main program */
 
-use gtk4 as gtk;
-
 use gtk::Application;
 use gtk::prelude::*;
 

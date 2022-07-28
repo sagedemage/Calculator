@@ -1,10 +1,10 @@
 /* Calculator implementations */
 
+use gtk::Entry;
+use gtk::prelude::*;
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
-pub use crate::gtk::prelude::*;
-pub use crate::operator_symbols::*;
-pub use crate::gtk::Entry;
+use crate::operator_symbols::*;
 
 pub struct Values {
     pub num1: Rc<Cell<f64>>,

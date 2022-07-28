@@ -1,6 +1,5 @@
 /* Widgets */
 
-use gtk4 as gtk;
 use gtk::{Button, Entry};
 
 pub struct NumberButtons {

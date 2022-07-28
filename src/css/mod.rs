@@ -1,8 +1,7 @@
 /* Implementation for CSS */
 
-pub use gdk4::Display;
-pub use gtk4 as gtk;
-pub use gtk::{CssProvider, StyleContext};
+use gdk::Display;
+use gtk::{CssProvider, StyleContext};
 
 pub fn load_css_file() {
     // Load the CSS file and add it to the provider
