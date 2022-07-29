@@ -2,7 +2,7 @@
 
 use gtk::{Grid, Entry};
 use gtk::prelude::*;
-pub use crate::widgets::*;
+use crate::widgets::{NumberButtons, OperatorButtons, SpecialButtons};
 
 pub fn set_grid(grid: &Grid, entry: &Entry, special_buttons: &SpecialButtons, 
                 operator_buttons: &OperatorButtons, number_buttons: &NumberButtons) {

@@ -9,10 +9,12 @@ use gtk::prelude::*;
 
 use glib_macros::clone;
 
-pub use crate::operator_symbols::*;
-pub use crate::widgets::*;
-pub use crate::calculator::*;
-pub use crate::grid::set_grid;
+use crate::operator_symbols::*;
+use crate::widgets;
+use crate::widgets::{NumberButtons, OperatorButtons, SpecialButtons};
+use crate::calculator;
+use crate::calculator::{Values, Operators};
+use crate::grid;
 
 // Get package version from Cargo
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -43,7 +45,7 @@ pub fn build_ui(application: &Application) {
     let grid = Grid::new();
    
     // entry
-    let entry = create_entry();
+    let entry = widgets::create_entry();
 
     // number buttons
     let number_buttons = NumberButtons::new();
@@ -88,71 +90,71 @@ pub fn build_ui(application: &Application) {
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 0.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 0.0);
             entry.insert_text("0", &mut -1);
         }));
     number_buttons.num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 1.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 1.0);
             entry.insert_text("1", &mut -1);
         }));
     number_buttons.num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 2.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 2.0);
             entry.insert_text("2", &mut -1);
         }));
     number_buttons.num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 3.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 3.0);
             entry.insert_text("3", &mut -1);
         }));
     number_buttons.num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 4.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 4.0);
             entry.insert_text("4", &mut -1);
         }));
     number_buttons.num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 5.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 5.0);
             entry.insert_text("5", &mut -1);
         }));
     number_buttons.num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 6.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 6.0);
             entry.insert_text("6", &mut -1);
         }));
     number_buttons.num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 7.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 7.0);
             entry.insert_text("7", &mut -1);
         }));
     number_buttons.num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 8.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 8.0);
             entry.insert_text("8", &mut -1);
         }));
     number_buttons.num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
         move |_| {
-            clear_entry_before_calculation(&initiate_equals, &entry);
-            set_value(num_counter.get(), &vals, 9.0);
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            calculator::set_value(num_counter.get(), &vals, 9.0);
             entry.insert_text("9", &mut -1);
         }));
     
@@ -164,7 +166,7 @@ pub fn build_ui(application: &Application) {
                 num_counter.set(num_counter.get() + 1);
 
                 // Do the operation
-                operation(ADD, &num_counter, &ops, &vals, &divide_zero);
+                calculator::operation(ADD, &num_counter, &ops, &vals, &divide_zero);
 
                 // Insert the addition symbol to the entry
                 entry.insert_text("+", &mut -1);
@@ -179,7 +181,7 @@ pub fn build_ui(application: &Application) {
                 num_counter.set(num_counter.get() + 1);
 
                 // Do the operation
-                operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
+                calculator::operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
 
                 // Insert the subtraction symbol to the entry
                 entry.insert_text("-", &mut -1);
@@ -194,7 +196,7 @@ pub fn build_ui(application: &Application) {
                 num_counter.set(num_counter.get() + 1);
 
                 // Do the operation
-                operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
+                calculator::operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
     
                 // Insert the multiplication symbol to the entry
                 entry.insert_text("\u{00D7}", &mut -1);
@@ -209,7 +211,7 @@ pub fn build_ui(application: &Application) {
                 num_counter.set(num_counter.get() + 1);
 
                 // Do the operation
-                operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
+                calculator::operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
         
                 // Insert the division symbol to the entry
                 entry.insert_text("\u{00F7}", &mut -1);
@@ -228,7 +230,7 @@ pub fn build_ui(application: &Application) {
                         num_counter.set(num_counter.get() + 1);
                         
                         // Equality
-                        equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals);
+                        calculator::equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals);
                     }
                 },
                 None => {}
@@ -238,7 +240,7 @@ pub fn build_ui(application: &Application) {
     special_buttons.clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             // reset variables
-            reset_variables(&vals, &ops, &num_counter, &divide_zero);
+            calculator::reset_variables(&vals, &ops, &num_counter, &divide_zero);
 
             // Clear entry text
             entry.set_text("");
@@ -260,7 +262,7 @@ pub fn build_ui(application: &Application) {
     header_bar.pack_end(&menu_button);
 
     /* Attach widgets to the Grid */
-    set_grid(&grid, &entry, &special_buttons, &operator_buttons, &number_buttons);
+    grid::set_grid(&grid, &entry, &special_buttons, &operator_buttons, &number_buttons);
 
     // Create a window
     let window = ApplicationWindow::builder()
