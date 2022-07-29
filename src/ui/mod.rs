@@ -21,6 +21,11 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub fn build_ui(application: &Application) {
     /* build ui of the application */
+    // Creates file of the image
+    let logo_file = gio::File::for_path("src/resources/example.png");
+    
+    // Creates picture
+    let app_logo = gtk::Picture::for_file(&logo_file);
 
     // Header bar
     let header_bar = HeaderBar::new();
@@ -77,6 +82,7 @@ pub fn build_ui(application: &Application) {
         // create about dialog here
         // About Dialog 
         let about_dialog = AboutDialog::builder()
+            .logo(&app_logo.paintable().unwrap())
             .version(VERSION)
             .comments("GTK4 Calculator App written in Rust")
             .copyright("© 2022 Salmaan Saeed")
