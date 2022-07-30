@@ -1,6 +1,9 @@
 /target
-*.xcf
 *.kra
 *.png
+*.xcf
+*.kra~
+*.png~
+*.xcf~
 .markdown-preview.html
 
