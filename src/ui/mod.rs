@@ -19,10 +19,13 @@ use crate::grid;
 // Get package version from Cargo
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
+// Path to the logo 
+const LOGO_PATH: &str = "src/resources/images/logo.png";
+
 pub fn build_ui(application: &Application) {
     /* build ui of the application */
     // Creates file of the image
-    let logo_file = gio::File::for_path("src/resources/images/logo.png");
+    let logo_file = gio::File::for_path(LOGO_PATH);
     
     // Creates picture
     let app_logo = gtk::Picture::for_file(&logo_file);
