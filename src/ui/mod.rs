@@ -22,7 +22,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub fn build_ui(application: &Application) {
     /* build ui of the application */
     // Creates file of the image
-    let logo_file = gio::File::for_path("src/resources/example.png");
+    let logo_file = gio::File::for_path("src/resources/images/logo.png");
     
     // Creates picture
     let app_logo = gtk::Picture::for_file(&logo_file);

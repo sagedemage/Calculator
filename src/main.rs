@@ -11,7 +11,7 @@ mod ui;
 mod css;
 
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
-const CSS_FILE_PATH: &str = "src/resources/styles.css";
+const CSS_FILE_PATH: &str = "src/resources/css/styles.css";
 
 fn main() {
     // Create a new application
