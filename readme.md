@@ -2,7 +2,7 @@
 
 Basic calculator application written in rust using gtk4 rust key bindings.
 
-![](images/calculator%20app.webp)
+![](images/calculator-app.webp)
 
 ## Dependencies
 * libgtk-4-dev
