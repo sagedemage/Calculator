@@ -23,45 +23,53 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 const LOGO_PATH: &str = "src/resources/images/logo.png";
 
 pub fn build_ui(application: &Application) {
+    // Create Window
+    let window = ApplicationWindow::builder()
+        .application(application)
+        .title("Calculator")
+        .default_width(250)
+        .default_height(70)
+        .build();
+
     /* build ui of the application */
-    // Creates file of the image
+    // Get file of the image
     let logo_file = gio::File::for_path(LOGO_PATH);
     
-    // Creates picture
+    // Create picture
     let app_logo = gtk::Picture::for_file(&logo_file);
 
-    // Header bar
+    // Create header bar
     let header_bar = HeaderBar::new();
 
-    // Menu Button
+    // Create menu button
     let menu_button = MenuButton::new();
     menu_button.set_icon_name("view-list"); // set menu button icon
 
-    // Vertical Box
+    // Create vertical box
     let vbox = Box::new(Orientation::Vertical, 0);
 
-    // Popover for labels
+    // Create Popover for labels
     let popover = Popover::new();
 
-    // About label
+    // Create about label
     let about_label = Label::new(Some("About"));
 
     // About gesture
     let about_gesture = GestureClick::new();
     
-    // Grid
+    // Create grid
     let grid = Grid::new();
    
-    // entry
+    // Create entry
     let entry = widgets::create_entry();
 
-    // number buttons
+    // Create number buttons
     let number_buttons = NumberButtons::new();
 
-    // operator buttons
+    // Create operator buttons
     let operator_buttons = OperatorButtons::new();
 
-    // special buttons
+    // Create special buttons
     let special_buttons = SpecialButtons::new();
 
     // add css class for the special button
@@ -272,14 +280,6 @@ pub fn build_ui(application: &Application) {
 
     /* Attach widgets to the Grid */
     grid::set_grid(&grid, &entry, &special_buttons, &operator_buttons, &number_buttons);
-
-    // Create a window
-    let window = ApplicationWindow::builder()
-        .application(application)
-        .title("Calculator")
-        .default_width(250)
-        .default_height(70)
-        .build();
 
     // Set the window title bar
     window.set_titlebar(Some(&header_bar));
