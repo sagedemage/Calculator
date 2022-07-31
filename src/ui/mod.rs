@@ -31,7 +31,7 @@ pub fn build_ui(application: &Application) {
         .default_height(70)
         .build();
 
-    // Load ui xml files
+    // Load menu ui file
     let menu_builder = Builder::from_file("src/resources/ui/menu.ui");
 
     // Get Menu object
