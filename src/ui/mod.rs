@@ -11,10 +11,8 @@ use gio::{Menu, MenuItem, SimpleAction};
 use glib_macros::clone;
 
 use crate::operator_symbols::*;
-use crate::widgets;
-use crate::widgets::{NumberButtons, OperatorButtons, SpecialButtons};
-use crate::calculator;
-use crate::calculator::{Values, Operators};
+use crate::widgets::{self, NumberButtons, OperatorButtons, SpecialButtons};
+use crate::calculator::{self, Values, Operators};
 use crate::grid;
 
 // Get package version from Cargo
