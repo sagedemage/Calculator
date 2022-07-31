@@ -52,11 +52,11 @@ pub fn build_ui(application: &Application) {
 
     // Create About Menu Item
     let about_item = MenuItem::new(Some("About"), Some("app.about"));
-    
+
     // Appends about item to menu_item
     menu.append_item(&about_item);
 
-    // Create Popover from menu
+    // Create Popover Menu from menu
     let popover_menu = PopoverMenu::from_model(Some(&menu));
 
     // Create grid
