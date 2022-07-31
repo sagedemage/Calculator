@@ -8,11 +8,11 @@ entry {
 	font-size: 25px;
 }
 
-button.clear {
+button#clear {
 	background-color: #A00000;
 }
 
-button.equals {
+button#equals {
 	background-color: #0059FF;
 }
 

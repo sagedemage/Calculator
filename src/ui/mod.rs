@@ -31,11 +31,11 @@ pub fn build_ui(application: &Application) {
         .default_height(70)
         .build();
 
-    // Load menu ui xml file
-    let builder = Builder::from_file("src/resources/ui/menu.ui");
+    // Load ui xml files
+    let menu_builder = Builder::from_file("src/resources/ui/menu.ui");
 
     // Get Menu object
-    let menu_object: std::option::Option<Menu> = builder.object("menu");
+    let menu_object: std::option::Option<Menu> = menu_builder.object("menu");
 
     // Get file of the image
     let logo_file = gio::File::for_path(LOGO_PATH);
@@ -75,8 +75,8 @@ pub fn build_ui(application: &Application) {
     let special_buttons = SpecialButtons::new();
 
     // add css class for the special button
-    special_buttons.clear.add_css_class("clear");
-    special_buttons.equals.add_css_class("equals");
+    special_buttons.clear.set_widget_name("clear");
+    special_buttons.equals.set_widget_name("equals");
 
     /* Mutable values */
     // values
@@ -180,60 +180,89 @@ pub fn build_ui(application: &Application) {
     operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
-            if entry.text().chars().last().unwrap() != '+' {
-                // Increase the counter
-                num_counter.set(num_counter.get() + 1);
+            let last_entry_char = entry.text().chars().last();
 
-                // Do the operation
-                calculator::operation(ADD, &num_counter, &ops, &vals, &divide_zero);
+            match last_entry_char {
+                Some(_) => {
+                    if entry.text().chars().last().unwrap() != '+' {
+                        // Increase the counter
+                        num_counter.set(num_counter.get() + 1);
 
-                // Insert the addition symbol to the entry
-                entry.insert_text("+", &mut -1);
+                        // Do the operation
+                        calculator::operation(ADD, &num_counter, &ops, &vals, &divide_zero);
+
+                        // Insert the addition symbol to the entry
+                        entry.insert_text("+", &mut -1);
+                    }
+                },
+                None => {}
             }
+            
         }));
 
     operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
-            if entry.text().chars().last().unwrap() != '-' {
-                // Increase the counter
-                num_counter.set(num_counter.get() + 1);
+            let last_entry_char = entry.text().chars().last();
 
-                // Do the operation
-                calculator::operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
+            match last_entry_char {
+                Some(_) => {
+                    if entry.text().chars().last().unwrap() != '-' {
+                        // Increase the counter
+                        num_counter.set(num_counter.get() + 1);
 
-                // Insert the subtraction symbol to the entry
-                entry.insert_text("-", &mut -1);
+                        // Do the operation
+                        calculator::operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
+
+                        // Insert the subtraction symbol to the entry
+                        entry.insert_text("-", &mut -1);
+                    }
+                },
+                None => {}
             }
         }));
 
     operator_buttons.multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
-            if entry.text().chars().last().unwrap() != '\u{00D7}' {
-                // Increase the counter
-                num_counter.set(num_counter.get() + 1);
+            let last_entry_char = entry.text().chars().last();
 
-                // Do the operation
-                calculator::operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
+            match last_entry_char {
+                Some(_) => {
+                    if entry.text().chars().last().unwrap() != '\u{00D7}' {
+                        // Increase the counter
+                        num_counter.set(num_counter.get() + 1);
+
+                        // Do the operation
+                        calculator::operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
     
-                // Insert the multiplication symbol to the entry
-                entry.insert_text("\u{00D7}", &mut -1);
+                        // Insert the multiplication symbol to the entry
+                        entry.insert_text("\u{00D7}", &mut -1);
+                    }
+                },
+                None => {}
             }
         }));
 
     operator_buttons.divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong entry =>
         move |_| {
-            if entry.text().chars().last().unwrap() != '\u{00F7}' {
-                // Increase the counter
-                num_counter.set(num_counter.get() + 1);
+            let last_entry_char = entry.text().chars().last();
 
-                // Do the operation
-                calculator::operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
+            match last_entry_char {
+                Some(_) => {
+                    if entry.text().chars().last().unwrap() != '\u{00F7}' {
+                        // Increase the counter
+                        num_counter.set(num_counter.get() + 1);
+
+                        // Do the operation
+                        calculator::operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
         
-                // Insert the division symbol to the entry
-                entry.insert_text("\u{00F7}", &mut -1);
+                        // Insert the division symbol to the entry
+                        entry.insert_text("\u{00F7}", &mut -1);
+                    }
+                },
+                None => {}
             }
         }));
     
