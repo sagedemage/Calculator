@@ -59,7 +59,7 @@ pub fn build_ui(application: &Application) {
     menu.append_item(&about_item);
 
     // Create Popover from menu
-    let popover = PopoverMenu::from_model(Some(&menu));
+    let popover_menu = PopoverMenu::from_model(Some(&menu));
 
     // Create grid
     let grid = Grid::new();
@@ -268,7 +268,7 @@ pub fn build_ui(application: &Application) {
         }));
 
     // Set popover for menu button
-    menu_button.set_popover(Some(&popover));
+    menu_button.set_popover(Some(&popover_menu));
 
     // Add about button to the header bar
     header_bar.pack_end(&menu_button);
