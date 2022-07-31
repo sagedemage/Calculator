@@ -3,9 +3,10 @@
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
-use gtk::{Application, ApplicationWindow, Box, Orientation, GestureClick,
-Popover, Grid, HeaderBar, AboutDialog, MenuButton, Label};
+use gtk::{Application, ApplicationWindow, PopoverMenu, Grid, 
+    HeaderBar, AboutDialog, MenuButton};
 use gtk::prelude::*;
+use gio::{Menu, MenuItem, SimpleAction};
 
 use glib_macros::clone;
 
@@ -23,6 +24,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 const LOGO_PATH: &str = "src/resources/images/logo.png";
 
 pub fn build_ui(application: &Application) {
+    /* build ui of the application */
     // Create Window
     let window = ApplicationWindow::builder()
         .application(application)
@@ -31,7 +33,6 @@ pub fn build_ui(application: &Application) {
         .default_height(70)
         .build();
 
-    /* build ui of the application */
     // Get file of the image
     let logo_file = gio::File::for_path(LOGO_PATH);
     
@@ -45,18 +46,21 @@ pub fn build_ui(application: &Application) {
     let menu_button = MenuButton::new();
     menu_button.set_icon_name("view-list"); // set menu button icon
 
-    // Create vertical box
-    let vbox = Box::new(Orientation::Vertical, 0);
+    // Simple Action for showing about dialog
+    let about_action = SimpleAction::new("about", None);
 
-    // Create Popover for labels
-    let popover = Popover::new();
+    // Create Menu
+    let menu = Menu::new();
 
-    // Create about label
-    let about_label = Label::new(Some("About"));
-
-    // About gesture
-    let about_gesture = GestureClick::new();
+    // Create About Menu Item
+    let about_item = MenuItem::new(Some("About"), Some("app.about"));
     
+    // Appends about item to menu_item
+    menu.append_item(&about_item);
+
+    // Create Popover from menu
+    let popover = PopoverMenu::from_model(Some(&menu));
+
     // Create grid
     let grid = Grid::new();
    
@@ -87,22 +91,22 @@ pub fn build_ui(application: &Application) {
     let initiate_equals: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
     /* Connect callbacks */
-    about_gesture.connect_pressed(move |about_gesture, _, _, _| {
-        about_gesture.set_state(gtk::EventSequenceState::Claimed);
+    about_action.connect_activate(clone!(@strong app_logo =>
+        move |_, _| {
+            // create about dialog here
+            // About Dialog 
+            let about_dialog = AboutDialog::builder()
+                .logo(&app_logo.paintable().unwrap())
+                .version(VERSION)
+                .comments("GTK4 Calculator App written in Rust")
+                .copyright("© 2022 Salmaan Saeed")
+                .authors(vec![String::from("Salmaan Saeed")])
+                .license("The 3-Clause BSD License")
+                .build();
 
-        // create about dialog here
-        // About Dialog 
-        let about_dialog = AboutDialog::builder()
-            .logo(&app_logo.paintable().unwrap())
-            .version(VERSION)
-            .comments("GTK4 Calculator App written in Rust")
-            .copyright("© 2022 Salmaan Saeed")
-            .authors(vec![String::from("Salmaan Saeed")])
-            .license("The 3-Clause BSD License")
-            .build();
-
-        about_dialog.show();
-    });
+            about_dialog.show();
+            }
+        ));
 
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
@@ -263,15 +267,6 @@ pub fn build_ui(application: &Application) {
             entry.set_text("");
         }));
 
-    // Add label to box
-    about_label.add_controller(&about_gesture);
-
-    // Add about label to vertical box
-    vbox.append(&about_label);
-    
-    // Set vertical box as the child of popover
-    popover.set_child(Some(&vbox));
-
     // Set popover for menu button
     menu_button.set_popover(Some(&popover));
 
@@ -280,6 +275,9 @@ pub fn build_ui(application: &Application) {
 
     /* Attach widgets to the Grid */
     grid::set_grid(&grid, &entry, &special_buttons, &operator_buttons, &number_buttons);
+
+    // Add about action to the application
+    application.add_action(&about_action);
 
     // Set the window title bar
     window.set_titlebar(Some(&header_bar));
