@@ -3,10 +3,10 @@
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 
-use gtk::{Application, ApplicationWindow, PopoverMenu, Grid, 
-    HeaderBar, AboutDialog, MenuButton};
+use gtk::{Application, ApplicationWindow, Builder, 
+    PopoverMenu, Grid, HeaderBar, AboutDialog, MenuButton};
 use gtk::prelude::*;
-use gio::{Menu, MenuItem, SimpleAction};
+use gio::{Menu, SimpleAction};
 
 use glib_macros::clone;
 
@@ -31,6 +31,12 @@ pub fn build_ui(application: &Application) {
         .default_height(70)
         .build();
 
+    // Load menu ui xml file
+    let builder = Builder::from_file("src/resources/ui/menu.ui");
+
+    // Get Menu object
+    let menu_object: std::option::Option<Menu> = builder.object("menu");
+
     // Get file of the image
     let logo_file = gio::File::for_path(LOGO_PATH);
     
@@ -47,14 +53,8 @@ pub fn build_ui(application: &Application) {
     // Simple Action for showing about dialog
     let about_action = SimpleAction::new("about", None);
 
-    // Create Menu
-    let menu = Menu::new();
-
-    // Create About Menu Item
-    let about_item = MenuItem::new(Some("About"), Some("app.about"));
-
-    // Appends about item to menu_item
-    menu.append_item(&about_item);
+    // Get Menu
+    let menu = menu_object.unwrap();
 
     // Create Popover Menu from menu
     let popover_menu = PopoverMenu::from_model(Some(&menu));
