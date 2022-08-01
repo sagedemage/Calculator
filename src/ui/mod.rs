@@ -87,11 +87,13 @@ pub fn build_ui(application: &Application) {
     let initiate_equals: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
     /* Connect callbacks */
-    about_action.connect_activate(clone!(@strong app_logo =>
+    about_action.connect_activate(clone!(@strong app_logo, @strong window =>
         move |_, _| {
             // create about dialog here
             // About Dialog 
             let about_dialog = AboutDialog::builder()
+                .transient_for(&window) // the temporary parent of the window 
+                .modal(true) // freezes the rest of the app from user input
                 .logo(&app_logo.paintable().unwrap())
                 .version(APP_VERSION)
                 .comments("GTK4 Calculator App written in Rust")
@@ -99,10 +101,10 @@ pub fn build_ui(application: &Application) {
                 .authors(vec![String::from("Salmaan Saeed")])
                 .license("The 3-Clause BSD License")
                 .build();
-
-            about_dialog.show();
-            }
-        ));
+            
+            // Show the about dialog
+            about_dialog.present();
+        }));
 
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong entry =>
