@@ -15,11 +15,9 @@ use crate::widgets::{self, NumberButtons, OperatorButtons, SpecialButtons};
 use crate::calculator::{self, Values, Operators};
 use crate::grid;
 
-// Get package version from Cargo
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
-// Path to the logo 
-const LOGO_PATH: &str = "src/resources/images/logo.png";
+const VERSION: &str = env!("CARGO_PKG_VERSION"); // get package version from Cargo
+const LOGO_PATH: &str = "src/resources/images/logo.png"; // path to the logo
+const MENU_UI_PATH: &str = "src/resources/ui/menu.ui";
 
 pub fn build_ui(application: &Application) {
     /* build ui of the application */
@@ -32,7 +30,7 @@ pub fn build_ui(application: &Application) {
         .build();
 
     // Load menu ui file
-    let menu_builder = Builder::from_file("src/resources/ui/menu.ui");
+    let menu_builder = Builder::from_file(MENU_UI_PATH);
 
     // Get Menu object
     let menu_object: std::option::Option<Menu> = menu_builder.object("menu");
