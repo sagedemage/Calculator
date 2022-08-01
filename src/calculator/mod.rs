@@ -73,7 +73,7 @@ pub fn operation(symbol_operator: char, num_counter: &Rc<Cell<i32>>, ops: &Rc<Re
         ops.borrow().current.set(symbol_operator);
         
         // Do calculation
-        calculation(ops.borrow().previous.get(), &vals);
+        calculation(ops.borrow().previous.get(), vals);
 
         // Check divison by zero
         check_divison_by_zero(ops.borrow().previous.get(), vals.borrow().num2.get(), divide_zero);
@@ -95,7 +95,7 @@ pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>,
     check_divison_by_zero(ops.borrow().current.get(), vals.borrow().num2.get(), divide_zero);
 
     // Do calculation
-    calculation(ops.borrow().current.get(), &vals);
+    calculation(ops.borrow().current.get(), vals);
 
     if divide_zero.get() {
         // The result stores Divsion by Zero Error Message
@@ -125,9 +125,9 @@ pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
                  entry: &Entry, initiate_equals: &Rc<Cell<bool>>) {
     if num_counter.get() == 2 {
         let result = equation_result(
-            &ops,
-            &vals,
-            &divide_zero,
+            ops,
+            vals,
+            divide_zero,
         );
 
         // Show the result on the entry
@@ -137,7 +137,7 @@ pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
         initiate_equals.set(true);
 
         // reset variables
-        reset_variables(&vals, &ops, &num_counter, &divide_zero);
+        reset_variables(vals, ops, num_counter, divide_zero);
     }
 }
 

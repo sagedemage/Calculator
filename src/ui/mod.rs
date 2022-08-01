@@ -184,7 +184,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if entry.text().chars().last().unwrap() != '+' {
+                    if !entry.text().ends_with('+') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
@@ -207,7 +207,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if entry.text().chars().last().unwrap() != '-' {
+                    if !entry.text().ends_with('-') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
@@ -229,7 +229,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if entry.text().chars().last().unwrap() != '\u{00D7}' {
+                    if !entry.text().ends_with('\u{00D7}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
@@ -251,7 +251,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if entry.text().chars().last().unwrap() != '\u{00F7}' {
+                    if !entry.text().ends_with('\u{00F7}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
