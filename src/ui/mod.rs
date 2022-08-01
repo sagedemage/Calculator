@@ -15,7 +15,7 @@ use crate::widgets::{self, NumberButtons, OperatorButtons, SpecialButtons};
 use crate::calculator::{self, Values, Operators};
 use crate::grid;
 
-const VERSION: &str = env!("CARGO_PKG_VERSION"); // get package version from Cargo
+const APP_VERSION: &str = env!("CARGO_PKG_VERSION"); // get package version from Cargo
 const LOGO_PATH: &str = "src/resources/images/logo.png"; // path to the logo
 const MENU_UI_PATH: &str = "src/resources/ui/menu.ui";
 
@@ -93,7 +93,7 @@ pub fn build_ui(application: &Application) {
             // About Dialog 
             let about_dialog = AboutDialog::builder()
                 .logo(&app_logo.paintable().unwrap())
-                .version(VERSION)
+                .version(APP_VERSION)
                 .comments("GTK4 Calculator App written in Rust")
                 .copyright("© 2022 Salmaan Saeed")
                 .authors(vec![String::from("Salmaan Saeed")])
