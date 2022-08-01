@@ -20,6 +20,7 @@ Check this page to install dependencies in other linux distros:
 * [gtk4](https://crates.io/crates/gtk4)
 * [gdk4](https://crates.io/crates/gdk4)
 * [glib-macros](https://crates.io/crates/glib-macros)
+* [gio](https://crates.io/crates/gio)
 
 ## Building Calculator app
 
