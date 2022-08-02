@@ -1,42 +1,29 @@
-/*
- * gtk4
- *
- * Memory Management
- *
- * Got my Working Example from here:
- * https://gtk-rs.org/gtk4-rs/stable/latest/book/g_object_memory_management.html
- */
+/* Calculator Desktop App */
 
- /* Main program */
+use gtk::Application;
+use gtk::prelude::*;
 
-pub use gtk4 as gtk;
-pub use gtk::{Application};
-
-pub use gdk4::Display;
-pub use gtk::{CssProvider, StyleContext};
-
-mod defs;
-mod button;
+mod operator_symbols;
+mod widgets;
+mod grid;
 mod calculator;
 mod ui;
 mod css;
 
-pub use crate::defs::*;
-pub use crate::button::*;
-pub use crate::calculator::*;
-pub use crate::ui::*;
-pub use crate::css::{load_css};
-
 const APP_ID: &str = "org.gtk_rs.GObjectSubclassing1";
+const CSS_FILE_PATH: &str = "src/resources/css/styles.css";
 
 fn main() {
     // Create a new application
     let app = Application::builder().application_id(APP_ID).build();
-
-    // Connect to signals
-    app.connect_startup(|_| load_css());
-    app.connect_activate(build_ui);
+    
+    /* Connect to signals */
+    // Load css file
+    app.connect_startup(|_| css::load_css_file(CSS_FILE_PATH));
+    // Activate UI
+    app.connect_activate(ui::build_ui);
 
     // Run the application
     app.run();
 }
+

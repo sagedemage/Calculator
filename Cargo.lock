@@ -339,9 +339,10 @@ dependencies = [
 
 [[package]]
 name = "gtk4-calculator"
-version = "0.1.0"
+version = "0.1.4"
 dependencies = [
  "gdk4",
+ "gio",
  "glib-macros",
  "gtk4",
 ]

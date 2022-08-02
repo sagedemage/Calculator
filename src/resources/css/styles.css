@@ -1,0 +1,18 @@
+button {
+	/* Put this, for the background color to be visible */
+    background-image: none;
+	font-size: 25px;
+}
+
+entry {
+	font-size: 25px;
+}
+
+button#clear {
+	background-color: #A00000;
+}
+
+button#equals {
+	background-color: #0059FF;
+}
+

@@ -2,7 +2,9 @@
 
 Basic calculator application written in rust using gtk4 rust key bindings.
 
-![](images/calculator%20app.webp)
+![](images/calculator-window.webp)
+
+![](images/about-dialog.webp)
 
 ## Dependencies
 * libgtk-4-dev
@@ -20,6 +22,7 @@ Check this page to install dependencies in other linux distros:
 * [gtk4](https://crates.io/crates/gtk4)
 * [gdk4](https://crates.io/crates/gdk4)
 * [glib-macros](https://crates.io/crates/glib-macros)
+* [gio](https://crates.io/crates/gio)
 
 ## Building Calculator app
 

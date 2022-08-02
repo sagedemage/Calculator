@@ -1,3 +1,11 @@
 /target
+*.kra
 *.xcf
-*.png
+*.kra~
+*.png~
+*.xcf~
+.markdown-preview.html
+about-dialog.png
+calculator-window.png
+calculator-app.png
+
