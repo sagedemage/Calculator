@@ -21,8 +21,8 @@ impl Values {
 }
 
 pub struct Operators {
-    pub current: Rc<Cell<char>>,
-    pub previous: Rc<Cell<char>>,
+    pub current: Rc<Cell<u8>>,
+    pub previous: Rc<Cell<u8>>,
 }
 
 impl Operators {
@@ -44,7 +44,7 @@ pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {
     }
 }
 
-pub fn calculation(operation: char, vals: &Rc<RefCell<Values>>) {
+pub fn calculation(operation: u8, vals: &Rc<RefCell<Values>>) {
     /* Calculate the 2 values */
     match operation {
         ADD => vals.borrow().num1.set(vals.borrow().num1.get() + vals.borrow().num2.get()),
@@ -57,14 +57,14 @@ pub fn calculation(operation: char, vals: &Rc<RefCell<Values>>) {
     }
 }
 
-pub fn check_divison_by_zero(ops: char, val2: f64, divide_zero: &Rc<Cell<bool>>) {
+pub fn check_divison_by_zero(ops: u8, val2: f64, divide_zero: &Rc<Cell<bool>>) {
     /* Set division by zero status */
     if ops == DIVIDE && val2 == 0.0 {
         divide_zero.set(true);
     }
 }
 
-pub fn operation(symbol_operator: char, num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
+pub fn operation(symbol_operator: u8, num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
                  vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>) {
     /* Do the operation when two values are received for calucaltion */ 
     if num_counter.get() == 2 {

@@ -1,8 +1,8 @@
-/* Calculator operator names */
+/* Operator codes */
 
-pub const ADD: char = 'a';
-pub const SUBTRACT: char = 's';
-pub const MULTIPLY: char = 'm';
-pub const DIVIDE: char = 'd';
-pub const NONE: char = 'n';
+pub const NONE: u8 = 0;
+pub const ADD: u8 = 1;
+pub const SUBTRACT: u8 = 2;
+pub const MULTIPLY: u8 = 3;
+pub const DIVIDE: u8 = 4;
 
