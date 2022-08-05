@@ -44,7 +44,7 @@ pub fn build_ui(application: &Application) {
     // empty paintable
     let mut paintable_app_logo: gdk::Paintable = gdk::Paintable::new_empty(0, 0);
     
-    // Check if the picture paintable exists
+    // Check if the paintable picture exists
     if app_logo.paintable().is_some() {
         println!("Issue no app logo image found");
         // Paintable picture
