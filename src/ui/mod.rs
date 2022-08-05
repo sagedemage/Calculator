@@ -46,9 +46,12 @@ pub fn build_ui(application: &Application) {
     
     // Check if the paintable picture exists
     if app_logo.paintable().is_some() {
-        println!("Issue no app logo image found");
-        // Paintable picture
+        // Get paintable of the picture of the app logo
         paintable_app_logo = app_logo.paintable().unwrap();
+    }
+    else {
+        // Print message when app logo image is not found 
+        eprintln!("File Not Found: app logo image not found!");
     }
 
     // Create header bar
