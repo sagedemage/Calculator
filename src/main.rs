@@ -20,6 +20,7 @@ fn main() {
     /* Connect to signals */
     // Load css file
     app.connect_startup(|_| css::load_css_file(CSS_FILE_PATH));
+    
     // Activate UI
     app.connect_activate(ui::build_ui);
 
