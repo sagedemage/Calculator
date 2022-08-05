@@ -40,18 +40,12 @@ pub fn build_ui(application: &Application) {
     
     // Create picture
     let app_logo = gtk::Picture::for_file(&logo_file);
-
-    // empty paintable
-    let mut paintable_app_logo: gdk::Paintable = gdk::Paintable::new_empty(0, 0);
     
     // Check if the paintable picture exists
-    if app_logo.paintable().is_some() {
-        // Get paintable of the picture of the app logo
-        paintable_app_logo = app_logo.paintable().unwrap();
-    }
-    else {
-        // Print message when app logo image is not found 
+    if app_logo.paintable().is_none() {
+        // Print message and exit app when app logo image is not found 
         eprintln!("File Not Found: app logo image not found!");
+        std::process::exit(1);
     }
 
     // Create header bar
@@ -107,7 +101,7 @@ pub fn build_ui(application: &Application) {
             let about_dialog = AboutDialog::builder()
                 .transient_for(&window) // the temporary parent of the window 
                 .modal(true) // freezes the rest of the app from user input
-                .logo(&paintable_app_logo)
+                .logo(&app_logo.paintable().unwrap())
                 .version(APP_VERSION)
                 .comments("GTK4 Calculator App written in Rust")
                 .copyright("© 2022 Salmaan Saeed")
