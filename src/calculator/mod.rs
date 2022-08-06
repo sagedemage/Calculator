@@ -74,6 +74,10 @@ pub fn calculation(operation: u8, vals: &Rc<RefCell<Values>>) {
     if operation == DIVIDE && vals.borrow().num2.get() != 0.0 {
         vals.borrow().num1.set(vals.borrow().num1.get() / vals.borrow().num2.get());
     }
+
+    // Round the result
+    let x: f64 = 10.0;
+    vals.borrow().num1.set((vals.borrow().num1.get() * x.powi(9)).round() / x.powi(9));
 }
 
 pub fn check_divison_by_zero(ops: u8, val2: f64, divide_zero: &Rc<Cell<bool>>) {
