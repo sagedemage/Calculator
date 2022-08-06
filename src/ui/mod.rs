@@ -2,11 +2,15 @@
 
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
+use std::path::Path;
+use std::option::Option;
+use std::process;
 
-use gtk::{Application, ApplicationWindow, Builder, 
-    PopoverMenu, Grid, HeaderBar, AboutDialog, MenuButton};
+use gtk::{Application, ApplicationWindow, Builder, PopoverMenu, 
+    Grid, HeaderBar, AboutDialog, MenuButton, Picture};
 use gtk::prelude::*;
 use gio::{Menu, SimpleAction};
+use gdk_pixbuf::Pixbuf;
 
 use glib_macros::clone;
 
@@ -33,26 +37,23 @@ pub fn build_ui(application: &Application) {
     let menu_builder = Builder::from_file(MENU_UI_PATH);
 
     // Get Menu object
-    let menu_object: std::option::Option<Menu> = menu_builder.object("menu");
+    let menu_object: Option<Menu> = menu_builder.object("menu");
 
-    // Get file of the image
-    let logo_file = gio::File::for_path(LOGO_PATH);
-    
-    // Create picture
-    let app_logo = gtk::Picture::for_file(&logo_file);
+    // Get file path of the app logo image
+    let file_path = Path::new(LOGO_PATH);
 
-    // empty paintable
-    let mut paintable_app_logo: gdk::Paintable = gdk::Paintable::new_empty(0, 0);
-    
-    // Check if the paintable picture exists
-    if app_logo.paintable().is_some() {
-        // Get paintable of the picture of the app logo
-        paintable_app_logo = app_logo.paintable().unwrap();
-    }
-    else {
-        // Print message when app logo image is not found 
+    // Check if the image file exists
+    if file_path.exists() == false {
+        // Print message and exit app when app logo image is not found 
         eprintln!("File Not Found: app logo image not found!");
+        process::exit(1);
     }
+
+    // Create pixbuf from image file
+    let file_pixbuf = Pixbuf::from_file(&file_path);
+
+    // Create picture
+    let app_logo = Picture::for_pixbuf(&file_pixbuf.unwrap());
 
     // Create header bar
     let header_bar = HeaderBar::new();
@@ -107,7 +108,7 @@ pub fn build_ui(application: &Application) {
             let about_dialog = AboutDialog::builder()
                 .transient_for(&window) // the temporary parent of the window 
                 .modal(true) // freezes the rest of the app from user input
-                .logo(&paintable_app_logo)
+                .logo(&app_logo.paintable().unwrap())
                 .version(APP_VERSION)
                 .comments("GTK4 Calculator App written in Rust")
                 .copyright("© 2022 Salmaan Saeed")
