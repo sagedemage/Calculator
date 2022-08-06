@@ -4,6 +4,7 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 use std::path::Path;
 use std::option::Option;
+use std::process;
 
 use gtk::{Application, ApplicationWindow, Builder, PopoverMenu, 
     Grid, HeaderBar, AboutDialog, MenuButton, Picture};
@@ -45,7 +46,7 @@ pub fn build_ui(application: &Application) {
     if file_path.exists() == false {
         // Print message and exit app when app logo image is not found 
         eprintln!("File Not Found: app logo image not found!");
-        std::process::exit(1);
+        process::exit(1);
     }
 
     // Create pixbuf from image file
