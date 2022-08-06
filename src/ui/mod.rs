@@ -43,7 +43,7 @@ pub fn build_ui(application: &Application) {
     let file_path = Path::new(LOGO_PATH);
 
     // Check if the image file exists
-    if file_path.exists() == false {
+    if !file_path.exists() {
         // Print message and exit app when app logo image is not found 
         eprintln!("File Not Found: app logo image not found!");
         process::exit(1);
