@@ -2,11 +2,14 @@
 
 use std::rc::Rc;
 use std::cell::{Cell, RefCell};
+use std::path::Path;
+use std::option::Option;
 
-use gtk::{Application, ApplicationWindow, Builder, 
-    PopoverMenu, Grid, HeaderBar, AboutDialog, MenuButton};
+use gtk::{Application, ApplicationWindow, Builder, PopoverMenu, 
+    Grid, HeaderBar, AboutDialog, MenuButton, Picture};
 use gtk::prelude::*;
 use gio::{Menu, SimpleAction};
+use gdk_pixbuf::Pixbuf;
 
 use glib_macros::clone;
 
@@ -33,20 +36,23 @@ pub fn build_ui(application: &Application) {
     let menu_builder = Builder::from_file(MENU_UI_PATH);
 
     // Get Menu object
-    let menu_object: std::option::Option<Menu> = menu_builder.object("menu");
+    let menu_object: Option<Menu> = menu_builder.object("menu");
 
-    // Get file of the image
-    let logo_file = gio::File::for_path(LOGO_PATH);
-    
-    // Create picture
-    let app_logo = gtk::Picture::for_file(&logo_file);
-    
-    // Check if the paintable picture exists
-    if app_logo.paintable().is_none() {
+    // Get file path of the app logo image
+    let file_path = Path::new(LOGO_PATH);
+
+    // Check if the image file exists
+    if file_path.exists() == false {
         // Print message and exit app when app logo image is not found 
         eprintln!("File Not Found: app logo image not found!");
         std::process::exit(1);
     }
+
+    // Create pixbuf from image file
+    let file_pixbuf = Pixbuf::from_file(&file_path);
+
+    // Create picture
+    let app_logo = Picture::for_pixbuf(&file_pixbuf.unwrap());
 
     // Create header bar
     let header_bar = HeaderBar::new();

@@ -341,6 +341,7 @@ dependencies = [
 name = "gtk4-calculator"
 version = "0.1.4"
 dependencies = [
+ "gdk-pixbuf",
  "gdk4",
  "gio",
  "glib-macros",
