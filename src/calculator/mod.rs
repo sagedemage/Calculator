@@ -34,14 +34,33 @@ impl Operators {
     }
 }
 
-pub fn set_value(num_counter: i32, vals: &Rc<RefCell<Values>>, num: f64) {
-    /* Set the first or second value */
-    if num_counter == 0 {
-        vals.borrow().num1.set(vals.borrow().num1.get() * 10.0 + num); 
+pub fn set_value(decimal_value: &Rc<Cell<bool>>, num_counter: i32, decimal_counter: &Rc<Cell<i32>>, vals: &Rc<RefCell<Values>>, num: f64) {
+    // insert decimal value or whole number
+    match decimal_value.get() {
+        true => {
+            decimal_counter.set(decimal_counter.get() + 1);
+
+            /* Set the first or second value */
+            if num_counter == 0 {
+                let x: f64 = 10.0;
+                vals.borrow().num1.set(vals.borrow().num1.get() + num * x.powi(-decimal_counter.get()));
+            }
+            if num_counter == 1 {
+                let x: f64 = 10.0;
+                vals.borrow().num2.set(vals.borrow().num2.get() + num * x.powi(-decimal_counter.get()));
+            }
+        },
+        false => {
+            /* Set the first or second value */
+            if num_counter == 0 {
+                vals.borrow().num1.set(vals.borrow().num1.get() * 10.0 + num); 
+            }
+            if num_counter == 1 {
+                vals.borrow().num2.set(vals.borrow().num2.get() * 10.0 + num);
+            }
+        },
     }
-    if num_counter == 1 {
-        vals.borrow().num2.set(vals.borrow().num2.get() * 10.0 + num); 
-    }
+    
 }
 
 pub fn calculation(operation: u8, vals: &Rc<RefCell<Values>>) {
@@ -64,14 +83,20 @@ pub fn check_divison_by_zero(ops: u8, val2: f64, divide_zero: &Rc<Cell<bool>>) {
     }
 }
 
-pub fn operation(symbol_operator: u8, num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
-                 vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>) {
-    /* Do the operation when two values are received for calucaltion */ 
+pub fn operation(symbol_operator: u8, num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>, 
+                 ops: &Rc<RefCell<Operators>>,vals: &Rc<RefCell<Values>>, decimal_value: &Rc<Cell<bool>>, 
+                 divide_zero: &Rc<Cell<bool>>) {
+    /* Operation driver function */
+    // reset decimal value and decimal counter
+    decimal_value.set(false);
+    decimal_counter.set(0);
+
+    // Do the operation when two values are received for calculation
     if num_counter.get() == 2 {
         // Set previous and current operation
         ops.borrow().previous.set(ops.borrow().current.get());
         ops.borrow().current.set(symbol_operator);
-        
+
         // Do calculation
         calculation(ops.borrow().previous.get(), vals);
 
@@ -110,19 +135,23 @@ pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>,
 }
 
 pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
-                       num_counter: &Rc<Cell<i32>>, divide_zero: &Rc<Cell<bool>>) {
+                       num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>,
+                       divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>) {
     /* reset variables */
     vals.borrow().num1.set(0.0);
     vals.borrow().num2.set(0.0);
     ops.borrow().previous.set(NONE);
     ops.borrow().current.set(NONE);
     num_counter.set(0);
+    decimal_counter.set(0);
     divide_zero.set(false);
+    decimal_value.set(false);
 }
 
 pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
                  vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>,
-                 entry: &Entry, initiate_equals: &Rc<Cell<bool>>) {
+                 entry: &Entry, initiate_equals: &Rc<Cell<bool>>,
+                 decimal_counter: &Rc<Cell<i32>>, decimal_value: &Rc<Cell<bool>>) {
     if num_counter.get() == 2 {
         let result = equation_result(
             ops,
@@ -137,7 +166,7 @@ pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
         initiate_equals.set(true);
 
         // reset variables
-        reset_variables(vals, ops, num_counter, divide_zero);
+        reset_variables(vals, ops, num_counter, decimal_counter, divide_zero, decimal_value);
     }
 }
 
