@@ -4,7 +4,6 @@ use std::rc::Rc;
 use std::cell::{Cell, RefCell};
 use std::path::Path;
 use std::option::Option;
-use std::process;
 
 use gtk::{Application, ApplicationWindow, Builder, PopoverMenu, 
     Grid, HeaderBar, AboutDialog, MenuButton, Picture};
@@ -39,21 +38,17 @@ pub fn build_ui(application: &Application) {
     // Get Menu object
     let menu_object: Option<Menu> = menu_builder.object("menu");
 
-    // Get file path of the app logo image
-    let file_path = Path::new(LOGO_PATH);
+    // Get file path of the logo image
+    let image_logo_path = Path::new(LOGO_PATH);
 
-    // Check if the image file exists
-    if !file_path.exists() {
-        // Print message and exit app when app logo image is not found 
-        eprintln!("File Not Found: app logo image not found!");
-        process::exit(1);
-    }
+    // Create pixbuf from file path of the app logo image
+    let image_logo_pixbuf = Pixbuf::from_file(&image_logo_path);
 
-    // Create pixbuf from image file
-    let file_pixbuf = Pixbuf::from_file(&file_path);
+    // Get the Pixbuf value of file_pixbuf if the file exists
+    let image_logo_pixbuf = image_logo_pixbuf.expect("File Not Found: app logo image not found!");
 
     // Create picture
-    let app_logo = Picture::for_pixbuf(&file_pixbuf.unwrap());
+    let app_logo = Picture::for_pixbuf(&image_logo_pixbuf);
 
     // Create header bar
     let header_bar = HeaderBar::new();
