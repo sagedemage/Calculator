@@ -38,7 +38,7 @@ pub fn set_sign_of_value(negative_value: &Rc<Cell<bool>>, num: f64) -> f64 {
     // set sign of value
     let mut value: f64 = num;
 
-    if negative_value.get() == true {
+    if negative_value.get() {
         value = -num;
     }
     value
