@@ -33,7 +33,8 @@ pub fn set_grid(grid: &Grid, entry: &Entry, special_buttons: &SpecialButtons,
     GridExt::attach(grid, &operator_buttons.plus, 3, 4, 1, 1);
 
     // Row 5
-    GridExt::attach(grid, &number_buttons.num0, 0, 5, 3, 1);
+    GridExt::attach(grid, &number_buttons.num0, 0, 5, 2, 1);
+    GridExt::attach(grid, &special_buttons.period, 2, 5, 1, 1);
     GridExt::attach(grid, &special_buttons.equals, 3, 5, 1, 1);
 }
 

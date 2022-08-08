@@ -65,6 +65,7 @@ impl OperatorButtons {
 pub struct SpecialButtons {
     pub clear: Button,
     pub equals: Button,
+    pub period: Button,
 }
 
 impl SpecialButtons {
@@ -72,6 +73,7 @@ impl SpecialButtons {
         SpecialButtons{
             clear: create_button("clear"),
             equals: create_button("="),
+            period: create_button("."),
         }
     }
 }
