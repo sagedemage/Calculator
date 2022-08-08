@@ -3,7 +3,7 @@
 use gtk::{Button, Entry};
 
 pub fn create_button(label: &'static str) -> Button {
-    let margin = 6;
+    let margin = 1;
     
     Button::builder()
         .label(label)

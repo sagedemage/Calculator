@@ -81,7 +81,19 @@ pub fn build_ui(application: &Application) {
     // Create special buttons
     let special_buttons = SpecialButtons::new();
 
-    // add css class for the special button
+    // add css class for the numbered buttons
+    number_buttons.num0.set_widget_name("number_buttons");
+    number_buttons.num1.set_widget_name("number_buttons");
+    number_buttons.num2.set_widget_name("number_buttons");
+    number_buttons.num3.set_widget_name("number_buttons");
+    number_buttons.num4.set_widget_name("number_buttons");
+    number_buttons.num5.set_widget_name("number_buttons");
+    number_buttons.num6.set_widget_name("number_buttons");
+    number_buttons.num7.set_widget_name("number_buttons");
+    number_buttons.num8.set_widget_name("number_buttons");
+    number_buttons.num9.set_widget_name("number_buttons");
+
+    // add css class for the special buttons
     special_buttons.clear.set_widget_name("clear");
     special_buttons.equals.set_widget_name("equals");
 
