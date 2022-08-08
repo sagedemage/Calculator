@@ -93,9 +93,17 @@ pub fn build_ui(application: &Application) {
     number_buttons.num8.set_widget_name("number_buttons");
     number_buttons.num9.set_widget_name("number_buttons");
 
+    // add css class for the operator buttons
+    operator_buttons.plus.set_widget_name("operator_buttons");
+    operator_buttons.minus.set_widget_name("operator_buttons");
+    operator_buttons.multiply.set_widget_name("operator_buttons");
+    operator_buttons.divide.set_widget_name("operator_buttons");
+
     // add css class for the special buttons
-    special_buttons.clear.set_widget_name("clear");
-    special_buttons.equals.set_widget_name("equals");
+    special_buttons.clear.set_widget_name("clear-button");
+    special_buttons.equals.set_widget_name("equals-button");
+    special_buttons.period.set_widget_name("period-button");
+    special_buttons.negative.set_widget_name("negative-button");
 
     /* Mutable values */
     // values
