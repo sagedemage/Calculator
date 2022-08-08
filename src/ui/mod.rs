@@ -229,6 +229,40 @@ pub fn build_ui(application: &Application) {
                 entry.insert_text(".", &mut -1);
             }
         }));
+
+    special_buttons.negative.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
+        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        move |_| {
+            let entry_length: i32 = entry.text().len() as i32;
+            let last_entry_char = entry.text().chars().last();
+
+            /*if entry.text().ends_with('-') {       
+                entry.delete_text(entry_length-1, -1);
+            }
+            else if !entry.text().ends_with('-') && !last_entry_char.unwrap().is_numeric() {
+                entry.insert_text("-", &mut -1);
+            }*/
+
+            match last_entry_char {
+                Some(_) => {
+                    if entry.text().ends_with('-') {       
+                        entry.delete_text(entry_length-1, -1);
+                    }
+                    else if !entry.text().ends_with('-') && !last_entry_char.unwrap().is_numeric() {
+                        entry.insert_text("-", &mut -1);
+                    }
+                },
+                None => {
+                    if entry.text().ends_with('-') {       
+                        entry.delete_text(entry_length-1, -1);
+                    }
+                    else if !entry.text().ends_with('-') {
+                        entry.insert_text("-", &mut -1);
+                    }
+                }
+            }
+
+        }));
     
     operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong decimal_counter, @strong entry =>
