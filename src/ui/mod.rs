@@ -117,6 +117,7 @@ pub fn build_ui(application: &Application) {
 
     //conditions
     let decimal_value: Rc<Cell<bool>> = Rc::new(Cell::new(false));
+    let negative_value: Rc<Cell<bool>> = Rc::new(Cell::new(false));
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
     let initiate_equals: Rc<Cell<bool>> = Rc::new(Cell::new(false));
 
@@ -141,7 +142,8 @@ pub fn build_ui(application: &Application) {
         }));
 
     number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
             calculator::set_value(&decimal_value, num_counter.get(),
@@ -149,75 +151,93 @@ pub fn build_ui(application: &Application) {
             entry.insert_text("0", &mut -1);
         }));
     number_buttons.num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong decimal_value, @strong negative_value, 
+        @strong decimal_counter, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 1.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 1.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("1", &mut -1);
         }));
     number_buttons.num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 2.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 2.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("2", &mut -1);
         }));
     number_buttons.num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 3.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 3.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("3", &mut -1);
         }));
     number_buttons.num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 4.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 4.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("4", &mut -1);
         }));
     number_buttons.num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 5.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 5.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("5", &mut -1);
         }));
     number_buttons.num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 6.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 6.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("6", &mut -1);
         }));
     number_buttons.num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 7.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 7.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("7", &mut -1);
         }));
     number_buttons.num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 8.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 8.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("8", &mut -1);
         }));
     number_buttons.num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+            let value = calculator::set_sign_of_value(&negative_value, 9.0);
             calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 9.0);
+                &decimal_counter, &vals, value);
             entry.insert_text("9", &mut -1);
         }));
 
@@ -231,33 +251,33 @@ pub fn build_ui(application: &Application) {
         }));
 
     special_buttons.negative.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong decimal_value, @strong negative_value, @strong decimal_counter, @strong entry =>
         move |_| {
+
+            calculator::clear_entry_before_calculation(&initiate_equals, &entry);
+
             let entry_length: i32 = entry.text().len() as i32;
             let last_entry_char = entry.text().chars().last();
-
-            /*if entry.text().ends_with('-') {       
-                entry.delete_text(entry_length-1, -1);
-            }
-            else if !entry.text().ends_with('-') && !last_entry_char.unwrap().is_numeric() {
-                entry.insert_text("-", &mut -1);
-            }*/
 
             match last_entry_char {
                 Some(_) => {
                     if entry.text().ends_with('-') {       
                         entry.delete_text(entry_length-1, -1);
+                        negative_value.set(false);
                     }
                     else if !entry.text().ends_with('-') && !last_entry_char.unwrap().is_numeric() {
                         entry.insert_text("-", &mut -1);
+                        negative_value.set(true);
                     }
                 },
                 None => {
                     if entry.text().ends_with('-') {       
                         entry.delete_text(entry_length-1, -1);
+                        negative_value.set(false);
                     }
                     else if !entry.text().ends_with('-') {
                         entry.insert_text("-", &mut -1);
+                        negative_value.set(true);
                     }
                 }
             }
@@ -265,7 +285,8 @@ pub fn build_ui(application: &Application) {
         }));
     
     operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -276,8 +297,8 @@ pub fn build_ui(application: &Application) {
                         num_counter.set(num_counter.get() + 1);
 
                         // Do the operation
-                        calculator::operation(ADD, &num_counter, &decimal_counter, &ops, &vals, &decimal_value, 
-                                              &divide_zero);
+                        calculator::operation(ADD, &num_counter, &decimal_counter, &ops, &vals, 
+                                              &negative_value, &decimal_value, &divide_zero);
 
                         // Insert the addition symbol to the entry
                         entry.insert_text("+", &mut -1);
@@ -289,7 +310,8 @@ pub fn build_ui(application: &Application) {
         }));
 
     operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -300,8 +322,8 @@ pub fn build_ui(application: &Application) {
                         num_counter.set(num_counter.get() + 1);
 
                         // Do the operation
-                        calculator::operation(SUBTRACT, &num_counter, &decimal_counter, &ops, &vals, &decimal_value, 
-                                              &divide_zero);
+                        calculator::operation(SUBTRACT, &num_counter, &decimal_counter, &ops, &vals, 
+                                              &negative_value, &decimal_value, &divide_zero);
 
                         // Insert the subtraction symbol to the entry
                         entry.insert_text("-", &mut -1);
@@ -312,7 +334,8 @@ pub fn build_ui(application: &Application) {
         }));
 
     operator_buttons.multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -323,8 +346,8 @@ pub fn build_ui(application: &Application) {
                         num_counter.set(num_counter.get() + 1);
 
                         // Do the operation
-                        calculator::operation(MULTIPLY, &num_counter, &decimal_counter, &ops, &vals, &decimal_value, 
-                                              &divide_zero);
+                        calculator::operation(MULTIPLY, &num_counter, &decimal_counter, &ops, &vals, 
+                                              &negative_value, &decimal_value, &divide_zero);
     
                         // Insert the multiplication symbol to the entry
                         entry.insert_text("\u{00D7}", &mut -1);
@@ -335,7 +358,8 @@ pub fn build_ui(application: &Application) {
         }));
 
     operator_buttons.divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -346,8 +370,8 @@ pub fn build_ui(application: &Application) {
                         num_counter.set(num_counter.get() + 1);
 
                         // Do the operation
-                        calculator::operation(DIVIDE, &num_counter, &decimal_counter, &ops, &vals, &decimal_value, 
-                                              &divide_zero);
+                        calculator::operation(DIVIDE, &num_counter, &decimal_counter, &ops, &vals, 
+                                              &negative_value, &decimal_value, &divide_zero);
         
                         // Insert the division symbol to the entry
                         entry.insert_text("\u{00F7}", &mut -1);
@@ -358,7 +382,7 @@ pub fn build_ui(application: &Application) {
         }));
     
     special_buttons.equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong decimal_counter, @strong entry =>
+        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -370,7 +394,7 @@ pub fn build_ui(application: &Application) {
                         
                         // Equality
                         calculator::equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals,
-                                             &decimal_counter, &decimal_value);
+                                             &decimal_counter, &decimal_value, &negative_value);
                     }
                 },
                 None => {}
@@ -381,7 +405,7 @@ pub fn build_ui(application: &Application) {
         move |_| {
             // reset variables
             calculator::reset_variables(&vals, &ops, &num_counter, &decimal_counter,
-                                        &divide_zero, &decimal_value);
+                                        &divide_zero, &decimal_value, &negative_value);
 
             // Clear entry text
             entry.set_text("");

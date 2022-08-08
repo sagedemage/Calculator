@@ -34,7 +34,18 @@ impl Operators {
     }
 }
 
-pub fn set_value(decimal_value: &Rc<Cell<bool>>, num_counter: i32, decimal_counter: &Rc<Cell<i32>>, vals: &Rc<RefCell<Values>>, num: f64) {
+pub fn set_sign_of_value(negative_value: &Rc<Cell<bool>>, num: f64) -> f64 {
+    // set sign of value
+    let mut value: f64 = num;
+
+    if negative_value.get() == true {
+        value = -num;
+    }
+    value
+}
+
+pub fn set_value(decimal_value: &Rc<Cell<bool>>, num_counter: i32, decimal_counter: &Rc<Cell<i32>>,
+                 vals: &Rc<RefCell<Values>>, num: f64) {
     // insert decimal value or whole number
     match decimal_value.get() {
         true => {
@@ -88,10 +99,11 @@ pub fn check_divison_by_zero(ops: u8, val2: f64, divide_zero: &Rc<Cell<bool>>) {
 }
 
 pub fn operation(symbol_operator: u8, num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>, 
-                 ops: &Rc<RefCell<Operators>>,vals: &Rc<RefCell<Values>>, decimal_value: &Rc<Cell<bool>>, 
-                 divide_zero: &Rc<Cell<bool>>) {
+                 ops: &Rc<RefCell<Operators>>,vals: &Rc<RefCell<Values>>, negative_value: &Rc<Cell<bool>>,
+                 decimal_value: &Rc<Cell<bool>>, divide_zero: &Rc<Cell<bool>>) {
     /* Operation driver function */
     // reset decimal value and decimal counter
+    negative_value.set(false);
     decimal_value.set(false);
     decimal_counter.set(0);
 
@@ -140,7 +152,8 @@ pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>,
 
 pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
                        num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>,
-                       divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>) {
+                       divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
+                       negative_value: &Rc<Cell<bool>>) {
     /* reset variables */
     vals.borrow().num1.set(0.0);
     vals.borrow().num2.set(0.0);
@@ -150,12 +163,14 @@ pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
     decimal_counter.set(0);
     divide_zero.set(false);
     decimal_value.set(false);
+    negative_value.set(false);
 }
 
 pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
                  vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>,
                  entry: &Entry, initiate_equals: &Rc<Cell<bool>>,
-                 decimal_counter: &Rc<Cell<i32>>, decimal_value: &Rc<Cell<bool>>) {
+                 decimal_counter: &Rc<Cell<i32>>, decimal_value: &Rc<Cell<bool>>,
+                 negative_value: &Rc<Cell<bool>>) {
     if num_counter.get() == 2 {
         let result = equation_result(
             ops,
@@ -170,7 +185,7 @@ pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
         initiate_equals.set(true);
 
         // reset variables
-        reset_variables(vals, ops, num_counter, decimal_counter, divide_zero, decimal_value);
+        reset_variables(vals, ops, num_counter, decimal_counter, divide_zero, decimal_value, negative_value);
     }
 }
 
