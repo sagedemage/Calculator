@@ -6,6 +6,8 @@ button {
 
 entry {
 	font-size: 25px;
+	padding-bottom: 20px;
+	padding-top: 10px;
 }
 
 button#clear {
