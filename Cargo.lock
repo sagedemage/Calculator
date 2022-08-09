@@ -339,7 +339,7 @@ dependencies = [
 
 [[package]]
 name = "gtk4-calculator"
-version = "0.1.5"
+version = "0.7.1"
 dependencies = [
  "gdk-pixbuf",
  "gdk4",
