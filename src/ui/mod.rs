@@ -296,9 +296,12 @@ pub fn build_ui(application: &Application) {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
+                        // reset distinct numeral types
+                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
+                                                                   &decimal_counter);
+
                         // Do the operation
-                        calculator::operation(ADD, &num_counter, &decimal_counter, &ops, &vals, 
-                                              &negative_value, &decimal_value, &divide_zero);
+                        calculator::operation(ADD, &num_counter, &ops, &vals, &divide_zero);
 
                         // Insert the addition symbol to the entry
                         entry.insert_text("+", &mut -1);
@@ -321,9 +324,12 @@ pub fn build_ui(application: &Application) {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
+                        // reset distinct numeral types
+                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
+                                                                   &decimal_counter);
+
                         // Do the operation
-                        calculator::operation(SUBTRACT, &num_counter, &decimal_counter, &ops, &vals, 
-                                              &negative_value, &decimal_value, &divide_zero);
+                        calculator::operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
 
                         // Insert the subtraction symbol to the entry
                         entry.insert_text("-", &mut -1);
@@ -345,9 +351,12 @@ pub fn build_ui(application: &Application) {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
+                        // reset distinct numeral types
+                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
+                                                                   &decimal_counter);
+
                         // Do the operation
-                        calculator::operation(MULTIPLY, &num_counter, &decimal_counter, &ops, &vals, 
-                                              &negative_value, &decimal_value, &divide_zero);
+                        calculator::operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
     
                         // Insert the multiplication symbol to the entry
                         entry.insert_text("\u{00D7}", &mut -1);
@@ -369,9 +378,12 @@ pub fn build_ui(application: &Application) {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
+                        // reset distinct numeral types
+                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
+                                                                   &decimal_counter);
+
                         // Do the operation
-                        calculator::operation(DIVIDE, &num_counter, &decimal_counter, &ops, &vals, 
-                                              &negative_value, &decimal_value, &divide_zero);
+                        calculator::operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
         
                         // Insert the division symbol to the entry
                         entry.insert_text("\u{00F7}", &mut -1);
@@ -393,8 +405,11 @@ pub fn build_ui(application: &Application) {
                         num_counter.set(num_counter.get() + 1);
                         
                         // Equality
-                        calculator::equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals,
-                                             &decimal_counter, &decimal_value, &negative_value);
+                        calculator::equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals);
+                        
+                        // reset variables
+                        calculator::reset_to_default(&vals, &ops, &num_counter, &decimal_counter,
+                                        &divide_zero, &decimal_value, &negative_value);
                     }
                 },
                 None => {}
@@ -404,7 +419,7 @@ pub fn build_ui(application: &Application) {
     special_buttons.clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             // reset variables
-            calculator::reset_variables(&vals, &ops, &num_counter, &decimal_counter,
+            calculator::reset_to_default(&vals, &ops, &num_counter, &decimal_counter,
                                         &divide_zero, &decimal_value, &negative_value);
 
             // Clear entry text

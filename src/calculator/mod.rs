@@ -98,15 +98,9 @@ pub fn check_divison_by_zero(ops: u8, val2: f64, divide_zero: &Rc<Cell<bool>>) {
     }
 }
 
-pub fn operation(symbol_operator: u8, num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>, 
-                 ops: &Rc<RefCell<Operators>>,vals: &Rc<RefCell<Values>>, negative_value: &Rc<Cell<bool>>,
-                 decimal_value: &Rc<Cell<bool>>, divide_zero: &Rc<Cell<bool>>) {
+pub fn operation(symbol_operator: u8, num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>, 
+                 vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>) {
     /* Operation driver function */
-    // reset decimal value and decimal counter
-    negative_value.set(false);
-    decimal_value.set(false);
-    decimal_counter.set(0);
-
     // Do the operation when two values are received for calculation
     if num_counter.get() == 2 {
         // Set previous and current operation
@@ -150,7 +144,15 @@ pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>,
     result
 }
 
-pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
+pub fn reset_distinct_numerical_types(negative_value: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
+                                      decimal_counter: &Rc<Cell<i32>>) {
+    /* reset negative and decimal variables */
+    negative_value.set(false);
+    decimal_value.set(false);
+    decimal_counter.set(0);
+}
+
+pub fn reset_to_default(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
                        num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>,
                        divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
                        negative_value: &Rc<Cell<bool>>) {
@@ -168,9 +170,7 @@ pub fn reset_variables(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
 
 pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
                  vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>,
-                 entry: &Entry, initiate_equals: &Rc<Cell<bool>>,
-                 decimal_counter: &Rc<Cell<i32>>, decimal_value: &Rc<Cell<bool>>,
-                 negative_value: &Rc<Cell<bool>>) {
+                 entry: &Entry, initiate_equals: &Rc<Cell<bool>>) {
     if num_counter.get() == 2 {
         let result = equation_result(
             ops,
@@ -183,9 +183,6 @@ pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
 
         // Notify the progam the user initated the equals button
         initiate_equals.set(true);
-
-        // reset variables
-        reset_variables(vals, ops, num_counter, decimal_counter, divide_zero, decimal_value, negative_value);
     }
 }
 
