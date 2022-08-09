@@ -19,6 +19,10 @@ use crate::calculator::{self, Values, Operators};
 use crate::grid;
 
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION"); // get package version from Cargo
+const LICENSE: &str = env!("CARGO_PKG_LICENSE"); // get license of the project
+const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION"); // get the description of the project
+const AUTHORS: &str = env!("CARGO_PKG_AUTHORS"); // get the authors of the project
+const COPYRIGHT_FORMAT: &str = "\u{00A9} 2022 "; // copyright format
 const LOGO_PATH: &str = "src/resources/images/logo.png"; // path to the logo
 const MENU_UI_PATH: &str = "src/resources/ui/menu.ui";
 
@@ -131,10 +135,10 @@ pub fn build_ui(application: &Application) {
                 .modal(true) // freezes the rest of the app from user input
                 .logo(&app_logo.paintable().unwrap())
                 .version(APP_VERSION)
-                .comments("GTK4 Calculator App written in Rust")
-                .copyright("© 2022 Salmaan Saeed")
-                .authors(vec![String::from("Salmaan Saeed")])
-                .license("The 3-Clause BSD License")
+                .comments(DESCRIPTION)
+                .copyright(format!("{}{}", COPYRIGHT_FORMAT, AUTHORS).as_str())
+                .authors(vec![String::from(AUTHORS)])
+                .license(LICENSE)
                 .build();
             
             // Show the about dialog

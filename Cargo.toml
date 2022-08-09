@@ -2,6 +2,9 @@
 name = "calculator"
 version = "0.7.1"
 edition = "2021"
+description = "basic calculator app for simple calculations"
+license = "The 3-Clause BSD License"
+authors = ["Salmaan Saeed"]
 
 [dependencies]
 gtk = { version = "0.4.8", package="gtk4" }
