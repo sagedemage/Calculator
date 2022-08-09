@@ -46,12 +46,14 @@ pub fn set_sign_of_value(negative_value: &Rc<Cell<bool>>, num: f64) -> f64 {
 
 pub fn set_value(decimal_value: &Rc<Cell<bool>>, num_counter: i32, decimal_counter: &Rc<Cell<i32>>,
                  vals: &Rc<RefCell<Values>>, num: f64) {
+    /* Sets the values for the first or second value */
     // insert decimal value or whole number
     match decimal_value.get() {
         true => {
+            // increment the decimal counter
             decimal_counter.set(decimal_counter.get() + 1);
 
-            /* Set the first or second value */
+            // Set the first or second value
             if num_counter == 0 {
                 let x: f64 = 10.0;
                 vals.borrow().num1.set(vals.borrow().num1.get() + num * x.powi(-decimal_counter.get()));
@@ -62,7 +64,7 @@ pub fn set_value(decimal_value: &Rc<Cell<bool>>, num_counter: i32, decimal_count
             }
         },
         false => {
-            /* Set the first or second value */
+            // Set the first or second value
             if num_counter == 0 {
                 vals.borrow().num1.set(vals.borrow().num1.get() * 10.0 + num); 
             }
@@ -156,7 +158,7 @@ pub fn reset_to_default(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>
                        num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>,
                        divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
                        negative_value: &Rc<Cell<bool>>) {
-    /* reset variables */
+    /* reset variables to its default state */
     vals.borrow().num1.set(0.0);
     vals.borrow().num2.set(0.0);
     ops.borrow().previous.set(NONE);
@@ -171,6 +173,8 @@ pub fn reset_to_default(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>
 pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,
                  vals: &Rc<RefCell<Values>>, divide_zero: &Rc<Cell<bool>>,
                  entry: &Entry, initiate_equals: &Rc<Cell<bool>>) {
+    /* Equality driver function */
+    // Get the result of the equation if two values were filled
     if num_counter.get() == 2 {
         let result = equation_result(
             ops,
