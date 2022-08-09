@@ -1,5 +1,5 @@
 [package]
-name = "gtk4-calculator"
+name = "calculator"
 version = "0.7.1"
 edition = "2021"
 
