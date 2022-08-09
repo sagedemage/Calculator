@@ -45,6 +45,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "calculator"
+version = "0.7.1"
+dependencies = [
+ "gdk-pixbuf",
+ "gdk4",
+ "gio",
+ "glib-macros",
+ "gtk4",
+]
+
+[[package]]
 name = "cfg-expr"
 version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -335,17 +346,6 @@ dependencies = [
  "libc",
  "once_cell",
  "pango",
-]
-
-[[package]]
-name = "gtk4-calculator"
-version = "0.7.1"
-dependencies = [
- "gdk-pixbuf",
- "gdk4",
- "gio",
- "glib-macros",
- "gtk4",
 ]
 
 [[package]]
