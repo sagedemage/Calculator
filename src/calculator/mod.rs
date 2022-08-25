@@ -157,7 +157,7 @@ pub fn reset_distinct_numerical_types(negative_value: &Rc<Cell<bool>>, decimal_v
 pub fn reset_to_default(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
                        num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>,
                        divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
-                       negative_value: &Rc<Cell<bool>>) {
+                       negative_value: &Rc<Cell<bool>>, ops_counter: &Rc<Cell<i32>>) {
     /* reset variables to its default state */
     vals.borrow().num1.set(0.0);
     vals.borrow().num2.set(0.0);
@@ -165,6 +165,7 @@ pub fn reset_to_default(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>
     ops.borrow().current.set(NONE);
     num_counter.set(0);
     decimal_counter.set(0);
+    ops_counter.set(-1);
     divide_zero.set(false);
     decimal_value.set(false);
     negative_value.set(false);
