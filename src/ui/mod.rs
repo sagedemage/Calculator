@@ -17,6 +17,7 @@ use crate::operator_symbols::*;
 use crate::widgets::{self, NumberButtons, OperatorButtons, SpecialButtons};
 use crate::calculator::{self, Values, Operators};
 use crate::grid;
+use crate::editable_entry_text;
 
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION"); // get package version from Cargo
 const LICENSE: &str = env!("CARGO_PKG_LICENSE"); // get license of the project
@@ -255,32 +256,32 @@ pub fn build_ui(application: &Application) {
         }));
 
     special_buttons.negative.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong negative_value, @strong decimal_counter, @strong entry =>
+        @strong initiate_equals, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
 
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
 
-            let entry_length: i32 = entry.text().len() as i32;
+            let entry_text: gtk::glib::GString = entry.text();
             let last_entry_char = entry.text().chars().last();
 
             match last_entry_char {
                 Some(_) => {
-                    if entry.text().ends_with('-') {     
-                        entry.delete_text(entry_length-1, -1);
+                    let last_entry_char = last_entry_char.unwrap();
+
+                    if entry_text.ends_with('-') {
+                        let new_text = editable_entry_text::remove_last_character_of_entry(&entry_text);
+                        entry.set_text(new_text.as_str());
                         negative_value.set(false);
                     }
-                    else if !entry.text().ends_with('-') && !last_entry_char.unwrap().is_numeric() {
-                        entry.insert_text("-", &mut -1);
+                    else if !entry_text.ends_with('-') && !last_entry_char.is_numeric() {
+                        entry.insert_text("(-", &mut -1);
                         negative_value.set(true);
                     }
                 },
                 None => {
-                    if entry.text().ends_with('-') {       
-                        entry.delete_text(entry_length-1, -1);
-                        negative_value.set(false);
-                    }
-                    else if !entry.text().ends_with('-') {
-                        entry.insert_text("-", &mut -1);
+                    if !entry_text.ends_with('-') {
+                        entry.insert_text("(-", &mut -1);
                         negative_value.set(true);
                     }
                 }
@@ -296,7 +297,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if !entry.text().ends_with('+') {
+                    if !entry.text().ends_with('\u{002B}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
@@ -308,7 +309,7 @@ pub fn build_ui(application: &Application) {
                         calculator::operation(ADD, &num_counter, &ops, &vals, &divide_zero);
 
                         // Insert the addition symbol to the entry
-                        entry.insert_text("+", &mut -1);
+                        entry.insert_text("\u{002B}", &mut -1);
                     }
                 },
                 None => {}
@@ -316,8 +317,6 @@ pub fn build_ui(application: &Application) {
             
         }));
 
-    // \u{2212}
-    // U+2212
     operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
         @strong entry =>
@@ -400,7 +399,8 @@ pub fn build_ui(application: &Application) {
         }));
     
     special_buttons.equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, @strong entry =>
+        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
