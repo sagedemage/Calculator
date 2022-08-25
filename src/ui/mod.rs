@@ -17,6 +17,7 @@ use crate::operator_symbols::*;
 use crate::widgets::{self, NumberButtons, OperatorButtons, SpecialButtons};
 use crate::calculator::{self, Values, Operators};
 use crate::grid;
+use crate::editable_entry_text;
 
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION"); // get package version from Cargo
 const LICENSE: &str = env!("CARGO_PKG_LICENSE"); // get license of the project
@@ -261,7 +262,7 @@ pub fn build_ui(application: &Application) {
 
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
 
-            let entry_text = entry.text();
+            let entry_text: gtk::glib::GString = entry.text();
             let last_entry_char = entry.text().chars().last();
 
             match last_entry_char {
@@ -269,21 +270,18 @@ pub fn build_ui(application: &Application) {
                     let last_entry_char = last_entry_char.unwrap();
 
                     if entry_text.ends_with('-') {
-                        let mut char_text = entry_text.chars(); // char text
-                        char_text.next_back(); // remove last char
-
-                        let new_text = char_text;
+                        let new_text = editable_entry_text::remove_last_character_of_entry(&entry_text);
                         entry.set_text(new_text.as_str());
                         negative_value.set(false);
                     }
                     else if !entry_text.ends_with('-') && !last_entry_char.is_numeric() {
-                        entry.insert_text("-", &mut -1);
+                        entry.insert_text("(-", &mut -1);
                         negative_value.set(true);
                     }
                 },
                 None => {
                     if !entry_text.ends_with('-') {
-                        entry.insert_text("-", &mut -1);
+                        entry.insert_text("(-", &mut -1);
                         negative_value.set(true);
                     }
                 }
