@@ -36,3 +36,20 @@ Build and run the application
 ```
 cargo run
 ```
+
+## Install the app on Linux
+
+Go to the root directory of my project
+```
+cd Calculator
+```
+
+Install the application
+```
+cargo install --path .
+```
+
+Run the executable
+```
+calculator
+```

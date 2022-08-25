@@ -55,7 +55,7 @@ impl OperatorButtons {
     pub fn new() -> OperatorButtons {
         OperatorButtons{
             plus: create_button("+"),
-            minus: create_button("-"),
+            minus: create_button("\u{2212}"),
             multiply: create_button("\u{00D7}"),
             divide: create_button("\u{00F7}"),
         }

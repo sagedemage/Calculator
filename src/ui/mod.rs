@@ -265,7 +265,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if entry.text().ends_with('-') {       
+                    if entry.text().ends_with('-') {     
                         entry.delete_text(entry_length-1, -1);
                         negative_value.set(false);
                     }
@@ -316,6 +316,8 @@ pub fn build_ui(application: &Application) {
             
         }));
 
+    // \u{2212}
+    // U+2212
     operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
         @strong entry =>
@@ -324,7 +326,7 @@ pub fn build_ui(application: &Application) {
 
             match last_entry_char {
                 Some(_) => {
-                    if !entry.text().ends_with('-') {
+                    if !entry.text().ends_with('\u{2212}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
 
@@ -336,7 +338,7 @@ pub fn build_ui(application: &Application) {
                         calculator::operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
 
                         // Insert the subtraction symbol to the entry
-                        entry.insert_text("-", &mut -1);
+                        entry.insert_text("\u{2212}", &mut -1);
                     }
                 },
                 None => {}
