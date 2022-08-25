@@ -118,9 +118,6 @@ pub fn build_ui(application: &Application) {
     // counters
     let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
     let decimal_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
-    let ops_counter: Rc<Cell<i32>> = Rc::new(Cell::new(-1));
-
-    let delete_char_length: Rc<Cell<i32>> = Rc::new(Cell::new(1));
 
     //conditions
     let decimal_value: Rc<Cell<bool>> = Rc::new(Cell::new(false));
@@ -259,43 +256,33 @@ pub fn build_ui(application: &Application) {
 
     special_buttons.negative.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong initiate_equals, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong ops_counter, @strong delete_char_length, @strong entry =>
+        @strong entry =>
         move |_| {
 
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
 
-            let entry_length: i32 = entry.text().len() as i32;
             let entry_text = entry.text();
             let last_entry_char = entry.text().chars().last();
 
-            if entry_text.ends_with('\u{00D7}') || entry_text.ends_with('\u{00F7}') { 
-                // multiply or divide
-                delete_char_length.set(2 + 1*ops_counter.get()); 
-            }
-            if entry_text.ends_with('\u{2212}') { // minus
-                delete_char_length.set(3 + 2*ops_counter.get());
-            }
-            if entry_text.ends_with('\u{002B}') { // plus
-                delete_char_length.set(1);
-            }
-
             match last_entry_char {
                 Some(_) => {
+                    let last_entry_char = last_entry_char.unwrap();
+
                     if entry_text.ends_with('-') {
-                        entry.delete_text(entry_length-delete_char_length.get(), -1);
+                        let mut char_text = entry_text.chars(); // char text
+                        char_text.next_back(); // remove last char
+
+                        let new_text = char_text;
+                        entry.set_text(new_text.as_str());
                         negative_value.set(false);
                     }
-                    else if !entry_text.ends_with('-') && !last_entry_char.unwrap().is_numeric() {
+                    else if !entry_text.ends_with('-') && !last_entry_char.is_numeric() {
                         entry.insert_text("-", &mut -1);
                         negative_value.set(true);
                     }
                 },
                 None => {
-                    if entry_text.ends_with('-') {       
-                        entry.delete_text(entry_length-delete_char_length.get(), -1);
-                        negative_value.set(false);
-                    }
-                    else if !entry_text.ends_with('-') {
+                    if !entry_text.ends_with('-') {
                         entry.insert_text("-", &mut -1);
                         negative_value.set(true);
                     }
@@ -306,7 +293,7 @@ pub fn build_ui(application: &Application) {
     
     operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong ops_counter, @strong entry =>
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -315,9 +302,6 @@ pub fn build_ui(application: &Application) {
                     if !entry.text().ends_with('\u{002B}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
-
-                        // ops counter
-                        ops_counter.set(ops_counter.get() + 1);
 
                         // reset distinct numeral types
                         calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
@@ -335,11 +319,9 @@ pub fn build_ui(application: &Application) {
             
         }));
 
-    // \u{2212}
-    // U+2212
     operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong ops_counter, @strong entry =>
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -348,9 +330,6 @@ pub fn build_ui(application: &Application) {
                     if !entry.text().ends_with('\u{2212}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
-
-                        // ops counter
-                        ops_counter.set(ops_counter.get() + 1);
 
                         // reset distinct numeral types
                         calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
@@ -369,7 +348,7 @@ pub fn build_ui(application: &Application) {
 
     operator_buttons.multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong ops_counter, @strong entry =>
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -378,9 +357,6 @@ pub fn build_ui(application: &Application) {
                     if !entry.text().ends_with('\u{00D7}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
-
-                        // ops counter
-                        ops_counter.set(ops_counter.get() + 1);
 
                         // reset distinct numeral types
                         calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
@@ -399,7 +375,7 @@ pub fn build_ui(application: &Application) {
 
     operator_buttons.divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong ops_counter, @strong entry =>
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -408,9 +384,6 @@ pub fn build_ui(application: &Application) {
                     if !entry.text().ends_with('\u{00F7}') {
                         // Increase the counter
                         num_counter.set(num_counter.get() + 1);
-
-                        // ops counter
-                        ops_counter.set(ops_counter.get() + 1);
 
                         // reset distinct numeral types
                         calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
@@ -429,7 +402,7 @@ pub fn build_ui(application: &Application) {
     
     special_buttons.equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
         @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong ops_counter, @strong entry =>
+        @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -444,7 +417,7 @@ pub fn build_ui(application: &Application) {
                         
                         // reset variables
                         calculator::reset_to_default(&vals, &ops, &num_counter, &decimal_counter,
-                                        &divide_zero, &decimal_value, &negative_value, &ops_counter);
+                                        &divide_zero, &decimal_value, &negative_value);
                     }
                 },
                 None => {}
@@ -455,7 +428,7 @@ pub fn build_ui(application: &Application) {
         move |_| {
             // reset variables
             calculator::reset_to_default(&vals, &ops, &num_counter, &decimal_counter,
-                                        &divide_zero, &decimal_value, &negative_value, &ops_counter);
+                                        &divide_zero, &decimal_value, &negative_value);
 
             // Clear entry text
             entry.set_text("");
