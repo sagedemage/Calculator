@@ -34,6 +34,34 @@ impl Operators {
     }
 }
 
+pub struct NumberTypeStatuses {
+    pub decimal: Rc<Cell<bool>>,
+    pub negative: Rc<Cell<bool>>,
+}
+
+impl NumberTypeStatuses {
+    pub fn new() -> NumberTypeStatuses {
+        NumberTypeStatuses{
+            decimal: Rc::new(Cell::new(false)),
+            negative: Rc::new(Cell::new(false)),
+        }
+    }
+}
+
+pub struct Counters {
+    pub number: Rc<Cell<i32>>,
+    pub decimal: Rc<Cell<i32>>,
+}
+
+impl Counters {
+    pub fn new() -> Counters {
+        Counters{
+            number: Rc::new(Cell::new(0)),
+            decimal: Rc::new(Cell::new(0)),
+        }
+    }
+}
+
 pub fn set_sign_of_value(negative_value: &Rc<Cell<bool>>, num: f64) -> f64 {
     // set sign of value
     let mut value: f64 = num;
@@ -44,31 +72,33 @@ pub fn set_sign_of_value(negative_value: &Rc<Cell<bool>>, num: f64) -> f64 {
     value
 }
 
-pub fn set_value(decimal_value: &Rc<Cell<bool>>, num_counter: i32, decimal_counter: &Rc<Cell<i32>>,
+pub fn set_value(decimal_value: &Rc<Cell<bool>>, counters: &Rc<RefCell<Counters>>,
                  vals: &Rc<RefCell<Values>>, num: f64) {
     /* Sets the values for the first or second value */
     // insert decimal value or whole number
     match decimal_value.get() {
         true => {
             // increment the decimal counter
-            decimal_counter.set(decimal_counter.get() + 1);
+            counters.borrow().decimal.set(counters.borrow().decimal.get() + 1);
 
             // Set the first or second value
-            if num_counter == 0 {
+            if counters.borrow().number.get() == 0 {
                 let x: f64 = 10.0;
-                vals.borrow().num1.set(vals.borrow().num1.get() + num * x.powi(-decimal_counter.get()));
+                vals.borrow().num1.set(vals.borrow().num1.get() + num * 
+                                       x.powi(-counters.borrow().decimal.get()));
             }
-            if num_counter == 1 {
+            if counters.borrow().number.get() == 1 {
                 let x: f64 = 10.0;
-                vals.borrow().num2.set(vals.borrow().num2.get() + num * x.powi(-decimal_counter.get()));
+                vals.borrow().num2.set(vals.borrow().num2.get() + num * 
+                                       x.powi(-counters.borrow().decimal.get()));
             }
         },
         false => {
             // Set the first or second value
-            if num_counter == 0 {
+            if counters.borrow().number.get() == 0 {
                 vals.borrow().num1.set(vals.borrow().num1.get() * 10.0 + num); 
             }
-            if num_counter == 1 {
+            if counters.borrow().number.get() == 1 {
                 vals.borrow().num2.set(vals.borrow().num2.get() * 10.0 + num);
             }
         },
@@ -146,28 +176,27 @@ pub fn equation_result(ops: &Rc<RefCell<Operators>>, vals: &Rc<RefCell<Values>>,
     result
 }
 
-pub fn reset_distinct_numerical_types(negative_value: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
+pub fn reset_distinct_numerical_types(number_type_statuses: &Rc<RefCell<NumberTypeStatuses>>, 
                                       decimal_counter: &Rc<Cell<i32>>) {
     /* reset negative and decimal variables */
-    negative_value.set(false);
-    decimal_value.set(false);
+    number_type_statuses.borrow().negative.set(false);
+    number_type_statuses.borrow().decimal.set(false);
     decimal_counter.set(0);
 }
 
 pub fn reset_to_default(vals: &Rc<RefCell<Values>>, ops: &Rc<RefCell<Operators>>,
-                       num_counter: &Rc<Cell<i32>>, decimal_counter: &Rc<Cell<i32>>,
-                       divide_zero: &Rc<Cell<bool>>, decimal_value: &Rc<Cell<bool>>,
-                       negative_value: &Rc<Cell<bool>>) {
+                       counters: &Rc<RefCell<Counters>>, divide_zero: &Rc<Cell<bool>>, 
+                       number_type_statuses: &Rc<RefCell<NumberTypeStatuses>>) {
     /* reset variables to its default state */
     vals.borrow().num1.set(0.0);
     vals.borrow().num2.set(0.0);
     ops.borrow().previous.set(NONE);
     ops.borrow().current.set(NONE);
-    num_counter.set(0);
-    decimal_counter.set(0);
+    counters.borrow().number.set(0);
+    counters.borrow().decimal.set(0);
     divide_zero.set(false);
-    decimal_value.set(false);
-    negative_value.set(false);
+    number_type_statuses.borrow().decimal.set(false);
+    number_type_statuses.borrow().negative.set(false);
 }
 
 pub fn equality(num_counter: &Rc<Cell<i32>>, ops: &Rc<RefCell<Operators>>,

@@ -15,7 +15,7 @@ use glib_macros::clone;
 
 use crate::operator_symbols::*;
 use crate::widgets::{self, NumberButtons, OperatorButtons, SpecialButtons};
-use crate::calculator::{self, Values, Operators};
+use crate::calculator::{self, Values, Operators, NumberTypeStatuses, Counters};
 use crate::grid;
 use crate::editable_entry_text;
 
@@ -117,14 +117,16 @@ pub fn build_ui(application: &Application) {
     let ops = Rc::new(RefCell::new(Operators::new()));
     
     // counters
-    let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
-    let decimal_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
+    //let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
+    //let decimal_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
+    
+    let counters = Rc::new(RefCell::new(Counters::new()));
 
-    //conditions
-    let decimal_value: Rc<Cell<bool>> = Rc::new(Cell::new(false));
-    let negative_value: Rc<Cell<bool>> = Rc::new(Cell::new(false));
+    // conditions
     let divide_zero: Rc<Cell<bool>> = Rc::new(Cell::new(false));
     let initiate_equals: Rc<Cell<bool>> = Rc::new(Cell::new(false));
+
+    let number_type_statuses = Rc::new(RefCell::new(NumberTypeStatuses::new()));
 
     /* Connect callbacks */
     about_action.connect_activate(clone!(@strong window =>
@@ -146,118 +148,99 @@ pub fn build_ui(application: &Application) {
             about_dialog.present();
         }));
 
-    number_buttons.num0.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num0.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, 0.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, 0.0);
             entry.insert_text("0", &mut -1);
         }));
-    number_buttons.num1.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong negative_value, 
-        @strong decimal_counter, @strong entry =>
+    number_buttons.num1.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 1.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 1.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("1", &mut -1);
         }));
-    number_buttons.num2.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+    number_buttons.num2.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, 
         @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 2.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 2.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("2", &mut -1);
         }));
-    number_buttons.num3.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
+    number_buttons.num3.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, 
         @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 3.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 3.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("3", &mut -1);
         }));
-    number_buttons.num4.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num4.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses,@strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 4.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 4.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("4", &mut -1);
         }));
-    number_buttons.num5.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num5.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 5.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 5.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("5", &mut -1);
         }));
-    number_buttons.num6.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num6.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 6.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 6.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("6", &mut -1);
         }));
-    number_buttons.num7.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num7.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 7.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 7.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("7", &mut -1);
         }));
-    number_buttons.num8.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num8.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 8.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 8.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("8", &mut -1);
         }));
-    number_buttons.num9.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong negative_value, @strong decimal_value, @strong decimal_counter, 
-        @strong entry =>
+    number_buttons.num9.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
-            let value = calculator::set_sign_of_value(&negative_value, 9.0);
-            calculator::set_value(&decimal_value, num_counter.get(),
-                &decimal_counter, &vals, value);
+            let value = calculator::set_sign_of_value(&number_type_statuses.borrow().negative, 9.0);
+            calculator::set_value(&number_type_statuses.borrow().decimal, &counters, &vals, value);
             entry.insert_text("9", &mut -1);
         }));
 
-    special_buttons.period.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong decimal_counter, @strong entry =>
+    special_buttons.period.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
-            if !decimal_value.get() {
-                decimal_value.set(true);
+            if !number_type_statuses.borrow().decimal.get() {
+                number_type_statuses.borrow().decimal.set(true);
                 entry.insert_text(".", &mut -1);
             }
         }));
 
-    special_buttons.negative.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong initiate_equals, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong entry =>
+    special_buttons.negative.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong initiate_equals, @strong number_type_statuses, @strong entry =>
         move |_| {
 
             calculator::clear_entry_before_calculation(&initiate_equals, &entry);
@@ -272,26 +255,25 @@ pub fn build_ui(application: &Application) {
                     if entry_text.ends_with('-') {
                         let new_text = editable_entry_text::remove_last_character_of_entry(&entry_text);
                         entry.set_text(new_text.as_str());
-                        negative_value.set(false);
+                        number_type_statuses.borrow().negative.set(false);
                     }
                     else if !entry_text.ends_with('-') && !last_entry_char.is_numeric() {
                         entry.insert_text("(-", &mut -1);
-                        negative_value.set(true);
+                        number_type_statuses.borrow().negative.set(true);
                     }
                 },
                 None => {
                     if !entry_text.ends_with('-') {
                         entry.insert_text("(-", &mut -1);
-                        negative_value.set(true);
+                        number_type_statuses.borrow().negative.set(true);
                     }
                 }
             }
 
         }));
     
-    operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong entry =>
+    operator_buttons.plus.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong divide_zero, @strong number_type_statuses, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -299,14 +281,16 @@ pub fn build_ui(application: &Application) {
                 Some(_) => {
                     if !entry.text().ends_with('\u{002B}') {
                         // Increase the counter
-                        num_counter.set(num_counter.get() + 1);
+                        counters.borrow().number.set(counters.borrow().number.get() + 1);
 
                         // reset distinct numeral types
-                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
-                                                                   &decimal_counter);
+                        calculator::reset_distinct_numerical_types(
+                            &number_type_statuses, 
+                            &counters.borrow().decimal
+                        );
 
                         // Do the operation
-                        calculator::operation(ADD, &num_counter, &ops, &vals, &divide_zero);
+                        calculator::operation(ADD, &counters.borrow().number, &ops, &vals, &divide_zero);
 
                         // Insert the addition symbol to the entry
                         entry.insert_text("\u{002B}", &mut -1);
@@ -317,9 +301,8 @@ pub fn build_ui(application: &Application) {
             
         }));
 
-    operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong entry =>
+    operator_buttons.minus.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong divide_zero, @strong number_type_statuses, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -327,14 +310,16 @@ pub fn build_ui(application: &Application) {
                 Some(_) => {
                     if !entry.text().ends_with('\u{2212}') {
                         // Increase the counter
-                        num_counter.set(num_counter.get() + 1);
+                        counters.borrow().number.set(counters.borrow().number.get() + 1);
 
                         // reset distinct numeral types
-                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
-                                                                   &decimal_counter);
+                        calculator::reset_distinct_numerical_types(
+                            &number_type_statuses,
+                            &counters.borrow().decimal
+                        );
 
                         // Do the operation
-                        calculator::operation(SUBTRACT, &num_counter, &ops, &vals, &divide_zero);
+                        calculator::operation(SUBTRACT, &counters.borrow().number, &ops, &vals, &divide_zero);
 
                         // Insert the subtraction symbol to the entry
                         entry.insert_text("\u{2212}", &mut -1);
@@ -344,9 +329,8 @@ pub fn build_ui(application: &Application) {
             }
         }));
 
-    operator_buttons.multiply.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong entry =>
+    operator_buttons.multiply.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong divide_zero, @strong number_type_statuses, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -354,14 +338,16 @@ pub fn build_ui(application: &Application) {
                 Some(_) => {
                     if !entry.text().ends_with('\u{00D7}') {
                         // Increase the counter
-                        num_counter.set(num_counter.get() + 1);
+                        counters.borrow().number.set(counters.borrow().number.get() + 1);
 
                         // reset distinct numeral types
-                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
-                                                                   &decimal_counter);
+                        calculator::reset_distinct_numerical_types(
+                            &number_type_statuses,
+                            &counters.borrow().decimal
+                        );
 
                         // Do the operation
-                        calculator::operation(MULTIPLY, &num_counter, &ops, &vals, &divide_zero);
+                        calculator::operation(MULTIPLY, &counters.borrow().number, &ops, &vals, &divide_zero);
     
                         // Insert the multiplication symbol to the entry
                         entry.insert_text("\u{00D7}", &mut -1);
@@ -371,9 +357,8 @@ pub fn build_ui(application: &Application) {
             }
         }));
 
-    operator_buttons.divide.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong entry =>
+    operator_buttons.divide.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong divide_zero, @strong number_type_statuses, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -381,14 +366,16 @@ pub fn build_ui(application: &Application) {
                 Some(_) => {
                     if !entry.text().ends_with('\u{00F7}') {
                         // Increase the counter
-                        num_counter.set(num_counter.get() + 1);
+                        counters.borrow().number.set(counters.borrow().number.get() + 1);
 
                         // reset distinct numeral types
-                        calculator::reset_distinct_numerical_types(&negative_value, &decimal_value, 
-                                                                   &decimal_counter);
+                        calculator::reset_distinct_numerical_types(
+                            &number_type_statuses,
+                            &counters.borrow().decimal
+                        );
 
                         // Do the operation
-                        calculator::operation(DIVIDE, &num_counter, &ops, &vals, &divide_zero);
+                        calculator::operation(DIVIDE, &counters.borrow().number, &ops, &vals, &divide_zero);
         
                         // Insert the division symbol to the entry
                         entry.insert_text("\u{00F7}", &mut -1);
@@ -398,9 +385,8 @@ pub fn build_ui(application: &Application) {
             }
         }));
     
-    special_buttons.equals.connect_clicked(clone!(@strong vals, @strong num_counter, @strong ops, 
-        @strong divide_zero, @strong decimal_value, @strong negative_value, @strong decimal_counter, 
-        @strong entry =>
+    special_buttons.equals.connect_clicked(clone!(@strong vals, @strong counters, @strong ops, 
+        @strong divide_zero, @strong number_type_statuses, @strong entry =>
         move |_| {
             let last_entry_char = entry.text().chars().last();
 
@@ -408,14 +394,15 @@ pub fn build_ui(application: &Application) {
                 Some(_) => {
                     if last_entry_char.unwrap().is_numeric() {
                         // Increase the counter
-                        num_counter.set(num_counter.get() + 1);
+                        counters.borrow().number.set(counters.borrow().number.get() + 1);
                         
                         // Equality
-                        calculator::equality(&num_counter, &ops, &vals, &divide_zero, &entry, &initiate_equals);
+                        calculator::equality(&counters.borrow().number, 
+                                             &ops, &vals, &divide_zero, &entry, &initiate_equals);
                         
                         // reset variables
-                        calculator::reset_to_default(&vals, &ops, &num_counter, &decimal_counter,
-                                        &divide_zero, &decimal_value, &negative_value);
+                        calculator::reset_to_default(&vals, &ops, &counters, &divide_zero, 
+                                                     &number_type_statuses);
                     }
                 },
                 None => {}
@@ -425,8 +412,8 @@ pub fn build_ui(application: &Application) {
     special_buttons.clear.connect_clicked(clone!(@strong entry =>
         move |_| {
             // reset variables
-            calculator::reset_to_default(&vals, &ops, &num_counter, &decimal_counter,
-                                        &divide_zero, &decimal_value, &negative_value);
+            calculator::reset_to_default(&vals, &ops, &counters, &divide_zero, 
+                                         &number_type_statuses);
 
             // Clear entry text
             entry.set_text("");
