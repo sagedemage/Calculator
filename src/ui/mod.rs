@@ -117,9 +117,6 @@ pub fn build_ui(application: &Application) {
     let ops = Rc::new(RefCell::new(Operators::new()));
     
     // counters
-    //let num_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
-    //let decimal_counter: Rc<Cell<i32>> = Rc::new(Cell::new(0));
-    
     let counters = Rc::new(RefCell::new(Counters::new()));
 
     // conditions
