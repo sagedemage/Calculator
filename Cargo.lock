@@ -46,7 +46,7 @@ dependencies = [
 
 [[package]]
 name = "calculator"
-version = "0.7.3"
+version = "0.7.4"
 dependencies = [
  "gdk-pixbuf",
  "gdk4",
